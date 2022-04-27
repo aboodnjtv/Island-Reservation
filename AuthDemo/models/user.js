@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     min: 0,
   },
+  isAdmin: {
+    type: Boolean,
+    required: [true, "Needs to specify if user is admin"],
+  },
 });
 
 //make the model and export it
