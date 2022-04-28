@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="stylesheets/Admin.css" />
+    <title>Admin</title>
+  </head>
+  <body>
+    <h1>Welcome Back <%=user.firstname %> <%=user.lastname %>!</h1>
+    <h2>Your ID: <%=user._id%></h2>
+    <form action="/logout" method="POST">
+      <button id="logout">Log out</button>
+    </form>
+    <ol>
+      <% for(let customer of allUsers) {%>
+      <li>
+        First Name: <%=customer.firstname%>
+        <br />
+        Last Name: <%=customer.lastname%>
+        <br />
+        Username: <%=customer.username%>
+        <br />
+        Email: <%=customer.email%>
+        <br />
+        Balance: <%=customer.balance%>
+        <br />
+
+        User Type: <% if(customer.isAdmin){%>
+        <span>Admin</span>
+        <% } else {%>
+        <span>Customer</span>
+        <% } %>
+        <br />
+        ID: <%= customer._id %>
+        <br />
+        <form action="delete-user?_method=DELETE" method="POST">
+          <input
+            type="text"
+            name="adminId"
+            id="adminId"
+            placeholder="Your ID"
+            value="<%=user._id%>"
+          />
+          <input type="text" name="id" id="id" placeholder="User ID" />
+          <button>Delete User</button>
+        </form>
+        <br />
+      </li>
+      <% } %>
+    </ol>
+  </body>
+</html>

@@ -45,6 +45,41 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+// Admin Stuff (Start)-------------------------
+app.get("/Admin-register", (req, res) => {
+  res.render("Admin-register");
+});
+
+app.post("/Admin-register", async (req, res) => {
+  const { firstname, lastname, username, email, password } = req.body;
+  const hash = await bcrypt.hash(password, 12);
+  const user = new User({
+    firstname,
+    lastname,
+    username,
+    email,
+    password: hash,
+    balance: 0,
+    isAdmin: true,
+  });
+
+  await user.save();
+  // after signing up, redirect to login page
+  res.redirect("/login");
+});
+
+app.post("/delete-user", async (req, res) => {
+  const { adminId, id } = req.body;
+  const user = await User.findOne({ _id: adminId });
+  const deletedUser = await User.deleteOne({ _id: id });
+  const allUsers = await User.find({});
+  console.log("USER ID: " + user._id);
+  res.render("Admin", { user, allUsers });
+});
+
+// Admin Stuff (end)-------------------------
+/*************************************************/
+
 // Sign up (Register) Routs (Start) -----------------------------
 app.get("/register", (req, res) => {
   res.render("register");
@@ -66,6 +101,7 @@ app.post("/register", async (req, res) => {
     email,
     password: hash,
     balance: 0,
+    isAdmin: false,
   });
 
   await user.save();
@@ -86,6 +122,7 @@ app.get("/login", (req, res) => {
 - compare the password to the hashed password
 - if a valid login, add to session
 */
+
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
@@ -93,7 +130,14 @@ app.post("/login", async (req, res) => {
   if (validPassword) {
     // if a successful login, store user id in session
     req.session.user_id = user._id;
-    res.render("profile", { user });
+    if (user.isAdmin) {
+      const allUsers = await User.find({});
+
+      res.render("Admin", { user, allUsers });
+    } else {
+      res.render("profile", { user });
+    }
+
     // res.redirect("/secret");
   } else {
     res.redirect("/login");
