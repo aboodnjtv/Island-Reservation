@@ -159,6 +159,17 @@ app.post("/logout", async (req, res) => {
 });
 // log out Rout (End) -----------------------------
 
+// A route to add balance to user
+app.post("/addBalance", async (req, res) => {
+  const { addedBalance, id } = req.body;
+  const user = await User.findOne({ _id: id });
+  console.log("TO ADD: " + parseInt(addedBalance));
+  console.log("user.balance: " + user.balance);
+  user.balance += parseInt(addedBalance);
+  await user.save();
+  res.render("profile", { user });
+});
+
 // to protect (only valud if logged it)
 // add an if statment to check if session has user id
 app.get("/secret", requireLogin, (req, res) => {
