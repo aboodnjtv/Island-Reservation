@@ -30,6 +30,17 @@ ol > li {
   padding: 5px 5px;
   margin: 5px 5px;
   font-size: larger;
+  max-width: 756px;
+  min-width: 756px;
+}
+.allAdmins > li {
+  background-color: rgb(0, 113, 104);
+  border-radius: 5px;
+  padding: 5px 5px;
+  margin: 5px 5px;
+  font-size: larger;
+  max-width: 756px;
+  min-width: 756px;
 }
 input {
   background-color: white;

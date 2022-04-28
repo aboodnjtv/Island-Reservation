@@ -13,8 +13,30 @@
     <form action="/logout" method="POST">
       <button id="logout">Log out</button>
     </form>
-    <ol>
-      <% for(let customer of allUsers) {%>
+    <h2>Admins</h2>
+    <ol class="allAdmins">
+      <% for(let admin of allAdmins) {%>
+      <li>
+        First Name: <%=admin.firstname%>
+        <br />
+        Last Name: <%=admin.lastname%>
+        <br />
+        Username: <%=admin.username%>
+        <br />
+        Email: <%=admin.email%>
+        <br />
+        Balance: <%=admin.balance%>
+        <br />
+        User Type: Admin
+        <br />
+        ID: <%= admin._id %>
+        <br />
+      </li>
+      <% } %>
+    </ol>
+    <h2>Customers</h2>
+    <ol class="allCustomers">
+      <% for(let customer of allCustomers) {%>
       <li>
         First Name: <%=customer.firstname%>
         <br />
@@ -26,12 +48,7 @@
         <br />
         Balance: <%=customer.balance%>
         <br />
-
-        User Type: <% if(customer.isAdmin){%>
-        <span>Admin</span>
-        <% } else {%>
-        <span>Customer</span>
-        <% } %>
+        User Type: Customer
         <br />
         ID: <%= customer._id %>
         <br />

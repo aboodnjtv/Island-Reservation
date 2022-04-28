@@ -72,9 +72,9 @@ app.post("/delete-user", async (req, res) => {
   const { adminId, id } = req.body;
   const user = await User.findOne({ _id: adminId });
   const deletedUser = await User.deleteOne({ _id: id });
-  const allUsers = await User.find({});
-  console.log("USER ID: " + user._id);
-  res.render("Admin", { user, allUsers });
+  const allCustomers = await User.find({ isAdmin: false });
+  const allAdmins = await User.find({ isAdmin: true });
+  res.render("Admin", { user, allCustomers, allAdmins });
 });
 
 // Admin Stuff (end)-------------------------
@@ -131,9 +131,10 @@ app.post("/login", async (req, res) => {
     // if a successful login, store user id in session
     req.session.user_id = user._id;
     if (user.isAdmin) {
-      const allUsers = await User.find({});
+      const allCustomers = await User.find({ isAdmin: false });
+      const allAdmins = await User.find({ isAdmin: true });
 
-      res.render("Admin", { user, allUsers });
+      res.render("Admin", { user, allCustomers, allAdmins });
     } else {
       res.render("profile", { user });
     }
