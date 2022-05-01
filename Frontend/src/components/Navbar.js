@@ -20,10 +20,11 @@ class Navbar extends React.Component {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
         <div className="container" id="navbarNav">
           <ul class="nav navbar-nav pull-left">
           </ul>
-          <ul className="nav navbar-nav text-center">
+          <ul className="nav navbar-nav text-center btn-space">
             <li className={"nav-item" + (this.props.page == 'Home' ? " active" : "")}>
               <a className="nav-link" href="/">
                 Home
@@ -44,11 +45,20 @@ class Navbar extends React.Component {
             }
           </ul>
           <ul class="nav navbar-nav pull-right">
-          <li className={"nav-item" + (this.props.page == 'Gallery' ? " active" : "")}>
-            <a className="nav-link" href="/user/login">
-              Login
+
+          <li className={"nav-item" + (this.props.page == 'Login' ? " active" : "")}>
+            <a className="nav-link" href="/user/signin">
+              Account
             </a>
           </li>
+
+          <li className={"nav-item" + (this.props.page == 'Signup' ? " active" : "")}>
+            <a className="nav-link" href="/user/signup">
+              Join
+            </a>
+          </li>
+
+
           </ul>
         </div>
       </nav>

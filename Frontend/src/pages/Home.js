@@ -19,19 +19,27 @@ class Home extends React.Component {
             <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
             <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
             <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
           </ol>
           <div className="carousel-inner">
             <div className="carousel-item active">
-              <img className="d-block w-100" src="1.jpg" alt="First slide" />
+              <img className="d-block w-100" src="HomePageImages/homepage1.jpg" alt="First slide" />
             </div>
             <div className="carousel-item">
-              <img className="d-block w-100" src="2.jpg" alt="Second slide" />
+              <img className="d-block w-100" src="HomePageImages/homepage2.jpg" alt="Second slide" />
             </div>
             <div className="carousel-item">
-              <img className="d-block w-100" src="3.jpg" alt="Third slide" />
+              <img className="d-block w-100" src="HomePageImages/homepage3.jpg" alt="Third slide" />
             </div>
             <div className="carousel-item">
-              <img className="d-block w-100" src="4.jpg" alt="Fourth slide" />
+              <img className="d-block w-100" src="HomePageImages/homepage4.jpg" alt="Fourth slide" />
+            </div>
+            <div className="carousel-item">
+              <img className="d-block w-100" src="HomePageImages/homepage5.jpg" alt="Fifth slide" />
+            </div>
+            <div className="carousel-item">
+              <img className="d-block w-100" src="HomePageImages/homepage6.jpg" alt="Sixth slide" />
             </div>
           </div>
           <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
