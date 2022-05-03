@@ -16,3 +16,20 @@
   margin-left:10px;
   margin-right:5px;
 }
+
+.navbar-nav {
+  flex-direction: row;
+}
+
+.nav-link {
+  padding-right: .5rem !important;
+  padding-left: .5rem !important;
+}
+
+/* Fixes dropdown menus placed on the right side */
+.ml-auto {
+  margin-right: auto !important;
+}
+.mr-auto {
+  margin-left: auto !important;
+}

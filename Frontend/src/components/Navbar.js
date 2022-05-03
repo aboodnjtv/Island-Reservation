@@ -5,12 +5,14 @@ class Navbar extends React.Component {
       super(props);
   }
 
-  render(){
+  render() {
+    {/* logo is one directory up from 'Detail' page, must change location of access */}
+    let logo = (this.props.page == "Detail" || this.props.page == "Signup" ? "../logo192.png" : "logo192.png");
     return (
       <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100'}}>
         <a className="navbar-brand" href="#">
           {/* set logo with Is. Res. text, &nbsp; adds a non-breakable space before word */}
-          <img src="logo192.png" style={{height: '30px', width: '30px'}}/>
+          <img src={logo} style={{height: '30px', width: '30px'}}/>
           &nbsp;Island Reservation
         </a>
         <button
@@ -21,10 +23,8 @@ class Navbar extends React.Component {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="container" id="navbarNav">
-          <ul class="nav navbar-nav pull-left">
-          </ul>
-          <ul className="nav navbar-nav text-center btn-space">
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="nav navbar-nav ml-auto">
             <li className={"nav-item" + (this.props.page == 'Home' ? " active" : "")}>
               <a className="nav-link" href="/">
                 Home
@@ -44,7 +44,7 @@ class Navbar extends React.Component {
               </li>
             }
           </ul>
-          <ul class="nav navbar-nav pull-right">
+          <ul class="nav navbar-nav mr-auto">
 
           <li className={"nav-item" + (this.props.page == 'Login' ? " active" : "")}>
             <a className="nav-link" href="/user/signin">
