@@ -7,7 +7,8 @@ class Navbar extends React.Component {
 
   render() {
     {/* logo is one directory up from 'Detail' page, must change location of access */}
-    let logo = (this.props.page == "Detail" || this.props.page == "Signup" ? "../logo192.png" : "logo192.png");
+    let logo = (this.props.page == "Detail" || this.props.page == "Signup" || this.props.page == "Signin"
+      ? "../logo192.png" : "logo192.png");
     return (
       <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100'}}>
         <a className="navbar-brand" href="#">
@@ -46,9 +47,9 @@ class Navbar extends React.Component {
           </ul>
           <ul class="nav navbar-nav mr-auto">
 
-          <li className={"nav-item" + (this.props.page == 'Login' ? " active" : "")}>
+          <li className={"nav-item" + (this.props.page == 'Signin' ? " active" : "")}>
             <a className="nav-link" href="/user/signin">
-              Account
+              Sign in
             </a>
           </li>
 
@@ -57,8 +58,6 @@ class Navbar extends React.Component {
               Join
             </a>
           </li>
-
-
           </ul>
         </div>
       </nav>
