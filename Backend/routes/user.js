@@ -25,36 +25,53 @@ const ObjectId = require("mongodb").ObjectId;
 
 // This section will help you signup
 userRoutes.route("/user/signup").post(function (req, response) {
+  console.log("user signup endpoint accessed");
   let db_connect = dbo.getDb();
+  let db_client = dbo.getClient();
   let myobj = {
     fname: req.body.fname,
     lname: req.body.lname,
-    email: req.body.email
+    email: req.body.email,
+    password: req.body.password
   };
-  db_connect.collection("users").insertOne(myobj, function (err, res) {
+  db_client.db("IR").collection("users").insertOne(myobj, function (err, res) {
     if (err) throw err;
-    response.json(res);
+    // response.json(res);
   });
+  console.log("very end of user signup endpoint reached");
+  response.end("Customer added.");
 });
 
 //took from Abdel's sample code, registering a new user
 userRoutes.post("/user/register", async (req, res) => {
   let db_connect = dbo.getDb();
+  let db_client = dbo.getClient();
+
   console.log("entered register user");
   console.log(req.body);
-  const { firstname, lastname, username, email, password } = req.body;
+  const { firstname, lastname, new_username, email, password } = req.body;
+
+  console.log("")
+  let existingUser = await db_client.db("IR").collection("users").find({username: new_username}).toArray();
+  console.log(existingUser);
+  if (existingUser.length != 0)
+  {
+    res.end("Error: Username is already in use.");
+  }
+  res.end("about to sign up a new user");
+
   const hash = await bcrypt.hash(password, 12);
   const user = new User({
     firstname,
     lastname,
-    username,
+    new_username,
     email,
     password: hash,
     balance: 0,
     isAdmin: false,
   });
 
-  let db_client = dbo.getClient();
+  // let db_client = dbo.getClient();
   await db_client.db("IR").collection("users").insertOne(user);
   // res.json(user);
   res.end("Customer added.");

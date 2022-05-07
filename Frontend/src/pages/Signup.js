@@ -16,15 +16,15 @@ class SignUp extends React.Component {
   // defining a method (arrow notation method)
   // which automatically binds to 'this'
   signUp = () => {
-    fetch("http://localhost:5000/user/signup", {
+    fetch("http://localhost:5000/api/user/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(this.state),
     })
-      .then(this.fetchCheckStatus)
-      .then(response => response.json())
+      // .then(this.fetchCheckStatus)
+      // .then(response => response.json())
       .then(data => {
           // this data can contain a json that says
           // the user is signed up successfully (email dne already)
@@ -82,7 +82,7 @@ class SignUp extends React.Component {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="email">E-mail</label>
+            <label htmlFor="email">EMAIL HERE</label>
             <input
               type="text"
               className="form-control"
