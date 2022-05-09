@@ -1,0 +1,30 @@
+body {
+  font-family: "Courier New", Courier, monospace;
+}
+ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: rgb(233, 233, 233);
+  border-radius: 20px;
+}
+li,
+a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-size: 15px;
+  list-style-type: none;
+  padding: 10px 10px;
+}
+li:hover {
+  background-color: rgb(204, 198, 198);
+  border-radius: 20px;
+}
+h3 {
+  font-weight: bold;
+  font-size: 40px;
+}
+p {
+  font-size: 30px;
+}
