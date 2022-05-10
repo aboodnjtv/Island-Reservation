@@ -10,34 +10,49 @@ class SignUp extends React.Component {
   			lname: "",
   			email: "",
         password: ""
+
   		}
   }
 
   // defining a method (arrow notation method)
   // which automatically binds to 'this'
-  signUp = () => {
+  signUp = (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    //let formData = new FormData();
+		//formData.append('fname', this.state.fname);
+		//formData.append('lname', this.state.lname);
+		//formData.append('email', this.state.email);
+    //formData.append('password', this.state.password);
+    let formData = JSON.stringify(this.state);
     fetch("http://localhost:5000/api/user/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(this.state),
+      body: formData,
     })
-      // .then(this.fetchCheckStatus)
-      // .then(response => response.json())
-      .then(data => {
-          // this data can contain a json that says
-          // the user is signed up successfully (email dne already)
-          // all fields must be entered
+      .then(this.fetchCheckStatus)
+      .then(response => {
+          // response is an object which contains status code and other information
+          // check if response.status is OK
+          if (response.status == 200) {
+            // if success, navigate to the sign in page
+            // move to sign in page with a parameter to let user know sign up success
+            window.location.href = '/user/signin?rx=1';
+          } else {
+            alert("Sign up failed ... please contact support");
+          }
 
-          console.log(data);
       })
       .catch(error => {
-        window.alert(error);
+        console.log(error);
         return;
       });
   };
   fetchCheckStatus = (response) => {
+    console.log(response.status);
   	if (response.status >= 200 && response.status < 300) {
   		return Promise.resolve(response)
   	} else {
@@ -82,7 +97,7 @@ class SignUp extends React.Component {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="email">EMAIL HERE</label>
+            <label htmlFor="email">E-mail</label>
             <input
               type="text"
               className="form-control"

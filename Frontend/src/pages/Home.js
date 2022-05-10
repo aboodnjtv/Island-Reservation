@@ -52,7 +52,6 @@ class Home extends React.Component {
             <span className="sr-only">Next</span>
           </a>
         </div>
-
       </>
     )
   }

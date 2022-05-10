@@ -43,11 +43,22 @@ class Signin extends React.Component {
   		return Promise.reject(new Error(response))
   	}
   }
+  getUrlParam = (key) => {
+    var params = {};
+    window.location.href.replace(/[?&]+([^=&]+)=([^&#]*)/gi, function(m, key, value) {
+        params[key] = value;
+    });
+    return params[key] ? params[key] : null;
+  }
   render() {
+    let addSignUpSuccess = (this.getUrlParam('rx') && this.getUrlParam('rx') == "1");
     return (
       <>
       <Navbar  page="Signin"/>
       <div className="container">
+        {addSignUpSuccess &&
+          <div style={{color: 'red'}}>Sign up was successful!</div>
+        }
         <h3>Sign in</h3>
         <div className="container">
         <div className="row">
