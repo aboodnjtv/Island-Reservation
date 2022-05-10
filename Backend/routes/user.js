@@ -30,6 +30,16 @@ userRoutes.route("/user/signup").post(async (req, res) => {
 
   // Get request body
   const { firstname, lastname, username, email, password } = req.body;
+  if (password.length < 8)
+  {
+    return res.status(410).send("Error: Password must be at least 8 characters long.");
+  }
+
+  if (email.indexOf('@') == -1 || email.indexOf('.') == -1)
+  {
+    return res.status(410).send("Error: Not a valid email.");
+  }
+
   const hash = await bcrypt.hash(password, 12);
 
   // Check if username or email already exists
@@ -76,7 +86,7 @@ userRoutes.post("/user/signin", async (req, res) => {
   if (!user)
   {
     console.log("username doesn't exist");
-    res.end(email + " doesn't exist in our records.");
+    res.status(500).end(email + " doesn't exist in our records.");
   }
   else
   {
@@ -90,18 +100,18 @@ userRoutes.post("/user/signin", async (req, res) => {
       if (user.isAdmin) {
         const allCustomers = await User.find({ isAdmin: false });
         const allAdmins = await User.find({ isAdmin: true });
-        // res.render("Admin", { user, allCustomers, allAdmins });
-        res.end("successful admin login for: " + user._id.toString());
+        res.status(200).json(user);
+        // res.end("successful admin login for: " + user._id.toString());
       } else {
-        res.end("successful login for: " + user._id.toString()); 
-        // res.render("profile", { user });
+        res.status(200).json(user);
+        // res.end("successful login for: " + user._id.toString()); 
       }
 
       // res.redirect("/secret");
     } else {
       console.log("failed login");
       // res.redirect("/login");
-      res.end("failed login for: " + email);
+      res.status(500).end("failed login for: " + email);
     }
   }
 });
