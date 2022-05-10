@@ -6,10 +6,10 @@ class SignUp extends React.Component {
   constructor(props) {
   		super(props);
   		this.state = {
-  			fname: "",
-  			lname: "",
-  			email: "",
-        password: ""
+  			"fname": "",
+  			"lname": "",
+  			"email": "",
+        "password": ""
   		}
   }
 
@@ -23,19 +23,70 @@ class SignUp extends React.Component {
       },
       body: JSON.stringify(this.state),
     })
-      // .then(this.fetchCheckStatus)
-      // .then(response => response.json())
-      .then(data => {
-          // this data can contain a json that says
-          // the user is signed up successfully (email dne already)
-          // all fields must be entered
+    .then((response) => response.json())
+    .then((data) => {
+      window.alert(data.id);
 
-          console.log(data);
-      })
-      .catch(error => {
-        window.alert(error);
-        return;
-      });
+      /*
+      * possible way to get JSON object using json()
+      * return response.json().then(function(json) {
+      *   // process your JSON further
+      * });
+      *
+      */
+    })
+    // .then( async (response) => {
+    //    const data = await response.json(); 
+    //   //  const conv = await data.toString();
+    //    window.alert(data);
+    //    console.log('Success:', data);
+    //   //  window.alert(data.id);
+    // })
+
+    // .then( (data) => {
+    //   // console.log(data); 
+    //   window.alert(data);
+    // })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
+    // try
+    // {
+    // let response = fetch("http://localhost:5000/api/user/signup", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(this.state),
+    // });
+
+    // // await window.alert(response.toString());
+    // window.alert(response.toString());
+    // // await window.alert(data.toString());
+    //   // .then(this.fetchCheckStatus)
+    //   // .then(async response => await response.json())
+    //   // .then(async data => await window.alert(data))
+    //   // .then(async response => {
+    //   //     // this data can contain a json that says
+    //   //     // the user is signed up successfully (email dne already)
+    //   //     // all fields must be entered
+    //   //     // await window.alert("tried");
+    //   //     const data = await response.json();
+    //   //     // const response = data.json();
+    //   //     // console.log(data);
+    //   //     // await window.alert(data);
+    //   // })
+    //   // .catch(error => {
+    //   //   window.alert(error);
+    //   //   return;
+    //   // });
+    // }
+    // catch(err)
+    // {
+    //   window.alert(err.message);
+    // }
+
   };
   fetchCheckStatus = (response) => {
   	if (response.status >= 200 && response.status < 300) {

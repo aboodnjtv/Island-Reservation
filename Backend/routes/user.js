@@ -32,15 +32,32 @@ userRoutes.route("/user/signup").post(function (req, response) {
     fname: req.body.fname,
     lname: req.body.lname,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    balance: 0
   };
   db_client.db("IR").collection("users").insertOne(myobj, function (err, res) {
     if (err) throw err;
     // response.json(res);
   });
   console.log("very end of user signup endpoint reached");
-  response.end("Customer added.");
+  // response.json({status: 200});
+  response.status(200).send({"status": 220, "id": "100-000001"});
 });
+
+// userRoutes.post("/user/login", async (req, res) => {
+//   let db_client = dbo.getClient();
+//   const username = req.body.email;
+//   const pass = req.body.password;
+
+//   let existingUser = await db_client.db("IR").collection("users").findOne({email: username}, {}).toArray();
+//   console.log(existingUser);
+//   if (existingUser.length == 0)
+//   {
+//     res.end("Error: Email doesn't exist in our records.");
+//   }
+
+
+// });
 
 //took from Abdel's sample code, registering a new user
 userRoutes.post("/user/register", async (req, res) => {
@@ -51,14 +68,14 @@ userRoutes.post("/user/register", async (req, res) => {
   console.log(req.body);
   const { firstname, lastname, new_username, email, password } = req.body;
 
-  console.log("")
-  let existingUser = await db_client.db("IR").collection("users").find({username: new_username}).toArray();
-  console.log(existingUser);
-  if (existingUser.length != 0)
-  {
-    res.end("Error: Username is already in use.");
-  }
-  res.end("about to sign up a new user");
+  console.log("");
+  // let existingUser = await db_client.db("IR").collection("users").find({username: new_username}).toArray();
+  // console.log(existingUser);
+  // if (existingUser.length != 0)
+  // {
+  //   res.end("Error: Username is already in use.");
+  // }
+  // res.end("about to sign up a new user");
 
   const hash = await bcrypt.hash(password, 12);
   const user = new User({
@@ -82,30 +99,38 @@ userRoutes.post("/user/register", async (req, res) => {
 //also taken from Abdel's sample code, logging in a user
 userRoutes.post("/user/login", async (req, res) => {
   let db_client = dbo.getClient();
-  const { entered_username, password } = req.body;
-  const user = await db_client.db("IR").collection("users").findOne({ username: entered_username }, {});
-  console.log(user);
-  const validPassword = await bcrypt.compare(password, user.password);
-  if (validPassword) {
-    console.log("successful login");
-    // if a successful login, store user id in session
-    console.log("user id:" + user._id.toString());
-    // req.session.user_id = user._id.toString();
-    if (user.isAdmin) {
-      const allCustomers = await User.find({ isAdmin: false });
-      const allAdmins = await User.find({ isAdmin: true });
-      // res.render("Admin", { user, allCustomers, allAdmins });
-      res.end("successful admin login for: " + user._id.toString());
-    } else {
-      res.end("successful login for: " + user._id.toString()); 
-      // res.render("profile", { user });
-    }
+  const { username, password } = req.body;
+  const user = await db_client.db("IR").collection("users").findOne({ email: username }, {});
+  if (!user)
+  {
+    console.log("username doesn't exist");
+    res.end("failed login for: " + username);
+  }
+  else
+  {
+    console.log(user);
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (validPassword) {
+      console.log("successful login");
+      // if a successful login, store user id in session
+      console.log("user id:" + user._id.toString());
+      // req.session.user_id = user._id.toString();
+      if (user.isAdmin) {
+        const allCustomers = await User.find({ isAdmin: false });
+        const allAdmins = await User.find({ isAdmin: true });
+        // res.render("Admin", { user, allCustomers, allAdmins });
+        res.end("successful admin login for: " + user._id.toString());
+      } else {
+        res.end("successful login for: " + user._id.toString()); 
+        // res.render("profile", { user });
+      }
 
-    // res.redirect("/secret");
-  } else {
-    console.log("failed login");
-    // res.redirect("/login");
-    res.end("failed login for: " + entered_username);
+      // res.redirect("/secret");
+    } else {
+      console.log("failed login");
+      // res.redirect("/login");
+      res.end("failed login for: " + username);
+    }
   }
 });
 
