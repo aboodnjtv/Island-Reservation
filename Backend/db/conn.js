@@ -5,7 +5,7 @@ const client = new MongoClient(Db, {
   useUnifiedTopology: true,
 });
  
-var _db;
+var IR_db;
 
 async function listDatabases(client){
   databasesList = await client.db().admin().listDatabases();
@@ -20,21 +20,21 @@ module.exports = {
       // Verify we got a good "db" object
       if (db)
       {
-        _db = db.db("clients");
+        IR_db = db.db("IR");
         console.log("Successfully connected to MongoDB."); 
-
+        // Print databases
         await listDatabases(client);
       }
       return callback(err);
-         });
-
-    // await listDatabases(client);
+    });
   },
- 
+
+  // Connects directly to IR database
   getDb: function () {
-    return _db;
+    return IR_db;
   },
 
+  // Connects to entire mongodb cluster
   getClient: function () {
     return client;
   }

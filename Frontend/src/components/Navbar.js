@@ -45,7 +45,7 @@ class Navbar extends React.Component {
               </li>
             }
           </ul>
-          <ul class="nav navbar-nav mr-auto">
+          <ul className="nav navbar-nav mr-auto">
 
           <li className={"nav-item" + (this.props.page == 'Signin' ? " active" : "")}>
             <a className="nav-link" href="/user/signin">

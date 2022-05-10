@@ -1,52 +1,63 @@
-import React from 'react';
-import './Signin.css'
-import Navbar from '../components/Navbar.js'
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import Navbar from '../components/Navbar.js';
+import './Signin.css';
 
-class Signin extends React.Component {
-  constructor(props) {
-  		super(props);
-  		this.state = {
-  			email: "",
-        password: ""
-  		}
+// Copy of Maiah's code, just changed from class component to functional component
+export default function SignIn() {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  // For navigating to different page when signed in
+  let successSignin= false;
+  const navigate = useNavigate();
+  
+  // These methods will update the state properties.
+  function updateForm(value) {
+    return setForm((prev) => {
+      return { ...prev, ...value };
+    });
   }
+  
+  // This function will handle the submission.
+  async function onSubmit(e) {
+    e.preventDefault();
+  
+    // When a post request is sent to the create url, we'll add a new record to the database.
+    const newPerson = { ...form };
 
-  // defining a method (arrow notation method)
-  // which automatically binds to 'this'
-  signIn = () => {
-    fetch("http://localhost:5000/user/signin", {
+    // When submit pressed, make api call
+    await fetch("http://localhost:5000/user/signin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(newPerson),
     })
-      .then(this.fetchCheckStatus)
-      .then(response => response.json())
-      .then(data => {
-          // this data can contain a json that says
-          // the user is signed up successfully (email dne already)
-          // all fields must be entered
-
-          console.log(data);
-      })
-      .catch(error => {
-        window.alert(error);
-        return;
-      });
-  };
-  fetchCheckStatus = (response) => {
-  	if (response.status >= 200 && response.status < 300) {
-  		return Promise.resolve(response)
-  	} else {
-  		response.status = "Transaction rejected ...";
-  		return Promise.reject(new Error(response))
-  	}
+    .then(response => {
+      // If the HTTP response is 2xx then response.ok will have a value of true
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      } else {
+        successSignin = true;
+      }
+    })
+    .catch(error => {
+      window.alert(error);
+      return;
+    });
+    
+    // Navigate to homepage if signin success (Should be own user profile)
+    if(successSignin){
+      navigate("/")
+    }
   }
-  render() {
-    return (
-      <>
-      <Navbar  page="Signin"/>
+
+  return (
+    <div>
+    <Navbar  page="Signin"/>
       <div className="container">
         <h3>Sign in</h3>
         <div className="container">
@@ -58,15 +69,15 @@ class Signin extends React.Component {
           for large page size, sign up takes 5 cols
           */}
         <div className="col-lg-5 col-md-6 col-xs-12">
-        <form className="border shadow-sm rounded p-3 mb-3" onSubmit={this.signIn}>
+        <form className="border shadow-sm rounded p-3 mb-3" onSubmit={onSubmit}>
           <div className="form-group">
             <label htmlFor="email">E-mail</label>
             <input
               type="text"
               className="form-control"
               id="email"
-              value={this.state.email}
-              onChange={(e) => this.setState({ email: e.target.value })}
+              value={form.email}
+              onChange={(e) => updateForm({ email: e.target.value })}
             />
           </div>
           <div className="form-group">
@@ -75,8 +86,8 @@ class Signin extends React.Component {
               type="password"
               className="form-control"
               id="password"
-              value={this.state.password}
-              onChange={(e) => this.setState({ password: e.target.value })}
+              value={form.password}
+              onChange={(e) => updateForm({ password: e.target.value })}
             />
           </div>
           <div className="form-group">
@@ -91,8 +102,6 @@ class Signin extends React.Component {
         </div>
         </div>
       </div>
-      </>
+      </div>
     );
   }
-}
-export default Signin;
