@@ -1,69 +1,65 @@
-import React from 'react';
-import './Signup.css'
-import Navbar from '../components/Navbar.js'
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import Navbar from '../components/Navbar.js';
+import './Signup.css';
 
-class SignUp extends React.Component {
-  constructor(props) {
-  		super(props);
-  		this.state = {
-  			fname: "",
-  			lname: "",
-  			email: "",
-        password: ""
-
-  		}
+// Copy of Maiah's code, just changed from class component to functional component
+export default function SignUp() {
+  const [form, setForm] = useState({
+    firstname: "",
+    lastname: "",
+    username: "",
+    email: "",
+    password: "",
+  });
+  // For navigating to different page when signed up
+  let successSignup = false;
+  const navigate = useNavigate();
+  
+  // These methods will update the state properties.
+  function updateForm(value) {
+    return setForm((prev) => {
+      return { ...prev, ...value };
+    });
   }
+  
+  // This function will handle the submission.
+  async function onSubmit(e) {
+    e.preventDefault();
+  
+    // When a post request is sent to the create url, we'll add a new record to the database.
+    const newPerson = { ...form };
 
-  // defining a method (arrow notation method)
-  // which automatically binds to 'this'
-  signUp = (ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-
-    //let formData = new FormData();
-		//formData.append('fname', this.state.fname);
-		//formData.append('lname', this.state.lname);
-		//formData.append('email', this.state.email);
-    //formData.append('password', this.state.password);
-    let formData = JSON.stringify(this.state);
-    fetch("http://localhost:5000/api/user/signup", {
+    // When submit pressed, make api call
+    await fetch("http://localhost:5000/user/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: formData,
+      body: JSON.stringify(newPerson),
     })
-      .then(this.fetchCheckStatus)
-      .then(response => {
-          // response is an object which contains status code and other information
-          // check if response.status is OK
-          if (response.status == 200) {
-            // if success, navigate to the sign in page
-            // move to sign in page with a parameter to let user know sign up success
-            window.location.href = '/user/signin?rx=1';
-          } else {
-            alert("Sign up failed ... please contact support");
-          }
+    .then(response => {
+      // If the HTTP response is 2xx then response.ok will have a value of true
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      } else {
+        successSignup = true;
+      }
+    })
+    .catch(error => {
+      window.alert(error);
+      return;
+    });
 
-      })
-      .catch(error => {
-        console.log(error);
-        return;
-      });
-  };
-  fetchCheckStatus = (response) => {
-    console.log(response.status);
-  	if (response.status >= 200 && response.status < 300) {
-  		return Promise.resolve(response)
-  	} else {
-  		response.status = "Transaction rejected ...";
-  		return Promise.reject(new Error(response))
-  	}
+    // Navigate to signin page if signup success
+    if(successSignup){
+      navigate("/user/signin")
+    }
   }
-  render() {
-    return (
-      <>
-      <Navbar  page="Signup"/>
+
+  return (
+    <div>
+    <Navbar page="Signup"/>
       <div className="container">
         <h3>Sign Up</h3>
         <div className="container">
@@ -75,15 +71,15 @@ class SignUp extends React.Component {
           for large page size, sign up takes 5 cols
           */}
         <div className="col-lg-5 col-md-6 col-xs-12">
-        <form className="border shadow-sm rounded p-3 mb-3" onSubmit={this.signUp}>
+        <form className="border shadow-sm rounded p-3 mb-3" onSubmit={onSubmit}>
           <div className="form-group">
             <label htmlFor="fname">First Name</label>
             <input
               type="text"
               className="form-control"
               id="fname"
-              value={this.state.fname}
-              onChange={(e) => this.setState({ fname: e.target.value })}
+              value={form.firstname}
+              onChange={(e) => updateForm({ firstname: e.target.value })}
             />
           </div>
           <div className="form-group">
@@ -92,8 +88,18 @@ class SignUp extends React.Component {
               type="text"
               className="form-control"
               id="lname"
-              value={this.state.lname}
-              onChange={(e) => this.setState({ lname: e.target.value })}
+              value={form.lastname}
+              onChange={(e) => updateForm({ lastname: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="uname">Username</label>
+            <input
+              type="text"
+              className="form-control"
+              id="uname"
+              value={form.username}
+              onChange={(e) => updateForm({ username: e.target.value })}
             />
           </div>
           <div className="form-group">
@@ -102,8 +108,8 @@ class SignUp extends React.Component {
               type="text"
               className="form-control"
               id="email"
-              value={this.state.email}
-              onChange={(e) => this.setState({ email: e.target.value })}
+              value={form.email}
+              onChange={(e) => updateForm({ email: e.target.value })}
             />
           </div>
           <div className="form-group">
@@ -112,8 +118,8 @@ class SignUp extends React.Component {
               type="password"
               className="form-control"
               id="password"
-              value={this.state.password}
-              onChange={(e) => this.setState({ password: e.target.value })}
+              value={form.password}
+              onChange={(e) => updateForm({ password: e.target.value })}
             />
           </div>
           <div className="form-group">
@@ -128,8 +134,6 @@ class SignUp extends React.Component {
         </div>
         </div>
       </div>
-      </>
+      </div>
     );
   }
-}
-export default SignUp;

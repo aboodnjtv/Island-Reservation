@@ -4,13 +4,13 @@ import AppDetail from './pages/AppDetail.js';
 import Home from './pages/Home.js';
 import { Routes, Route } from "react-router-dom";
 import SignUp from './pages/Signup';
-import Signin from './pages/Signin';
+import SignIn from './pages/Signin';
 
 function App() {
   return (
     <div className="app">
       <Routes>
-        <Route exact path="/user/signin" element={<Signin />} />
+        <Route exact path="/user/signin" element={<SignIn />} />
         <Route exact path="/detail/:id" element={<AppDetail />} />
         <Route exact path="/user/signup" element={<SignUp />} />
         <Route exact path="/list" element={<AppIndex />} />
