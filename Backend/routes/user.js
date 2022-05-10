@@ -10,6 +10,20 @@ const userRoutes = express.Router();
 // This will help us connect to the database
 const dbo = require("../db/conn");
 
+userRoutes.get('/users', async (req, res) => {
+  try
+  {
+      let db_client = dbo.getClient();
+      let data = await db_client.db("IR").collection("users").find({}).toArray();
+
+      res.send(data);
+  }
+  catch(error)
+  {
+      res.status(500).json({message: error.message});
+  }
+})
+
 // Sign up route
 userRoutes.route("/user/signup").post(async (req, res) => {
   let db_client = dbo.getDb();
@@ -62,7 +76,7 @@ userRoutes.post("/user/signin", async (req, res) => {
   if (!user)
   {
     console.log("username doesn't exist");
-    res.end("failed login for: " + email);
+    res.end(email + " doesn't exist in our records.");
   }
   else
   {
