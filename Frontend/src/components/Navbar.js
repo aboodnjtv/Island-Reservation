@@ -7,7 +7,8 @@ class Navbar extends React.Component {
 
   render() {
     {/* logo is one directory up from 'Detail' page, must change location of access */}
-    let logo = (this.props.page == "Detail" || this.props.page == "Signup" || this.props.page == "Signin"
+    let logo = (this.props.page == "Detail" || this.props.page == "Signup" ||
+      this.props.page == "Signin" || this.props.page == "Signout"
       ? "../logo192.png" : "logo192.png");
     return (
       <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100'}}>
@@ -46,18 +47,32 @@ class Navbar extends React.Component {
             }
           </ul>
           <ul className="nav navbar-nav mr-auto">
-
-          <li className={"nav-item" + (this.props.page == 'Signin' ? " active" : "")}>
-            <a className="nav-link" href="/user/signin">
-              Sign in
-            </a>
-          </li>
-
-          <li className={"nav-item" + (this.props.page == 'Signup' ? " active" : "")}>
-            <a className="nav-link" href="/user/signup">
-              Join
-            </a>
-          </li>
+          {sessionStorage.getItem("isAuthenticated") ?
+          <>
+            <li className={"nav-item" + (this.props.page == 'UserHome' ? " active" : "")}>
+              <a className="nav-link" href="/userhome">
+                My Account
+              </a>
+            </li>
+            <li className={"nav-item" + (this.props.page == 'Signout' ? " active" : "")}>
+              <a className="nav-link" href="/user/signout">
+                Sign out
+              </a>
+            </li>
+          </> :
+          <>
+            <li className={"nav-item" + (this.props.page == 'Signin' ? " active" : "")}>
+              <a className="nav-link" href="/user/signin">
+                Sign in
+              </a>
+            </li>
+            <li className={"nav-item" + (this.props.page == 'Signup' ? " active" : "")}>
+              <a className="nav-link" href="/user/signup">
+                Join
+              </a>
+            </li>
+          </>
+          }
           </ul>
         </div>
       </nav>

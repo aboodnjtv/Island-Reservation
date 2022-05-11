@@ -13,18 +13,18 @@ export default function SignIn() {
   // For navigating to different page when signed in
   let successSignin= false;
   const navigate = useNavigate();
-  
+
   // These methods will update the state properties.
   function updateForm(value) {
     return setForm((prev) => {
       return { ...prev, ...value };
     });
   }
-  
+
   // This function will handle the submission.
   async function onSubmit(e) {
     e.preventDefault();
-  
+
     // When a post request is sent to the create url, we'll add a new record to the database.
     const newPerson = { ...form };
 
@@ -42,16 +42,23 @@ export default function SignIn() {
         throw new Error(response.statusText)
       } else {
         successSignin = true;
+        // we have an ok from the backend, so we are authenticated (signed in)
+        // either pass the "isAuthenticated" key OR a userJSON object inside of response
+        //localStorage.setItem(response.userJson);
+        // each time we navigate to a new page check local storage again
+        // to make sure user is signed in
+        sessionStorage.setItem("isAuthenticated", true);
+
       }
     })
     .catch(error => {
       window.alert(error);
       return;
     });
-    
-    // Navigate to homepage if signin success (Should be own user profile)
+
+    // Navigate to user homepage if signin success (Should be own user profile)
     if(successSignin){
-      navigate("/")
+      window.location.href = "/userhome";
     }
   }
 
