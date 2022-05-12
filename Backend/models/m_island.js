@@ -5,19 +5,32 @@ const Schema = mongoose.Schema;
 // put after I've separated the island schema into it's own folder and file
 // const Student = require('../models/island.js');
 
+//name, location, land_size, details, price, rating, islandImg, is_available
 // create student schema & model
 const islandSchema = new Schema({
     name: {
-        type: String,
-        required: [true, 'name field is required']
+        type: String
     },
     location: {
-      type: String,
-      required: [true, 'location field is required']
+      type: String
     },
     land_size: {
-      type: Number,
-      required: [true, 'land_size field is required']
+      type: Number
+    },
+    details: {
+      type: String
+    },
+    price: {
+      type: Number
+    },
+    rating: {
+      type: Number
+    },
+    islandImg: {
+      type: String
+    },
+    is_available: {
+      type: Boolean
     }
     // amenities: {
     //   type: [String],

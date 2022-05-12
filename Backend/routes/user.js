@@ -32,12 +32,14 @@ userRoutes.route("/user/signup").post(async (req, res) => {
   const { firstname, lastname, username, email, password } = req.body;
   if (password.length < 8)
   {
-    return res.status(410).send("Error: Password must be at least 8 characters long.");
+    return res.status(410).json({message: "Password must be at least 8 characters long."});
+    // return res.status(410).send("Error: Password must be at least 8 characters long.");
   }
 
   if (email.indexOf('@') == -1 || email.indexOf('.') == -1)
   {
-    return res.status(410).send("Error: Not a valid email.");
+    return res.status(410).json({message: "Not a valid email."});
+    // return res.status(410).send("Error: Not a valid email.");
   }
 
   const hash = await bcrypt.hash(password, 12);
@@ -49,10 +51,12 @@ userRoutes.route("/user/signup").post(async (req, res) => {
   {
     // If username exists, send 409 error code with an error message
     // See this for standard error code and meanings: https://restfulapi.net/http-status-codes/
-    return res.status(409).send("Error: Username is already in use.");
+    return res.status(409).json({message: "Username is already in use."});
+    // return res.status(409).send("Error: Username is already in use.");
   } else if (existingEmail.length != 0) {
     // If email exists, send 409 error code with an error message
-    return res.status(409).send("Error: Email is already in use.");
+    return res.status(409).json({message: "Email is already in use."});
+    // return res.status(409).send("Error: Email is already in use.");
   }
 
   // Create object to insert into database
@@ -70,7 +74,8 @@ userRoutes.route("/user/signup").post(async (req, res) => {
   db_client.collection("users").insertOne(user, function (err) {
     if (err) {
       // If insert fails, return 500 error status
-      res.status(500).send("Server Error: Failed to insert into database.");
+      return res.status(500).json({message: "Server Error. Failed to insert into database."});
+      // res.status(500).send("Server Error: Failed to insert into database.");
       throw err;
     }
     // Return user input in api call, automatically returns 200 success status

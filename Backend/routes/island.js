@@ -233,5 +233,36 @@ islandRoutes.get('/islands/rating/desc', async (req, res) => {
   }
 })
 
+// adding an island
+islandRoutes.route("/islands/add").post(async (req, res) => {
+  let db_client = dbo.getDb();
+
+  // Get request body
+  const { name, location, land_size, details, price, rating, islandImg, is_available } = req.body;
+
+  // Create object to insert into database
+  const island = new Island({
+    name,
+    location,
+    land_size,
+    details,
+    price,
+    rating,
+    islandImg,
+    is_available
+  });
+  
+  // Insert into database
+  db_client.collection("islands").insertOne(island, function (err) {
+    if (err) {
+      // If insert fails, return 500 error status
+      res.status(500).send("Server Error: Failed to insert into database.");
+      throw err;
+    }
+    // Return user input in api call, automatically returns 200 success status
+    return res.status(200).json(island);
+  });
+});
+
 
 module.exports = islandRoutes;
