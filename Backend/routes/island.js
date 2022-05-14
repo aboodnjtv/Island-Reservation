@@ -19,9 +19,27 @@ islandRoutes.get('/islands', async (req, res) => {
   {
       // console.log("got inside");
       let db_client = dbo.getClient();
-      let data = await db_client.db("IR").collection("islands").find({}).toArray();
+      let data = await db_client.db("IR").collection("islands").find({}, {projection: {name: 1, location: 1, land_size: 1, islandImg: 1, is_available: 1}}).toArray();
 
       res.send(data);
+  }
+  catch(error)
+  {
+      res.status(500).json({message: error.message});
+  }
+})
+
+//get a specific island by _id
+//send in a _id as a url parameter
+//ex: localhost:5000/island?id=627c579e955e61bdfe61df69 --> parameter id = 627c579e955e61bdfe61df69
+islandRoutes.get('/island', async (req, res) => {
+  try
+  {
+      const id_obj = new ObjectId(req.query.id);
+      let db_client = dbo.getClient();
+      let island_data = await db_client.db("IR").collection("islands").find({_id: id_obj}).toArray();
+
+      res.send(island_data[0]);
   }
   catch(error)
   {
