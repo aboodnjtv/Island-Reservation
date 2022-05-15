@@ -37,6 +37,11 @@ class Navbar extends React.Component {
                 Gallery
               </a>
             </li>
+            <li className={"nav-item" + (this.props.page == 'AppAbout' ? " active" : "")}>
+              <a className="nav-link" href="/about">
+                About
+              </a>
+            </li>
             {/* This li component will show on condition that page == 'Detail' */}
             {this.props.page == "Detail" &&
               <li className={"nav-item" + (this.props.page == 'Detail' ? " active" : "")}>
