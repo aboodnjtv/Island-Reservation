@@ -48,8 +48,15 @@ export default function SignIn() {
         // each time we navigate to a new page check local storage again
         // to make sure user is signed in
         sessionStorage.setItem("isAuthenticated", true);
-
       }
+      // return the promise(response.json) so that the next .then can resolve the promise
+      return response.json();
+    })
+    .then(data => {
+      // resolve the promise (response.json) as a user record
+      let userRecord = JSON.stringify(data);
+      // store the user record into session storage to access it on userhomepage
+      sessionStorage.setItem("userRecord", userRecord);
     })
     .catch(error => {
       window.alert(error);
