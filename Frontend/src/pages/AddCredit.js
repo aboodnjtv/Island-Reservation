@@ -13,8 +13,8 @@ export default function AddCredit() {
     cvc: "",
     addamount: ""
   });
-  // For navigating to different page when signed up
-  let successSignup = false;
+  // For navigating to different page when successfully added balance 
+  let successAddBalance = false;
   const navigate = useNavigate();
 
   // These methods will update the state properties.
