@@ -63,6 +63,40 @@ class UserHome extends React.Component {
               </div>
             </div>
             <div className="row">
+              <div className="col-sm-6 col-12">
+                <div className="card mb-3" style={{maxWidth: '540px'}}>
+                  <div className="row no-gutters">
+                    <div className="col-md-4">
+                      <img src="./userHomePageImages/island1.jpg" alt="..." class="img-thumbnail" />
+                    </div>
+                    <div className="col-md-8">
+                      <div className="card-body">
+                      <h5 className="card-title">Manage Your Islands</h5>
+                      <p className="card-text">Add an island and allow users to place bookings, or remove your island here.</p>
+                      <a href="/" className="btn btn-primary">Manage</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6 col-12">
+                <div className="card mb-3" style={{maxWidth: '540px'}}>
+                  <div className="row no-gutters">
+                    <div className="col-md-4">
+                      <img src="./userHomePageImages/island1.jpg" alt="..." class="img-thumbnail" />
+                    </div>
+                    <div className="col-md-8">
+                      <div className="card-body">
+                        <h5 className="card-title">Review Your Trip</h5>
+                        <p className="card-text">Add a review of your vacation here.</p>
+                        <a href="/addcredit" className="btn btn-primary">Review</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
               <div className="col-12">
                 <div className="card">
                   <div className="card-body">
