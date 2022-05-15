@@ -28,7 +28,7 @@ export default function AddCredit() {
   async function onSubmit(e) {
     e.preventDefault();
 
-    // When a post request is sent to the create url, we'll add a new record to the database.
+    // Fix this to send the new balance to the db, have backend add this balance to current balance
     const newPerson = { ...form };
 
     // When submit pressed, make api call
@@ -46,7 +46,7 @@ export default function AddCredit() {
         throw new Error(data.message);
         // throw new Error(response.statusText)
       } else {
-        successSignup = true;
+        successAddBalance = true;
       }
     })
     .catch(error => {
@@ -55,8 +55,8 @@ export default function AddCredit() {
     });
 
     // Navigate to signin page if signup success
-    if(successSignup){
-      navigate("/user/signin")
+    if(successAddBalance){
+      navigate("/userhome")
     }
   }
 
