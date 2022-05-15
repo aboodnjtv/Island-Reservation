@@ -33,7 +33,7 @@ class UserHome extends React.Component {
                 <div className="card mb-3" style={{maxWidth: '540px'}}>
                   <div className="row no-gutters">
                     <div className="col-md-4">
-                      <img src="./userHomePageImages/island2.jpg" alt="..." class="img-thumbnail" />
+                      <img src="./userHomePageImages/suitcase.jpg" alt="..." class="img-thumbnail" />
                     </div>
                     <div className="col-md-8">
                       <div className="card-body">
@@ -49,7 +49,7 @@ class UserHome extends React.Component {
                 <div className="card mb-3" style={{maxWidth: '540px'}}>
                   <div className="row no-gutters">
                     <div className="col-md-4">
-                      <img src="./userHomePageImages/money.jpg" alt="..." class="img-thumbnail" />
+                      <img src="./userHomePageImages/money1.jpg" alt="..." class="img-thumbnail" />
                     </div>
                     <div className="col-md-8">
                       <div className="card-body">
@@ -83,7 +83,7 @@ class UserHome extends React.Component {
                 <div className="card mb-3" style={{maxWidth: '540px'}}>
                   <div className="row no-gutters">
                     <div className="col-md-4">
-                      <img src="./userHomePageImages/island1.jpg" alt="..." class="img-thumbnail" />
+                      <img src="./userHomePageImages/rating.jpg" alt="..." class="img-thumbnail" />
                     </div>
                     <div className="col-md-8">
                       <div className="card-body">
