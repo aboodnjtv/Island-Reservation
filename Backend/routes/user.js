@@ -10,19 +10,16 @@ const userRoutes = express.Router();
 // This will help us connect to the database
 const dbo = require("../db/conn");
 
-userRoutes.get('/users', async (req, res) => {
-  try
-  {
-      let db_client = dbo.getClient();
-      let data = await db_client.db("IR").collection("users").find({}).toArray();
+userRoutes.get("/users", async (req, res) => {
+  try {
+    let db_client = dbo.getClient();
+    let data = await db_client.db("IR").collection("users").find({}).toArray();
 
-      res.send(data);
+    res.send(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-  catch(error)
-  {
-      res.status(500).json({message: error.message});
-  }
-})
+});
 
 // Sign up route
 userRoutes.route("/user/signup").post(async (req, res) => {
@@ -30,32 +27,37 @@ userRoutes.route("/user/signup").post(async (req, res) => {
 
   // Get request body
   const { firstname, lastname, username, email, password } = req.body;
-  if (password.length < 8)
-  {
-    return res.status(410).json({message: "Password must be at least 8 characters long."});
+  if (password.length < 8) {
+    return res
+      .status(410)
+      .json({ message: "Password must be at least 8 characters long." });
     // return res.status(410).send("Error: Password must be at least 8 characters long.");
   }
 
-  if (email.indexOf('@') == -1 || email.indexOf('.') == -1)
-  {
-    return res.status(410).json({message: "Not a valid email."});
+  if (email.indexOf("@") == -1 || email.indexOf(".") == -1) {
+    return res.status(410).json({ message: "Not a valid email." });
     // return res.status(410).send("Error: Not a valid email.");
   }
 
   const hash = await bcrypt.hash(password, 12);
 
   // Check if username or email already exists
-  let existingUser = await db_client.collection("users").find({username: username}).toArray();
-  let existingEmail = await db_client.collection("users").find({email: email}).toArray();
-  if (existingUser.length != 0)
-  {
+  let existingUser = await db_client
+    .collection("users")
+    .find({ username: username })
+    .toArray();
+  let existingEmail = await db_client
+    .collection("users")
+    .find({ email: email })
+    .toArray();
+  if (existingUser.length != 0) {
     // If username exists, send 409 error code with an error message
     // See this for standard error code and meanings: https://restfulapi.net/http-status-codes/
-    return res.status(409).json({message: "Username is already in use."});
+    return res.status(409).json({ message: "Username is already in use." });
     // return res.status(409).send("Error: Username is already in use.");
   } else if (existingEmail.length != 0) {
     // If email exists, send 409 error code with an error message
-    return res.status(409).json({message: "Email is already in use."});
+    return res.status(409).json({ message: "Email is already in use." });
     // return res.status(409).send("Error: Email is already in use.");
   }
 
@@ -69,12 +71,14 @@ userRoutes.route("/user/signup").post(async (req, res) => {
     balance: 0,
     isAdmin: false,
   });
-  
+
   // Insert into database
   db_client.collection("users").insertOne(user, function (err) {
     if (err) {
       // If insert fails, return 500 error status
-      return res.status(500).json({message: "Server Error. Failed to insert into database."});
+      return res
+        .status(500)
+        .json({ message: "Server Error. Failed to insert into database." });
       // res.status(500).send("Server Error: Failed to insert into database.");
       throw err;
     }
@@ -87,14 +91,13 @@ userRoutes.route("/user/signup").post(async (req, res) => {
 userRoutes.post("/user/signin", async (req, res) => {
   let db_client = dbo.getDb();
   const { email, password } = req.body;
-  const user = await db_client.collection("users").findOne({ email: email }, {});
-  if (!user)
-  {
+  const user = await db_client
+    .collection("users")
+    .findOne({ email: email }, {});
+  if (!user) {
     console.log("username doesn't exist");
     res.status(500).end(email + " doesn't exist in our records.");
-  }
-  else
-  {
+  } else {
     console.log(user);
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
@@ -109,7 +112,7 @@ userRoutes.post("/user/signin", async (req, res) => {
         // res.end("successful admin login for: " + user._id.toString());
       } else {
         res.status(200).json(user);
-        // res.end("successful login for: " + user._id.toString()); 
+        // res.end("successful login for: " + user._id.toString());
       }
 
       // res.redirect("/secret");
@@ -119,6 +122,21 @@ userRoutes.post("/user/signin", async (req, res) => {
       res.status(500).end("failed login for: " + email);
     }
   }
+});
+
+// A route to add balance to user
+userRoutes.post("/user/addcredit", async (req, res) => {
+  const { addamount, email } = req.body;
+  let db_client = dbo.getDb();
+  const user = await db_client
+    .collection("users")
+    .findOne({ email: email }, {});
+  // const user = await User.findOne({ _id: id });
+  console.log("ADD Balance: " + parseInt(addamount));
+  console.log("user.balance: " + user.balance);
+  user.balance += parseInt(addamount);
+  await user.save();
+  // res.render("profile", { user });
 });
 
 module.exports = userRoutes;
