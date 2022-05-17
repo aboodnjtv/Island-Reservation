@@ -36,10 +36,12 @@ export default function SignIn() {
       },
       body: JSON.stringify(newPerson),
     })
-    .then(response => {
+    .then(async response => {
       // If the HTTP response is 2xx then response.ok will have a value of true
       if (!response.ok) {
-        throw new Error(response.statusText)
+        const data = await response.json();
+        throw new Error(data.message);
+        // throw new Error(response.statusText)
       } else {
         successSignin = true;
         // we have an ok from the backend, so we are authenticated (signed in)

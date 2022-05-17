@@ -9,6 +9,7 @@ const userRoutes = express.Router();
 
 // This will help us connect to the database
 const dbo = require("../db/conn");
+const ObjectId = require("mongodb").ObjectId;
 
 userRoutes.get("/users", async (req, res) => {
   try {
@@ -87,7 +88,7 @@ userRoutes.route("/user/signup").post(async (req, res) => {
   });
 });
 
-//also taken from Abdel's sample code, logging in a user
+//logging in a user
 userRoutes.post("/user/signin", async (req, res) => {
   let db_client = dbo.getDb();
   const { email, password } = req.body;
@@ -96,7 +97,10 @@ userRoutes.post("/user/signin", async (req, res) => {
     .findOne({ email: email }, {});
   if (!user) {
     console.log("username doesn't exist");
-    res.status(500).end(email + " doesn't exist in our records.");
+    return res
+      .status(500)
+      .json({message: email + " doesn't exist in our records." });
+      // .end(email + " doesn't exist in our records.");
   } else {
     console.log(user);
     const validPassword = await bcrypt.compare(password, user.password);
@@ -111,7 +115,27 @@ userRoutes.post("/user/signin", async (req, res) => {
         res.status(200).json(user);
         // res.end("successful admin login for: " + user._id.toString());
       } else {
-        res.status(200).json(user);
+        let db_client = dbo.getClient();
+        const id_obj = new ObjectId(user._id.toString());
+        let currentDate = new Date();
+        let all_reservations = await db_client.db("IR").collection("reservations").find({reserver_id: id_obj}).toArray();
+        let past_reservations = [];
+        let active_reservations = [];
+        for (let resIndex = 0; resIndex < all_reservations.length; resIndex++)
+        {
+          if (all_reservations[resIndex].reservationStartDate > currentDate || 
+              all_reservations[resIndex].reservationEndDate > currentDate)
+          {
+            active_reservations.push(all_reservations[resIndex]);
+          }
+          else 
+          {
+            past_reservations.push(all_reservations[resIndex]);
+          }
+        }
+        res.status(200).json({"user_info": user, "active_res_count": active_reservations.length, 
+          "past_res_count": past_reservations.length, "active_reservations": active_reservations, 
+          "past_reservations": past_reservations});
         // res.end("successful login for: " + user._id.toString());
       }
 
@@ -119,7 +143,10 @@ userRoutes.post("/user/signin", async (req, res) => {
     } else {
       console.log("failed login");
       // res.redirect("/login");
-      res.status(500).end("failed login for: " + email);
+      return res
+        .status(500)
+        .json({message: "failed login for: " + email});
+        // .end("failed login for: " + email);
     }
   }
 });
