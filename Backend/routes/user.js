@@ -14,7 +14,6 @@ userRoutes.get("/users", async (req, res) => {
   try {
     let db_client = dbo.getClient();
     let data = await db_client.db("IR").collection("users").find({}).toArray();
-
     res.send(data);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -89,7 +88,7 @@ userRoutes.route("/user/signup").post(async (req, res) => {
 
 //also taken from Abdel's sample code, logging in a user
 userRoutes.post("/user/signin", async (req, res) => {
-  let db_client = dbo.getDb();
+  let db_client = dbo.getDb(); //IR DB
   const { email, password } = req.body;
   const user = await db_client
     .collection("users")
@@ -126,17 +125,36 @@ userRoutes.post("/user/signin", async (req, res) => {
 
 // A route to add balance to user
 userRoutes.post("/user/addcredit", async (req, res) => {
-  const { addamount, email } = req.body;
+  const { addamount, firstname } = req.body;
+  console.log("*DEBUG* firstname as (email): " + firstname);
+
   let db_client = dbo.getDb();
+
   const user = await db_client
     .collection("users")
-    .findOne({ email: email }, {});
-  // const user = await User.findOne({ _id: id });
-  console.log("ADD Balance: " + parseInt(addamount));
-  console.log("user.balance: " + user.balance);
-  user.balance += parseInt(addamount);
-  await user.save();
-  // res.render("profile", { user });
+    .findOne({ email: firstname });
+
+  if (!user) {
+    console.log("USER WAS NOT FOUND !!");
+    res.status(200).json(user);
+  } else {
+    const myquery = { email: firstname };
+    const updatedBalance = parseInt(addamount) + parseInt(user.balance);
+    const newvalues = { $set: { balance: updatedBalance } };
+    const updatedUser = await db_client
+      .collection("users")
+      .updateOne(myquery, newvalues, function (err, res) {
+        if (err) throw err;
+        console.log(
+          "User added $" +
+            addamount +
+            " to their accout, Current Balance: $" +
+            updatedBalance
+        );
+        // c
+      });
+    res.status(200).json(user);
+  }
 });
 
 module.exports = userRoutes;

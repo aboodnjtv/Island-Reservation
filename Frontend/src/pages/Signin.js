@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import Navbar from '../components/Navbar.js';
-import './Signin.css';
+import Navbar from "../components/Navbar.js";
+import "./Signin.css";
 
 // Copy of Maiah's code, just changed from class component to functional component
 export default function SignIn() {
@@ -11,7 +11,7 @@ export default function SignIn() {
   });
 
   // For navigating to different page when signed in
-  let successSignin= false;
+  let successSignin = false;
   const navigate = useNavigate();
 
   // These methods will update the state properties.
@@ -36,86 +36,89 @@ export default function SignIn() {
       },
       body: JSON.stringify(newPerson),
     })
-    .then(response => {
-      // If the HTTP response is 2xx then response.ok will have a value of true
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      } else {
-        successSignin = true;
-        // we have an ok from the backend, so we are authenticated (signed in)
-        // either pass the "isAuthenticated" key OR a userJSON object inside of response
-        //localStorage.setItem(response.userJson);
-        // each time we navigate to a new page check local storage again
-        // to make sure user is signed in
-        sessionStorage.setItem("isAuthenticated", true);
-      }
-      // return the promise(response.json) so that the next .then can resolve the promise
-      return response.json();
-    })
-    .then(data => {
-      // resolve the promise (response.json) as a user record
-      let userRecord = JSON.stringify(data);
-      // store the user record into session storage to access it on userhomepage
-      sessionStorage.setItem("userRecord", userRecord);
-    })
-    .catch(error => {
-      window.alert(error);
-      return;
-    });
+      .then((response) => {
+        // If the HTTP response is 2xx then response.ok will have a value of true
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        } else {
+          successSignin = true;
+          // we have an ok from the backend, so we are authenticated (signed in)
+          // either pass the "isAuthenticated" key OR a userJSON object inside of response
+          //localStorage.setItem(response.userJson);
+          // each time we navigate to a new page check local storage again
+          // to make sure user is signed in
+          sessionStorage.setItem("isAuthenticated", true);
+        }
+        // return the promise(response.json) so that the next .then can resolve the promise
+        return response.json();
+      })
+      .then((data) => {
+        // resolve the promise (response.json) as a user record
+        let userRecord = JSON.stringify(data);
+        // store the user record into session storage to access it on userhomepage
+        sessionStorage.setItem("userRecord", userRecord);
+      })
+      .catch((error) => {
+        window.alert(error);
+        return;
+      });
 
     // Navigate to user homepage if signin success (Should be own user profile)
-    if(successSignin){
+    if (successSignin) {
       window.location.href = "/userhome";
     }
   }
 
   return (
     <div>
-    <Navbar  page="Signin"/>
+      <Navbar page="Signin" />
       <div className="container">
         <h3>Sign in</h3>
         <div className="container">
-        <div className="row">
-        {/* bootstrap responsive design
+          <div className="row">
+            {/* bootstrap responsive design
           width of  columns on a 12 column grid:
           for xs (mobile) sign up takes whole screen (12 cols)
           for med page size, sign up takes 6 columns
           for large page size, sign up takes 5 cols
           */}
-        <div className="col-lg-5 col-md-6 col-xs-12">
-        <form className="border shadow-sm rounded p-3 mb-3" onSubmit={onSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="text"
-              className="form-control"
-              id="email"
-              value={form.email}
-              onChange={(e) => updateForm({ email: e.target.value })}
-            />
+            <div className="col-lg-5 col-md-6 col-xs-12">
+              <form
+                className="border shadow-sm rounded p-3 mb-3"
+                onSubmit={onSubmit}
+              >
+                <div className="form-group">
+                  <label htmlFor="email">E-mail</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="email"
+                    value={form.email}
+                    onChange={(e) => updateForm({ email: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    value={form.password}
+                    onChange={(e) => updateForm({ password: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    type="submit"
+                    value="Sign In"
+                    className="btn btn-primary"
+                  />
+                </div>
+              </form>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              value={form.password}
-              onChange={(e) => updateForm({ password: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="submit"
-              value="Sign In"
-              className="btn btn-primary"
-            />
-          </div>
-        </form>
-        </div>
-        </div>
         </div>
       </div>
-      </div>
-    );
-  }
+    </div>
+  );
+}
