@@ -21,6 +21,24 @@ userRoutes.get("/users", async (req, res) => {
   }
 });
 
+//get a specific user by _id
+//send in a _id as a url parameter
+//ex: localhost:5000/user?id=628310e922fae0e05a9b10ef --> parameter id = 628310e922fae0e05a9b10ef
+userRoutes.get('/user', async (req, res) => {
+  try
+  {
+      const id_obj = new ObjectId(req.query.id);
+      let db_client = dbo.getClient();
+      let user_data = await db_client.db("IR").collection("users").find({_id: id_obj}).toArray();
+
+      res.send(user_data[0]);
+  }
+  catch(error)
+  {
+      res.status(500).json({message: error.message});
+  }
+})
+
 // Sign up route
 userRoutes.route("/user/signup").post(async (req, res) => {
   let db_client = dbo.getDb();
