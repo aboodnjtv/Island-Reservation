@@ -48,6 +48,7 @@ export default function AddCredit() {
         }
       })
       .catch((error) => {
+        console.log("Error thrown after: .catch((error) =>");
         window.alert(error);
         return;
       });
