@@ -2,6 +2,7 @@ import React from 'react';
 import './appIndex.css';
 import CardView from '../components/CardView.js';
 import HttpRequest from '../components/HttpRequest.js';
+import Navbar from "../components/Navbar.js";
 /**
  * app home
  */
@@ -28,9 +29,14 @@ import HttpRequest from '../components/HttpRequest.js';
     </div>
     );
     return (
-    <div className="row">
-      {listItems}
-    </div>);
+      <>
+        <Navbar page="Gallery" />
+
+        <div className="row">
+          {listItems}
+        </div>
+      </>
+    );
   }
  }
 
