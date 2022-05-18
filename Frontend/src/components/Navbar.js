@@ -14,8 +14,8 @@ class Navbar extends React.Component {
       <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100'}}>
         <a className="navbar-brand" href="#">
           {/* set logo with Is. Res. text, &nbsp; adds a non-breakable space before word */}
-          <img src={logo} style={{height: '30px', width: '30px'}}/>
-          &nbsp;Island Reservation
+          <img src={logo} style={{height: '60px', width: '32px'}}/>
+          &nbsp;&nbsp;&nbsp;Island Reservation
         </a>
         <button
           className="navbar-toggler" type="button" data-toggle="collapse"

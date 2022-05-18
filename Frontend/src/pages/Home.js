@@ -16,6 +16,14 @@ class Home extends React.Component {
           data-ride="carousel"
           style={{ height: "100%" }}
         >
+          {/* add the logo at center of page */}
+
+          <div className="overpic" >
+            <div className="caption">
+              <img src="IRclear.png" class="" alt=""/>
+            </div>
+          </div>
+
           <ol className="carousel-indicators">
             <li
               data-target="#carouselExampleIndicators"
