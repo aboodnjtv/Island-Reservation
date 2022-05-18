@@ -11,6 +11,12 @@ export default function AddCredit() {
     cvc: "",
     addamount: "",
   });
+
+  // Get logged in user info
+  let userRecordString = sessionStorage.getItem("userRecord");
+  let userRecord = JSON.parse(userRecordString);
+  let userId = userRecord.user_info._id;
+
   // For navigating to different page when successfully added balance
   let successAddBalance = false;
   const navigate = useNavigate();
@@ -27,24 +33,29 @@ export default function AddCredit() {
     e.preventDefault();
 
     // Fix this to send the new balance to the db, have backend add this balance to current balance
-    const newPerson = { ...form };
+    const newCard = { ...form };
+    // NOTE: USER BALANCE WILL GO TO NAN IF ENTIRE FORM NOT FILLED OUT, NEED TO CHECK THAT FORM IS FILLED OUT
 
     // When submit pressed, make api call
-    await fetch("http://localhost:5000/user/addcredit", {
+    await fetch(`http://localhost:5000/user/addcredit/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newPerson),
+      body: JSON.stringify(newCard),
     })
       .then(async (response) => {
+        const data = await response.json();
         // If the HTTP response is 2xx then response.ok will have a value of true
         if (!response.ok) {
-          const data = await response.json();
           throw new Error(data.message);
           // throw new Error(response.statusText)
         } else {
           successAddBalance = true;
+          // Update session storage to update user homepage
+          let userRecord = JSON.parse(sessionStorage.getItem("userRecord"));
+          userRecord.user_info.balance = data.balance;
+          sessionStorage.setItem("userRecord", JSON.stringify(userRecord));
         }
       })
       .catch((error) => {

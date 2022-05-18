@@ -28,8 +28,8 @@ class UserHome extends React.Component {
           <section className="container">
             <h1>
               {" "}
-              Welcome, <span>{userRecord.firstname}</span>&nbsp;
-              <span>{userRecord.lastname}</span>!
+              Welcome, <span>{userRecord.user_info.firstname}</span>&nbsp;
+              <span>{userRecord.user_info.lastname}</span>!
             </h1>
             <div className="row">
               <div className="col-sm-6 col-12">
@@ -72,7 +72,7 @@ class UserHome extends React.Component {
                         <h5 className="card-title">Your Balance</h5>
                         <p className="card-text">
                           Your account currently has a balance of $
-                          <span>{userRecord.balance}</span>.
+                          <span>{userRecord.user_info.balance}</span>.
                         </p>
                         <a href="/addcredit" className="btn btn-primary">
                           Add credit

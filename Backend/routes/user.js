@@ -9,6 +9,8 @@ const userRoutes = express.Router();
 
 // This will help us connect to the database
 const dbo = require("../db/conn");
+
+// This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
 userRoutes.get("/users", async (req, res) => {
@@ -169,36 +171,39 @@ userRoutes.post("/user/signin", async (req, res) => {
 });
 
 // A route to add balance to user
-userRoutes.post("/user/addcredit", async (req, res) => {
-  const { addamount, firstname } = req.body;
-  console.log("*DEBUG* firstname as (email): " + firstname);
-
+userRoutes.post("/user/addcredit/:id", async (req, res) => {
   let db_client = dbo.getDb();
+  // Get userID who we are adding credit to
+  const userID = req.params.id;
 
+  // This is the form data from Add Credit page, we don't do anything with it currently
+  const { firstname, lastname, ccnumber, expr, cvc, addamount } = req.body;
+
+  // Make sure user exists in database
   const user = await db_client
     .collection("users")
-    .findOne({ email: firstname });
+    .findOne({ _id: ObjectId(userID) });
 
   if (!user) {
-    console.log("USER WAS NOT FOUND !!");
-    res.status(200).json(user);
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({message: "User doesn't exist in our records." });
   } else {
-    const myquery = { email: firstname };
+    // MongoDB query to find user
+    const myquery = { _id: ObjectId(userID) };
+    // Calculate updated balance
     const updatedBalance = parseInt(addamount) + parseInt(user.balance);
+    // MongoDB query to update user's balance
     const newvalues = { $set: { balance: updatedBalance } };
-    const updatedUser = await db_client
+    // Update user
+    await db_client
       .collection("users")
-      .updateOne(myquery, newvalues, function (err, res) {
+      .findOneAndUpdate(myquery, newvalues, {returnDocument: "after"}, function (err, response) {
         if (err) throw err;
-        console.log(
-          "User added $" +
-            addamount +
-            " to their accout, Current Balance: $" +
-            updatedBalance
-        );
-        // c
+        // Return updated user info
+        res.status(200).json(response.value);
       });
-    res.status(200).json(user);
   }
 });
 
