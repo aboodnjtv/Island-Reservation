@@ -1,5 +1,7 @@
 const express = require("express");
-
+const multer = require('multer');
+const { v4: uuidv4 } = require('uuid');
+uuidv4();
 // userRoutes is an instance of the express router.
 // We use it to define our routes.
 // The router will be added as a middleware and will take control of requests starting with path /record.
@@ -12,6 +14,29 @@ const dbo = require("../db/conn");
 const ObjectId = require("mongodb").ObjectId;
 
 const Island = require('../models/m_island.js');
+const DIR = './public/';
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, DIR);
+  },
+  filename: (req, file, cb) => {
+      const fileName = file.originalname.toLowerCase().split(' ').join('-');
+      console.log("filename:", fileName)
+      cb(null, uuidv4() + '-' + fileName)
+  }
+});
+
+var upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+      if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+          cb(null, true);
+      } else {
+          cb(null, false);
+          return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+      }
+  }
+});
 
 //sample call in postman: localhost:5000/api/islands
 islandRoutes.get('/islands', async (req, res) => {
@@ -251,13 +276,22 @@ islandRoutes.get('/islands/rating/desc', async (req, res) => {
   }
 })
 
+
+
 // adding an island
-islandRoutes.route("/islands/add").post(async (req, res) => {
+islandRoutes.route("/islands/add").post(upload.single('islandImg'), async (req, res) => {
   let db_client = dbo.getDb();
-
   // Get request body
-  const { name, location, land_size, details, price, rating, islandImg, is_available } = req.body;
-
+  const name = req.body.name;
+  const location = req.body.location;
+  const land_size = req.body.land_size;
+  const details = req.body.details;
+  const rating = req.body.rating;
+  const price = req.body.price;
+  const is_available = req.body.is_available;
+  // const { name, location, land_size, details, price, rating, is_available } = req.body;
+  const url = req.protocol + '://' + req.get('host');
+  const islandImg = url + '/public/' + req.file.filename;
   // Create object to insert into database
   const island = new Island({
     name,
@@ -267,9 +301,9 @@ islandRoutes.route("/islands/add").post(async (req, res) => {
     price,
     rating,
     islandImg,
-    is_available
+    is_available,
   });
-  
+ 
   // Insert into database
   db_client.collection("islands").insertOne(island, function (err) {
     if (err) {
