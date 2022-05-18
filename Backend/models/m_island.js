@@ -31,7 +31,7 @@ const islandSchema = new Schema({
     },
     is_available: {
       type: Boolean
-    }
+    },
     // amenities: {
     //   type: [String],
     //   // required: [true, 'name field is required']

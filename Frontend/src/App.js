@@ -10,6 +10,7 @@ import SignOut from './pages/SignOut';
 import AddCredit from './pages/AddCredit';
 import AppAbout from './pages/AppAbout';
 import ProtectedRoute from './components/ProtectedRoute';
+import Upload from './pages/upload';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route exact path="/list" element={<AppIndex />} />
         <Route exact path="/" element={<Home />} />
         <Route exact path="/about" element={<AppAbout />} />
+        <Route path="/upload" element={<Upload />} />
         <Route exact path="/userhome" element={(
           <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
           <UserHome/>
