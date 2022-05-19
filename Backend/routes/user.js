@@ -9,6 +9,7 @@ const userRoutes = express.Router();
 
 // This will help us connect to the database
 const dbo = require("../db/conn");
+const e = require("express");
 
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
@@ -26,20 +27,21 @@ userRoutes.get("/users", async (req, res) => {
 //get a specific user by _id
 //send in a _id as a url parameter
 //ex: localhost:5000/user?id=628310e922fae0e05a9b10ef --> parameter id = 628310e922fae0e05a9b10ef
-userRoutes.get('/user', async (req, res) => {
-  try
-  {
-      const id_obj = new ObjectId(req.query.id);
-      let db_client = dbo.getClient();
-      let user_data = await db_client.db("IR").collection("users").find({_id: id_obj}).toArray();
+userRoutes.get("/user", async (req, res) => {
+  try {
+    const id_obj = new ObjectId(req.query.id);
+    let db_client = dbo.getClient();
+    let user_data = await db_client
+      .db("IR")
+      .collection("users")
+      .find({ _id: id_obj })
+      .toArray();
 
-      res.send(user_data[0]);
+    res.send(user_data[0]);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-  catch(error)
-  {
-      res.status(500).json({message: error.message});
-  }
-})
+});
 
 // Sign up route
 userRoutes.route("/user/signup").post(async (req, res) => {
@@ -118,8 +120,8 @@ userRoutes.post("/user/signin", async (req, res) => {
     console.log("username doesn't exist");
     return res
       .status(500)
-      .json({message: email + " doesn't exist in our records." });
-      // .end(email + " doesn't exist in our records.");
+      .json({ message: email + " doesn't exist in our records." });
+    // .end(email + " doesn't exist in our records.");
   } else {
     console.log(user);
     const validPassword = await bcrypt.compare(password, user.password);
@@ -137,24 +139,30 @@ userRoutes.post("/user/signin", async (req, res) => {
         let db_client = dbo.getClient();
         const id_obj = new ObjectId(user._id.toString());
         let currentDate = new Date();
-        let all_reservations = await db_client.db("IR").collection("reservations").find({reserver_id: id_obj}).toArray();
+        let all_reservations = await db_client
+          .db("IR")
+          .collection("reservations")
+          .find({ reserver_id: id_obj })
+          .toArray();
         let past_reservations = [];
         let active_reservations = [];
-        for (let resIndex = 0; resIndex < all_reservations.length; resIndex++)
-        {
-          if (all_reservations[resIndex].reservationStartDate > currentDate || 
-              all_reservations[resIndex].reservationEndDate > currentDate)
-          {
+        for (let resIndex = 0; resIndex < all_reservations.length; resIndex++) {
+          if (
+            all_reservations[resIndex].reservationStartDate > currentDate ||
+            all_reservations[resIndex].reservationEndDate > currentDate
+          ) {
             active_reservations.push(all_reservations[resIndex]);
-          }
-          else 
-          {
+          } else {
             past_reservations.push(all_reservations[resIndex]);
           }
         }
-        res.status(200).json({"user_info": user, "active_res_count": active_reservations.length, 
-          "past_res_count": past_reservations.length, "active_reservations": active_reservations, 
-          "past_reservations": past_reservations});
+        res.status(200).json({
+          user_info: user,
+          active_res_count: active_reservations.length,
+          past_res_count: past_reservations.length,
+          active_reservations: active_reservations,
+          past_reservations: past_reservations,
+        });
         // res.end("successful login for: " + user._id.toString());
       }
 
@@ -162,10 +170,8 @@ userRoutes.post("/user/signin", async (req, res) => {
     } else {
       console.log("failed login");
       // res.redirect("/login");
-      return res
-        .status(500)
-        .json({message: "failed login for: " + email});
-        // .end("failed login for: " + email);
+      return res.status(500).json({ message: "failed login for: " + email });
+      // .end("failed login for: " + email);
     }
   }
 });
@@ -188,7 +194,7 @@ userRoutes.post("/user/addcredit/:id", async (req, res) => {
     // If user not found return error message
     return res
       .status(500)
-      .json({message: "User doesn't exist in our records." });
+      .json({ message: "User doesn't exist in our records." });
   } else {
     // MongoDB query to find user
     const myquery = { _id: ObjectId(userID) };
@@ -199,52 +205,123 @@ userRoutes.post("/user/addcredit/:id", async (req, res) => {
     // Update user
     await db_client
       .collection("users")
-      .findOneAndUpdate(myquery, newvalues, {returnDocument: "after"}, function (err, response) {
-        if (err) throw err;
-        // Return updated user info
-        res.status(200).json(response.value);
-      });
+      .findOneAndUpdate(
+        myquery,
+        newvalues,
+        { returnDocument: "after" },
+        function (err, response) {
+          if (err) throw err;
+          // Return updated user info
+          res.status(200).json(response.value);
+        }
+      );
   }
 });
 
-userRoutes.post("/user/update", async (req, res) => {
+// userRoutes.post("/user/update", async (req, res) => {
+//   let db_client = dbo.getDb();
+//   // Get userID who we are adding credit to
+//   const userID = new ObjectId(req.query.id);
+
+//   const { firstname, lastname, password } = req.body;
+
+//   if (password.length < 8) {
+//     return res
+//       .status(410)
+//       .json({ message: "Password must be at least 8 characters long." });
+//   }
+
+//   // Make sure user exists in database
+//   const user = await db_client
+//     .collection("users")
+//     .findOne({ _id: ObjectId(userID) });
+
+//   if (!user) {
+//     // If user not found return error message
+//     return res
+//       .status(500)
+//       .json({message: "User doesn't exist in our records." });
+//   } else {
+//     // MongoDB query to find user
+//     const myquery = { _id: userID };
+//     const hashed_password = await bcrypt.hash(password, 12);
+
+//     // MongoDB query to update user's balance
+//     const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
+//     // Update user
+//     await db_client
+//       .collection("users")
+//       .findOneAndUpdate(myquery, newvalues, {returnDocument: "after"}, function (err, response) {
+//         if (err) throw err;
+//         // Return updated user info
+//         res.status(200).json(response.value);
+//       });
+//   }
+// });
+
+// A route to add balance to user
+userRoutes.post("/user/reserve/:id", async (req, res) => {
   let db_client = dbo.getDb();
   // Get userID who we are adding credit to
-  const userID = new ObjectId(req.query.id);
-
-  const { firstname, lastname, password } = req.body;
-
-  if (password.length < 8) {
-    return res
-      .status(410)
-      .json({ message: "Password must be at least 8 characters long." });
-  }
-
+  const userID = req.params.id;
+  // This is the form data from Add Credit page, we don't do anything with it currently
+  const { firstname, lastname, islandName } = req.body;
   // Make sure user exists in database
   const user = await db_client
     .collection("users")
     .findOne({ _id: ObjectId(userID) });
-
   if (!user) {
     // If user not found return error message
     return res
       .status(500)
-      .json({message: "User doesn't exist in our records." });
+      .json({ message: "User doesn't exist in our records." });
   } else {
-    // MongoDB query to find user
-    const myquery = { _id: userID };
-    const hashed_password = await bcrypt.hash(password, 12);
+    // found the user, now find the island based on its id
+    const island = await db_client
+      .collection("islands")
+      .findOne({ name: islandName });
 
-    // MongoDB query to update user's balance
-    const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
-    // Update user
-    await db_client
-      .collection("users")
-      .findOneAndUpdate(myquery, newvalues, {returnDocument: "after"}, function (err, response) {
-        if (err) throw err;
-        // Return updated user info
-        res.status(200).json(response.value);
-      });
+    if (!island) {
+      console.log("Island was not found!");
+      return res
+        .status(500)
+        .json({ message: "Island was not found in the database" });
+    } else {
+      console.log("Island named: " + islandName + " was found!");
+
+      if (!island.is_available) {
+        console.log(
+          "Sorry!" +
+            island.name +
+            " Island is already reserved by another client!"
+        );
+        //instead render an actual page
+        return res
+          .status(500)
+          .json({ message: "Island is already reserved by another client" });
+      } else {
+        //updat Availability of island (if it is already available)
+        // MongoDB query to find island
+        const myquery = { name: islandName };
+        // Calculate updated balance
+        const updatAvailability = false;
+        // MongoDB query to update user's balance
+        const newvalues = { $set: { is_available: updatAvailability } };
+        // Update user
+        await db_client
+          .collection("islands")
+          .findOneAndUpdate(
+            myquery,
+            newvalues,
+            { returnDocument: "after" },
+            function (err, response) {
+              if (err) throw err;
+              // Return updated user info
+              res.status(200).json(response.value);
+            }
+          );
+      }
+    }
   }
 });
 
