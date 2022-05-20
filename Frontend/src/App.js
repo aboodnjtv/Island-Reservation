@@ -1,16 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import './App.css';
-import AppIndex from './pages/AppIndex.js';
-import AppDetail from './pages/AppDetail.js';
-import Home from './pages/Home.js';
-import SignUp from './pages/Signup';
-import SignIn from './pages/Signin';
-import UserHome from './pages/UserHome';
-import SignOut from './pages/SignOut';
-import AddCredit from './pages/AddCredit';
-import AppAbout from './pages/AppAbout';
-import ProtectedRoute from './components/ProtectedRoute';
-import Upload from './pages/upload';
+import "./App.css";
+import AppIndex from "./pages/AppIndex.js";
+import AppDetail from "./pages/AppDetail.js";
+import Home from "./pages/Home.js";
+import SignUp from "./pages/Signup";
+import SignIn from "./pages/Signin";
+import UserHome from "./pages/UserHome";
+import SignOut from "./pages/SignOut";
+import AddCredit from "./pages/AddCredit";
+import Reserve from "./pages/Reserve";
+import AppAbout from "./pages/AppAbout";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Upload from "./pages/upload";
 
 function App() {
   return (
@@ -24,16 +25,39 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/about" element={<AppAbout />} />
         <Route path="/upload" element={<Upload />} />
-        <Route exact path="/userhome" element={(
-          <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
-          <UserHome/>
-          </ProtectedRoute>
-        )} />
-        <Route exact path="/addcredit" element={(
-          <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
-          <AddCredit/>
-          </ProtectedRoute>
-        )} />
+        <Route
+          exact
+          path="/userhome"
+          element={
+            <ProtectedRoute
+              isLoggedIn={sessionStorage.getItem("isAuthenticated")}
+            >
+              <UserHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="/addcredit"
+          element={
+            <ProtectedRoute
+              isLoggedIn={sessionStorage.getItem("isAuthenticated")}
+            >
+              <AddCredit />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="/reserve"
+          element={
+            <ProtectedRoute
+              isLoggedIn={sessionStorage.getItem("isAuthenticated")}
+            >
+              <Reserve />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );
