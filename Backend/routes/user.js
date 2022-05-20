@@ -207,6 +207,9 @@ userRoutes.post("/user/addcredit/:id", async (req, res) => {
   }
 });
 
+//update the user's info
+//pass in the id as a url parameter
+//pass in the first name, last name, and password in a JSON
 userRoutes.post("/user/update", async (req, res) => {
   let db_client = dbo.getDb();
   // Get userID who we are adding credit to

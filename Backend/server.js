@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 // App Routes
 app.use(require("./routes/user"));
 app.use(require("./routes/island"));
+app.use(require("./routes/reservation"));
 app.use('/public', express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
