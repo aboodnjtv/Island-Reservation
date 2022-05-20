@@ -30,6 +30,7 @@ userRoutes.get("/users", async (req, res) => {
 userRoutes.get("/user", async (req, res) => {
   try {
     const id_obj = new ObjectId(req.query.id);
+    let currentDate = new Date();
     let db_client = dbo.getClient();
     let user_data = await db_client
       .db("IR")
@@ -37,7 +38,32 @@ userRoutes.get("/user", async (req, res) => {
       .find({ _id: id_obj })
       .toArray();
 
-    res.send(user_data[0]);
+    let all_reservations = await db_client
+      .db("IR")
+      .collection("reservations")
+      .find({ reserver_id: id_obj })
+      .toArray();
+    let past_reservations = [];
+    let active_reservations = [];
+    for (let resIndex = 0; resIndex < all_reservations.length; resIndex++) {
+      if (
+        all_reservations[resIndex].reservationStartDate > currentDate ||
+        all_reservations[resIndex].reservationEndDate > currentDate
+      ) {
+        active_reservations.push(all_reservations[resIndex]);
+      } else {
+        past_reservations.push(all_reservations[resIndex]);
+      }
+    }
+
+    // res.send(user_data[0]);
+    res.status(200).json({
+      user_info: user_data[0],
+      active_res_count: active_reservations.length,
+      past_res_count: past_reservations.length,
+      active_reservations: active_reservations,
+      past_reservations: past_reservations,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -218,46 +244,47 @@ userRoutes.post("/user/addcredit/:id", async (req, res) => {
   }
 });
 
-// userRoutes.post("/user/update", async (req, res) => {
-//   let db_client = dbo.getDb();
-//   // Get userID who we are adding credit to
-//   const userID = new ObjectId(req.query.id);
+//update user information
+userRoutes.post("/user/update", async (req, res) => {
+  let db_client = dbo.getDb();
+  // Get userID who we are adding credit to
+  const userID = new ObjectId(req.query.id);
 
-//   const { firstname, lastname, password } = req.body;
+  const { firstname, lastname, password } = req.body;
 
-//   if (password.length < 8) {
-//     return res
-//       .status(410)
-//       .json({ message: "Password must be at least 8 characters long." });
-//   }
+  if (password.length < 8) {
+    return res
+      .status(410)
+      .json({ message: "Password must be at least 8 characters long." });
+  }
 
-//   // Make sure user exists in database
-//   const user = await db_client
-//     .collection("users")
-//     .findOne({ _id: ObjectId(userID) });
+  // Make sure user exists in database
+  const user = await db_client
+    .collection("users")
+    .findOne({ _id: ObjectId(userID) });
 
-//   if (!user) {
-//     // If user not found return error message
-//     return res
-//       .status(500)
-//       .json({message: "User doesn't exist in our records." });
-//   } else {
-//     // MongoDB query to find user
-//     const myquery = { _id: userID };
-//     const hashed_password = await bcrypt.hash(password, 12);
+  if (!user) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({message: "User doesn't exist in our records." });
+  } else {
+    // MongoDB query to find user
+    const myquery = { _id: userID };
+    const hashed_password = await bcrypt.hash(password, 12);
 
-//     // MongoDB query to update user's balance
-//     const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
-//     // Update user
-//     await db_client
-//       .collection("users")
-//       .findOneAndUpdate(myquery, newvalues, {returnDocument: "after"}, function (err, response) {
-//         if (err) throw err;
-//         // Return updated user info
-//         res.status(200).json(response.value);
-//       });
-//   }
-// });
+    // MongoDB query to update user's balance
+    const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
+    // Update user
+    await db_client
+      .collection("users")
+      .findOneAndUpdate(myquery, newvalues, {returnDocument: "after"}, function (err, response) {
+        if (err) throw err;
+        // Return updated user info
+        res.status(200).json(response.value);
+      });
+  }
+});
 
 // A route to add balance to user
 userRoutes.post("/user/reserve/:id", async (req, res) => {
