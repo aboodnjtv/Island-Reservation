@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // Define Reservation schema
-const reservationSchema = new Schema({
+const reservationSchema = new mongoose.Schema({
     reserver_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -16,7 +16,13 @@ const reservationSchema = new Schema({
     },
     reservationDate: {
       type: Date,
-    }
+    },
+    startDate: {
+      type: Date,
+    },
+    endDate: {
+      type: Date,
+    },
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema);
