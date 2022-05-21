@@ -41,3 +41,23 @@
   padding: 10px;
   box-sizing: border-box;
 }
+
+.triangle-up {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid #343a40;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.triangle-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid #343a40;
+  display: inline-block;
+  margin-left: 10px;
+}
