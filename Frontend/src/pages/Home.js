@@ -5,7 +5,24 @@ import Navbar from "../components/Navbar.js";
  * app home
  */
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      widthContainer: 1400
+    };
+  }
+  componentDidMount() {
+    // reserve a this pointer to the component, must do this when using event listener
+    let self = this;
+    // when event is a resize of the window, we reset state var widthContainer to size of window
+    window.addEventListener("resize", function(event) {
+      //console.log(document.body.clientWidth + ' wide by ' + document.body.clientHeight+' high');
+      self.setState({widthContainer: document.body.clientWidth});
+    })
+  }
   render() {
+    // access the state widthContainer to remove the logo display if window is less than 1200 px
+    let overPicStyle = this.state.widthContainer < 1200 ? {display: 'none'} : {};
     return (
       <>
         <Navbar page="Home" />
@@ -18,9 +35,9 @@ class Home extends React.Component {
         >
           {/* add the logo at center of page */}
 
-          <div className="overpic" >
+          <div className="overpic" style={overPicStyle}>
             <div className="caption">
-              <img src="IRclear.png" class="" alt=""/>
+              <img src="IRclear.png" />
             </div>
           </div>
 

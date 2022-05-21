@@ -11,7 +11,7 @@ import AddCredit from "./pages/AddCredit";
 import Reserve from "./pages/Reserve";
 import AppAbout from "./pages/AppAbout";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Upload from "./pages/upload";
+import AddIsland from "./pages/AddIsland";
 
 function App() {
   return (
@@ -24,37 +24,29 @@ function App() {
         <Route exact path="/list" element={<AppIndex />} />
         <Route exact path="/" element={<Home />} />
         <Route exact path="/about" element={<AppAbout />} />
-        <Route path="/upload" element={<Upload />} />
-        <Route
-          exact
-          path="/userhome"
+        <Route exact path="/userhome"
           element={
-            <ProtectedRoute
-              isLoggedIn={sessionStorage.getItem("isAuthenticated")}
-            >
+            <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
               <UserHome />
             </ProtectedRoute>
           }
         />
-        <Route
-          exact
-          path="/addcredit"
+        <Route exact path="/addcredit"
           element={
-            <ProtectedRoute
-              isLoggedIn={sessionStorage.getItem("isAuthenticated")}
-            >
+            <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
               <AddCredit />
             </ProtectedRoute>
           }
         />
-        <Route
-          exact
-          path="/reserve"
-          element={
-            <ProtectedRoute
-              isLoggedIn={sessionStorage.getItem("isAuthenticated")}
-            >
+        <Route exact path="/reserve" element={
+            <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
               <Reserve />
+            </ProtectedRoute>
+          }
+        />
+        <Route exact path="/addisland" element={
+            <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
+              <AddIsland />
             </ProtectedRoute>
           }
         />

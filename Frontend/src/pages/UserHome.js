@@ -4,18 +4,59 @@ import Navbar from "../components/Navbar.js";
 
 class UserHome extends React.Component {
   constructor(props) {
-    let userRecordString = sessionStorage.getItem("userRecord");
-    userRecordString = unescape(userRecordString);
+    // let userRecordString = sessionStorage.getItem("userRecord");
+    // userRecordString = unescape(userRecordString);
     super(props);
     this.state = {
-      userRecordString: userRecordString,
+      userRecord: null
     };
   }
 
+  componentDidMount() {
+    // save self as current this state because .then is an event handler
+    // the event handler redefines 'this'
+    // create a pointer to 'this' so that we can use set state of the component
+    let self = this;
+    // get user email from the userRecord gathered from sign in
+    let userRecordString = sessionStorage.getItem("userRecord");
+    // get rid of escape characters in user record string
+    userRecordString = unescape(userRecordString);
+    // make string into json
+    let userRecord = JSON.parse(userRecordString);
+
+    let userid = userRecord.user_info._id;
+
+    // fetch latest version of user data from backend
+    fetch("http://localhost:5000/user?id=" + userid, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then(response => {
+      // If the HTTP response is 2xx then response.ok will have a value of true
+      if (!response.ok) {
+        const data = response.json();
+        throw new Error(data.message);
+      }
+      // return the promise(response.json) so that the next .then can resolve the promise
+      return response.json();
+    })
+    .then(data => {
+      // resolve the promise: response.json(), into data as a user record
+      self.setState({userRecord: data});
+    })
+    .catch(error => {
+      window.alert(error);
+      return;
+    });
+
+  }
   render() {
-    let userRecord = JSON.parse(this.state.userRecordString);
+    // let userRecord = JSON.parse(this.state.userRecordString);
+    // check if no user record
     let emptyUserRecord = true;
-    if (userRecord) {
+    if (this.state.userRecord) {
       emptyUserRecord = false;
     }
 
@@ -28,8 +69,8 @@ class UserHome extends React.Component {
           <section className="container">
             <h1>
               {" "}
-              Welcome, <span>{userRecord.user_info.firstname}</span>&nbsp;
-              <span>{userRecord.user_info.lastname}</span>!
+              Welcome, <span>{this.state.userRecord.user_info.firstname}</span>&nbsp;
+              <span>{this.state.userRecord.user_info.lastname}</span>!
             </h1>
             <div className="row">
               <div className="col-sm-6 col-12">
@@ -39,7 +80,7 @@ class UserHome extends React.Component {
                       <img
                         src="./userHomePageImages/suitcase.jpg"
                         alt="..."
-                        class="img-thumbnail"
+                        className="img-thumbnail"
                       />
                     </div>
                     <div className="col-md-8">
@@ -64,7 +105,7 @@ class UserHome extends React.Component {
                       <img
                         src="./userHomePageImages/money1.jpg"
                         alt="..."
-                        class="img-thumbnail"
+                        className="img-thumbnail"
                       />
                     </div>
                     <div className="col-md-8">
@@ -72,7 +113,7 @@ class UserHome extends React.Component {
                         <h5 className="card-title">Your Balance</h5>
                         <p className="card-text">
                           Your account currently has a balance of $
-                          <span>{userRecord.user_info.balance}</span>.
+                          <span>{this.state.userRecord.user_info.balance}</span>.
                         </p>
                         <a href="/addcredit" className="btn btn-primary">
                           Add credit
@@ -91,7 +132,7 @@ class UserHome extends React.Component {
                       <img
                         src="./userHomePageImages/island1.jpg"
                         alt="..."
-                        class="img-thumbnail"
+                        className="img-thumbnail"
                       />
                     </div>
                     <div className="col-md-8">
@@ -99,9 +140,9 @@ class UserHome extends React.Component {
                         <h5 className="card-title">Manage Your Islands</h5>
                         <p className="card-text">
                           Add an island and allow users to place bookings, or
-                          remove your island here.
+                          update your existing island here.
                         </p>
-                        <a href="/" className="btn btn-primary">
+                        <a href="/addisland" className="btn btn-primary">
                           Manage
                         </a>
                       </div>
@@ -116,7 +157,7 @@ class UserHome extends React.Component {
                       <img
                         src="./userHomePageImages/rating.jpg"
                         alt="..."
-                        class="img-thumbnail"
+                        className="img-thumbnail"
                       />
                     </div>
                     <div className="col-md-8">
@@ -140,8 +181,8 @@ class UserHome extends React.Component {
                   <div className="card-body">
                     <h5 className="card-title">Active Reservations</h5>
                     <p className="card-text">
-                      {userRecord.bookingArray &&
-                        userRecord.bookingArray.map(function (entry, i) {
+                      {this.state.userRecord.bookingArray &&
+                        this.state.userRecord.bookingArray.map(function (entry, i) {
                           return <div key={"booking-" + i}>{entry}</div>;
                         })}
                     </p>
@@ -155,8 +196,8 @@ class UserHome extends React.Component {
                   <div className="card-body">
                     <h5 className="card-title">Past Reservations</h5>
                     <p className="card-text">
-                      {userRecord.pastBookingArray &&
-                        userRecord.pastBookingArray.map(function (entry, i) {
+                      {this.state.userRecord.pastBookingArray &&
+                        this.state.userRecord.pastBookingArray.map(function (entry, i) {
                           return <div key={"past-booking-" + i}>{entry}</div>;
                         })}
                     </p>
@@ -166,7 +207,7 @@ class UserHome extends React.Component {
             </div>
           </section>
         ) : (
-          <section className="container">No User Record in session!</section>
+          <section className="container">Loading User Record ...</section>
         )}
       </>
     );
