@@ -34,3 +34,10 @@
   font-size: 18px;
   font-weight: bold;
 }
+
+.buttons{
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
