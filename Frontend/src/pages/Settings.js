@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 
+
 export default function ChangeUserData() {
   // note: user is not allowed to change email
+
   const [form, setForm] = useState({
     firstname: "",
     lastname: "",
