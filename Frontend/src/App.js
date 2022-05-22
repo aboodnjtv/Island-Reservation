@@ -10,8 +10,10 @@ import SignOut from "./pages/SignOut";
 import AddCredit from "./pages/AddCredit";
 import Reserve from "./pages/Reserve";
 import AppAbout from "./pages/AppAbout";
-import ProtectedRoute from "./components/ProtectedRoute";
 import AddIsland from "./pages/AddIsland";
+import Settings from "./pages/Settings.js";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
   return (
@@ -47,6 +49,12 @@ function App() {
         <Route exact path="/addisland" element={
             <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
               <AddIsland />
+            </ProtectedRoute>
+          }
+        />
+        <Route exact path="/settings" element={
+            <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
+              <Settings />
             </ProtectedRoute>
           }
         />

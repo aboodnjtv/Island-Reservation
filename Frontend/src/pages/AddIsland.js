@@ -15,6 +15,11 @@ export default function Upload(){
     islandImg: '',
     is_available: true,
   });
+
+  // For navigating to different page when signed in
+  let successAddedIsland = false;
+  const navigate = useNavigate();
+
   let formStyle = {padding: '10px',
     border: '1px solid #ccc',
     borderRadius: '4px'};
@@ -43,9 +48,15 @@ export default function Upload(){
 
     axios.post("http://localhost:5000/islands/add", formData, {
     }).then(res => {
-        console.log(res)
+        successAddedIsland = true;
+        //console.log(res);
+        // Navigate to user homepage if successfully added island
+        if (successAddedIsland) {
+          window.location.href = "/userhome";
+        }
     }).catch(error => {
-        console.log(error.response)
+      window.alert(error);
+      return;
     });
   }
 
@@ -54,33 +65,37 @@ export default function Upload(){
       <Navbar page="Add Island" />
       <div className="container">
         <div className="row">
-          <form onSubmit={onSubmit} encType="multipart/form-data" style={formStyle}>
+          <form className="container" onSubmit={onSubmit} encType="multipart/form-data">
             <h3>Add Your Island</h3>
-            <div className="form-group">
-              <label htmlFor='name'>Island Name</label>
-              <input type="text" name='name' class="form-control" value={form.name} onChange={(e) => updateForm({ name: e.target.value })}/>
-            </div>
-            <div className="form-group">
-              <label htmlFor='location'>Location</label>
-              <input type="text" name='location' class="form-control" value={form.location} onChange={(e) => updateForm({ location: e.target.value })}/>
-            </div>
-            <div className="form-group">
-              <label htmlFor='land_size'>Size</label>
-              <input type="text" name='land_size' class="form-control" value={form.land_size} onChange={(e) => updateForm({ land_size: e.target.value })}/>
-            </div>
-            <div className="form-group">
-              <label htmlFor='details'>Details</label>
-              <textarea  name='details' class="form-control" value={form.details} onChange={(e) => updateForm({ details: e.target.value })}/>
-            </div>
-            <div className="form-group">
-              <label htmlFor='price'>Price</label>
-              <input type="text" name='price' class="form-control" value={form.price} onChange={(e) => updateForm({ price: e.target.value })}/>
-            </div>
-            <div className="form-group">
-              <input type="file"  onChange={handleChange} />
-            </div>
-            <div className="form-group">
-              <button className="btn btn-primary" type="submit">Upload</button>
+            <div className ="col-lg-6 col-md-6 col-xs-6">
+              <div className ="border shadow-sm rounded p-3 mb-3">
+                <div className="form-group">
+                  <label htmlFor='name'>Island Name</label>
+                  <input type="text" name='name' className="form-control" value={form.name} onChange={(e) => updateForm({ name: e.target.value })}/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor='location'>Location</label>
+                  <input type="text" name='location' className="form-control" value={form.location} onChange={(e) => updateForm({ location: e.target.value })}/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor='land_size'>Size</label>
+                  <input type="text" name='land_size' className="form-control" value={form.land_size} onChange={(e) => updateForm({ land_size: e.target.value })}/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor='details'>Details</label>
+                  <textarea  name='details' className="form-control" value={form.details} onChange={(e) => updateForm({ details: e.target.value })}/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor='price'>Price</label>
+                  <input type="text" name='price' className="form-control" value={form.price} onChange={(e) => updateForm({ price: e.target.value })}/>
+                </div>
+                <div className="form-group">
+                  <input type="file"  onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                  <button className="btn btn-primary" type="submit">Upload</button>
+                </div>
+              </div>
             </div>
           </form>
         </div>

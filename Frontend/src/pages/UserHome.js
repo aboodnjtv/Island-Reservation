@@ -17,14 +17,14 @@ class UserHome extends React.Component {
     // the event handler redefines 'this'
     // create a pointer to 'this' so that we can use set state of the component
     let self = this;
-    // get user email from the userRecord gathered from sign in
+    // get user id from the userRecord gathered from sign in
     let userRecordString = sessionStorage.getItem("userRecord");
     // get rid of escape characters in user record string
     userRecordString = unescape(userRecordString);
     // make string into json
     let userRecord = JSON.parse(userRecordString);
 
-    let userid = userRecord.user_info._id;
+    let userid = userRecord._id;
 
     // fetch latest version of user data from backend
     fetch("http://localhost:5000/user?id=" + userid, {
@@ -170,6 +170,30 @@ class UserHome extends React.Component {
                           Review
                         </a>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-sm-6 col-12">
+              <div className="card mb-3" style={{ maxWidth: "540px" }}>
+                <div className="row no-gutters">
+                  <div className="col-md-4">
+                    <img
+                      src="./userHomePageImages/settings.jpg"
+                      alt="..."
+                      className="img-thumbnail"
+                    />
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">Account Settings</h5>
+                      <p className="card-text">
+                        Manage your account information.
+                      </p>
+                      <a href="/settings" className="btn btn-primary">
+                        Settings
+                      </a>
                     </div>
                   </div>
                 </div>
