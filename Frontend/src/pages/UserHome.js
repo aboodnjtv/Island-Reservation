@@ -18,16 +18,7 @@ class UserHome extends React.Component {
     // create a pointer to 'this' so that we can use set state of the component
     let self = this;
     // get user id from the userRecord gathered from sign in
-    let userRecordString = sessionStorage.getItem("userRecord");
-    // get rid of escape characters in user record string
-    userRecordString = unescape(userRecordString);
-    // make string into json
-    let userRecord = JSON.parse(userRecordString);
-
-    let userid = userRecord.user_info._id;
-    if (!userid) {
-      userid = userRecord._id;
-    }
+    let userid = sessionStorage.getItem("userRecordID");
 
     // fetch latest version of user data from backend
     fetch("http://localhost:5000/user?id=" + userid, {

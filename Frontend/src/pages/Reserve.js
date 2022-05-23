@@ -10,9 +10,7 @@ export default function Reserve() {
   });
 
   // Get logged in user info
-  let userRecordString = sessionStorage.getItem("userRecord");
-  let userRecord = JSON.parse(userRecordString);
-  let userId = userRecord.user_info._id;
+  let userId = sessionStorage.getItem("userRecordID");
 
   // For navigating to different page when successfully added balance
   let successAddBalance = false;
@@ -49,10 +47,6 @@ export default function Reserve() {
           // throw new Error(response.statusText)
         } else {
           successAddBalance = true;
-          // Update session storage to update user homepage
-          let userRecord = JSON.parse(sessionStorage.getItem("userRecord"));
-          userRecord.user_info.balance = data.balance;
-          sessionStorage.setItem("userRecord", JSON.stringify(userRecord));
         }
       })
       .catch((error) => {

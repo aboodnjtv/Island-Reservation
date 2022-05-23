@@ -13,9 +13,7 @@ export default function AddCredit() {
   });
 
   // Get logged in user info
-  let userRecordString = sessionStorage.getItem("userRecord");
-  let userRecord = JSON.parse(userRecordString);
-  let userId = userRecord.user_info._id;
+  let userid = sessionStorage.getItem("userRecordID");
 
   // For navigating to different page when successfully added balance
   let successAddBalance = false;
@@ -37,7 +35,7 @@ export default function AddCredit() {
     // NOTE: USER BALANCE WILL GO TO NAN IF ENTIRE FORM NOT FILLED OUT, NEED TO CHECK THAT FORM IS FILLED OUT
 
     // When submit pressed, make api call
-    await fetch(`http://localhost:5000/user/addcredit/${userId}`, {
+    await fetch(`http://localhost:5000/user/addcredit/${userid}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,10 +50,6 @@ export default function AddCredit() {
           // throw new Error(response.statusText)
         } else {
           successAddBalance = true;
-          // Update session storage to update user homepage
-          let userRecord = JSON.parse(sessionStorage.getItem("userRecord"));
-          userRecord.user_info.balance = data.balance;
-          sessionStorage.setItem("userRecord", JSON.stringify(userRecord));
         }
       })
       .catch((error) => {
