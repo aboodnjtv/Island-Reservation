@@ -24,7 +24,10 @@ class UserHome extends React.Component {
     // make string into json
     let userRecord = JSON.parse(userRecordString);
 
-    let userid = userRecord._id;
+    let userid = userRecord.user_info._id;
+    if (!userid) {
+      userid = userRecord._id;
+    }
 
     // fetch latest version of user data from backend
     fetch("http://localhost:5000/user?id=" + userid, {
