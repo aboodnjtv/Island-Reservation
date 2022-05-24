@@ -491,4 +491,34 @@ userRoutes.post("/user/reserve/:id", async (req, res) => {
   }
 });
 
+
+//get the islands that a user has uploaded
+//send in a _id as a url parameter
+//ex: localhost:5000/user/islands?id=628310e922fae0e05a9b10ef --> parameter id = 628310e922fae0e05a9b10ef
+userRoutes.get("/user/islands", async (req, res) => {
+  try {
+    const id_obj = new ObjectId(req.query.id);
+    let db_client = dbo.getClient();
+    let user_data = await db_client
+      .db("IR")
+      .collection("users")
+      .find({ _id: id_obj })
+      .toArray();
+
+    let user_islands = await db_client
+      .db("IR")
+      .collection("islands")
+      .find({ owner_id: id_obj })
+      .toArray();
+
+    // res.send(user_data[0]);
+    res.status(200).json({
+      user_info: user_data[0],
+      user_islands: user_islands
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = userRoutes;
