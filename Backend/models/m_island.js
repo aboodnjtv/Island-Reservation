@@ -32,6 +32,15 @@ const islandSchema = new Schema({
     is_available: {
       type: Boolean
     },
+    latitude: {
+      type: Number
+    },
+    longitude: {
+      type: Number
+    },
+    owner_id: {
+      type: String
+    },
     // amenities: {
     //   type: [String],
     //   // required: [true, 'name field is required']
