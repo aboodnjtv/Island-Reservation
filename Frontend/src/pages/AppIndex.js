@@ -104,7 +104,7 @@ import Navbar from "../components/Navbar.js";
       const list = this.state.list;
       const listItems = list.map((item) =>
       <div key={item._id} className="col-lg-3 col-md-4 col-sm-12">
-        <CardView title={item.name} distance={item.rating} area={item.land_size} cover={item.islandImg} />
+        <CardView title={item.name} rating={item.rating} area={item.land_size} cover={item.islandImg} price={item.price} id={item._id} />
       </div>
       );
       console.log(listItems);

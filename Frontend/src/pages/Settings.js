@@ -31,13 +31,7 @@ export default function ChangeUserData() {
     const newData = { ...form };
 
     // get the user's id (never changes) from sessionStorage (stored upon sign in)
-    let userRecordString = sessionStorage.getItem("userRecord");
-    // get rid of escape characters in user record string
-    userRecordString = unescape(userRecordString);
-    // make string into json
-    let userRecord = JSON.parse(userRecordString);
-    // grab id
-    let userid = userRecord._id;
+    let userid = sessionStorage.getItem("userRecordID");
 
     // When submit pressed, make api call
     await fetch("http://localhost:5000/user/update?id=" + userid, {
@@ -62,8 +56,6 @@ export default function ChangeUserData() {
     .then(data => {
       // resolve the promise (response.json) as a user record
       let userRecord = JSON.stringify(data);
-      // store the user record into session storage to access it on userhomepage
-      sessionStorage.setItem("userRecord", userRecord);
     })
     .catch(error => {
       window.alert(error);

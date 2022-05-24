@@ -56,9 +56,13 @@ export default function SignIn() {
     })
     .then(data => {
       // resolve the promise (response.json) as a user record
-      let userRecord = JSON.stringify(data);
+      let userRecordString = JSON.stringify(data);
+      // get rid of escape characters in user record string
+      userRecordString = unescape(userRecordString);
+      // make string into json
+      let userRecord = JSON.parse(userRecordString);
       // store the user record into session storage to access it on userhomepage
-      sessionStorage.setItem("userRecord", userRecord);
+      sessionStorage.setItem("userRecordID", userRecord.user_info._id);
     })
     .catch(error => {
       window.alert(error);

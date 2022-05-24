@@ -286,6 +286,145 @@ userRoutes.post("/user/update", async (req, res) => {
   }
 });
 
+//update user information
+userRoutes.post("/user/update/firstname", async (req, res) => {
+  let db_client = dbo.getDb();
+  // Get userID who we are adding credit to
+  const userID = new ObjectId(req.query.id);
+
+  const { firstname} = req.body;
+
+  // Make sure user exists in database
+  const user = await db_client
+    .collection("users")
+    .findOne({ _id: ObjectId(userID) });
+
+  if (!user) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({ message: "User doesn't exist in our records." });
+  } else {
+    // MongoDB query to find user
+    const myquery = { _id: userID };
+
+    // MongoDB query to update user's balance
+    const newvalues = {
+      $set: {
+        firstname: firstname
+      },
+    };
+    // Update user
+    await db_client
+      .collection("users")
+      .findOneAndUpdate(
+        myquery,
+        newvalues,
+        { returnDocument: "after" },
+        function (err, response) {
+          if (err) throw err;
+          // Return updated user info
+          res.status(200).json(response.value);
+        }
+      );
+  }
+});
+
+//update user information
+userRoutes.post("/user/update/lastname", async (req, res) => {
+  let db_client = dbo.getDb();
+  // Get userID who we are adding credit to
+  const userID = new ObjectId(req.query.id);
+
+  const {lastname} = req.body;
+
+  // Make sure user exists in database
+  const user = await db_client
+    .collection("users")
+    .findOne({ _id: ObjectId(userID) });
+
+  if (!user) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({ message: "User doesn't exist in our records." });
+  } else {
+    // MongoDB query to find user
+    const myquery = { _id: userID };
+
+    // MongoDB query to update user's balance
+    const newvalues = {
+      $set: {
+        lastname: lastname
+      },
+    };
+    // Update user
+    await db_client
+      .collection("users")
+      .findOneAndUpdate(
+        myquery,
+        newvalues,
+        { returnDocument: "after" },
+        function (err, response) {
+          if (err) throw err;
+          // Return updated user info
+          res.status(200).json(response.value);
+        }
+      );
+  }
+});
+
+//update user password only
+userRoutes.post("/user/update/password", async (req, res) => {
+  let db_client = dbo.getDb();
+  // Get userID who we are adding credit to
+  const userID = new ObjectId(req.query.id);
+
+  const { password } = req.body;
+
+  if (password.length < 8) {
+    return res
+      .status(410)
+      .json({ message: "Password must be at least 8 characters long." });
+  }
+
+  // Make sure user exists in database
+  const user = await db_client
+    .collection("users")
+    .findOne({ _id: ObjectId(userID) });
+
+  if (!user) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({ message: "User doesn't exist in our records." });
+  } else {
+    // MongoDB query to find user
+    const myquery = { _id: userID };
+    const hashed_password = await bcrypt.hash(password, 12);
+
+    // MongoDB query to update user's balance
+    const newvalues = {
+      $set: {
+        password: hashed_password
+      },
+    };
+    // Update user
+    await db_client
+      .collection("users")
+      .findOneAndUpdate(
+        myquery,
+        newvalues,
+        { returnDocument: "after" },
+        function (err, response) {
+          if (err) throw err;
+          // Return updated user info
+          res.status(200).json(response.value);
+        }
+      );
+  }
+});
+
 // A route to add balance to user
 userRoutes.post("/user/reserve/:id", async (req, res) => {
   let db_client = dbo.getDb();
@@ -349,6 +488,36 @@ userRoutes.post("/user/reserve/:id", async (req, res) => {
           );
       }
     }
+  }
+});
+
+
+//get the islands that a user has uploaded
+//send in a _id as a url parameter
+//ex: localhost:5000/user/islands?id=628310e922fae0e05a9b10ef --> parameter id = 628310e922fae0e05a9b10ef
+userRoutes.get("/user/islands", async (req, res) => {
+  try {
+    const id_obj = new ObjectId(req.query.id);
+    let db_client = dbo.getClient();
+    let user_data = await db_client
+      .db("IR")
+      .collection("users")
+      .find({ _id: id_obj })
+      .toArray();
+
+    let user_islands = await db_client
+      .db("IR")
+      .collection("islands")
+      .find({ owner_id: id_obj })
+      .toArray();
+
+    // res.send(user_data[0]);
+    res.status(200).json({
+      user_info: user_data[0],
+      user_islands: user_islands
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 

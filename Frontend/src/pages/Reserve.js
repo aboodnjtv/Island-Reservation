@@ -1,24 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 
+function getDateString(date){
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let year = date.getFullYear();
+  if(month < 10)
+    month = '0' + month.toString();
+  if(day < 10)
+    day = '0' + day.toString();
+  let stringDate = year + '-' + month + '-' + day;
+  return stringDate;
+}
+
 export default function Reserve() {
+  // State for the reservation form
   const [form, setForm] = useState({
-    firstname: "",
-    lastname: "",
-    islandName: "",
+    startDate: "",
+    endDate: "",
   });
+  // State for the island that is selected for reservation
+  const [island, setIsland] = useState({});
 
-  // Get logged in user info
-  let userRecordString = sessionStorage.getItem("userRecord");
-  let userRecord = JSON.parse(userRecordString);
-  let userId = userRecord.user_info._id;
+  // Get id of logged in user
+  let userId = sessionStorage.getItem("userRecordID");
 
-  // For navigating to different page when successfully added balance
+  // Get selected island ID
+  let search = window.location.search;
+  let params = new URLSearchParams(search);
+  let islandId = params.get('island');
+
+  // Get todays date so user cant reserve in the past
+  let today = new Date();
+  today = getDateString(today);
+
+  // Calculate number of days and total price
+  let numDays = Math.floor((Date.parse(form.endDate) - Date.parse(form.startDate)) / 86400000);
+  let totalPrice = island.price * numDays;
+
+  // For navigating to different page when successfully reserved
   let successAddBalance = false;
   const navigate = useNavigate();
 
-  // These methods will update the state properties.
+  // This method will update the form as use is putting in dates
   function updateForm(value) {
     return setForm((prev) => {
       return { ...prev, ...value };
@@ -30,16 +55,17 @@ export default function Reserve() {
     e.preventDefault();
 
     // Fix this to send the new balance to the db, have backend add this balance to current balance
-    const newCard = { ...form };
+    const reservationInfo = { ...form }
+    reservationInfo.amountPaid = totalPrice;
     // NOTE: USER BALANCE WILL GO TO NAN IF ENTIRE FORM NOT FILLED OUT, NEED TO CHECK THAT FORM IS FILLED OUT
 
     // When submit pressed, make api call
-    await fetch(`http://localhost:5000/user/reserve/${userId}`, {
+    await fetch(`http://localhost:5000/reservations/add/${userId}/${islandId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newCard),
+      body: JSON.stringify(reservationInfo),
     })
       .then(async (response) => {
         const data = await response.json();
@@ -49,10 +75,6 @@ export default function Reserve() {
           // throw new Error(response.statusText)
         } else {
           successAddBalance = true;
-          // Update session storage to update user homepage
-          let userRecord = JSON.parse(sessionStorage.getItem("userRecord"));
-          userRecord.user_info.balance = data.balance;
-          sessionStorage.setItem("userRecord", JSON.stringify(userRecord));
         }
       })
       .catch((error) => {
@@ -70,64 +92,95 @@ export default function Reserve() {
     }
   }
 
+  // useEffect is similar to componentDidMount, updates island state for the currently selected island
+  useEffect(() => {
+    fetch("http://localhost:5000/island?id=" + islandId, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then(response => {
+      // If the HTTP response is 2xx then response.ok will have a value of true
+      if (!response.ok) {
+        const data = response.json();
+        throw new Error(data.message);
+      }
+      // return the promise(response.json) so that the next .then can resolve the promise
+      return response.json();
+    })
+    .then(data => {
+      // resolve the promise: response.json(), into data as a user record
+      setIsland(data);
+    })
+    .catch(error => {
+      window.alert(error);
+      return;
+    });
+  }, [islandId])
+
   return (
     <div>
       <Navbar page="Add Credit" />
       <div className="container">
-        <h3>Reserve Island</h3>
-        <div className="container">
-          <div className="row">
-            {/* bootstrap responsive design
-          width of  columns on a 12 column grid:
-          for xs (mobile) sign up takes whole screen (12 cols)
-          for med page size, sign up takes 6 columns
-          for large page size, sign up takes 5 cols
-          */}
-            <div className="col-lg-5 col-md-6 col-xs-12">
-              <form
+        <div className="card">
+        <h3 className="card-title" style={{display: 'flex',  justifyContent:'center'}}>Reserve {island.name}</h3>
+        <div className="card-body">
+          <div className="card">
+            <img src={island.islandImg} className="card-img-top" alt="..." />
+            <div className="card-body">
+              <div className="card-info">
+                <div className="card-info-number">{island.rating}</div>
+              </div>
+              <h4 style={{marginTop: "10px"}}>Details</h4>
+              <div className="card-info-number">{island.details} km</div>
+            </div>
+            </div>
+            <form
                 className="border shadow-sm rounded p-3 mb-3"
                 onSubmit={onSubmit}
               >
                 <div className="form-group">
-                  <label htmlFor="fname">First Name</label>
+                  <label htmlFor="ddmmyy">Start Date</label>
                   <input
-                    type="text"
+                    type="date"
+                    min={today}
                     className="form-control"
-                    id="fname"
-                    value={form.firstname}
-                    onChange={(e) => updateForm({ firstname: e.target.value })}
+                    id="ddmmyy"
+                    value={form.startDate}
+                    onChange={(e) => updateForm({ startDate: e.target.value, endDate: ""})}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="lname">Last Name</label>
+                  <label htmlFor="ddmmyy">End Date</label>
                   <input
-                    type="text"
+                    type="date"
+                    min={form.startDate}
                     className="form-control"
-                    id="lname"
-                    value={form.lastname}
-                    onChange={(e) => updateForm({ lastname: e.target.value })}
+                    id="ddmmyy"
+                    value={form.endDate}
+                    onChange={(e) => updateForm({ endDate: e.target.value })}
                   />
                 </div>
-
-                <div className="form-group">
-                  <label htmlFor="islandName">Island Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="islandName"
-                    value={form.islandName}
-                    onChange={(e) => updateForm({ islandName: e.target.value })}
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    type="submit"
-                    value="Reserve Island"
-                    className="btn btn-primary"
-                  />
-                </div>
+                {numDays > 0 &&
+                  <div> {"Total Days: " + numDays}</div>
+                }
+                {numDays > 0 &&
+                  <div> {"Total Price: " + totalPrice}</div>
+                }
+                {numDays > 0 &&
+                  <div className="form-group">
+                    <input
+                      type="submit"
+                      value="Reserve Island"
+                      className="btn btn-primary"
+                    />
+                  </div>
+                }
+                {numDays <= 0 &&
+                  <div> Hourly Reservations will be avaliable soon! </div>
+                }
               </form>
-            </div>
           </div>
         </div>
       </div>
