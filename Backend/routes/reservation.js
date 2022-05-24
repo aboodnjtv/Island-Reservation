@@ -36,25 +36,23 @@ reservationRoutes.get('/reservations', async (req, res) => {
 // }
 
 // Add reservation route
-reservationRoutes.route("/reservations/add").post(async (req, res) => {
+reservationRoutes.route("/reservations/add/:uid/:lid").post(async (req, res) => {
     // let db_client = dbo.getDb();
     let db_client = dbo.getClient();
-
+    let reserver_id = req.params.uid;
+    let island_id = req.params.lid;
     // Get request body
-    let { reserver_id,
-        island_id,
-        amountPaid,
+    let { 
         // email,
         // islandName,
         // reservationDate,
         startDate,
-        endDate } = req.body;
+        endDate,
+        amountPaid,
+    } = req.body;
     // Check if username or island exists in database
-    console.log(reserver_id);
     let existingUser = await db_client.db("IR").collection("users").find({_id: ObjectId(reserver_id)}).toArray();
-    console.log(existingUser);
     let existingIsland = await db_client.db("IR").collection("islands").find({_id: ObjectId(island_id)}).toArray();
-    console.log(existingIsland);
     //get list of reservations for the island the user is trying to reserve
     let islandsReservations = await db_client.db("IR").collection("reservations").find({island_id: ObjectId(island_id)}).toArray();
     let userReservations = await db_client.db("IR").collection("reservations").find({reserver_id: ObjectId(reserver_id)}).toArray();
@@ -71,17 +69,6 @@ reservationRoutes.route("/reservations/add").post(async (req, res) => {
     const reservationDate = new Date();
     startDate = new Date(startDate);
     endDate = new Date(endDate);
-
-
-    //check if the island is available to be booked
-    if (!island.is_available) 
-    {
-        console.log("Sorry!" + island.name + " Island is fully booked or unavailable!");
-        //instead render an actual page
-        return res
-            .status(500)
-            .json({ message: "Island is already reserved by another client" });
-    }
 
     //check if the user has enough balance to pay for the reservation
     if (user.balance < amountPaid) {
@@ -149,7 +136,7 @@ reservationRoutes.route("/reservations/add").post(async (req, res) => {
         amountPaid,
         reservationDate,
         startDate,
-        endDate
+        endDate,
     });
   
     // Insert into database
