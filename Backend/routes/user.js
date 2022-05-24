@@ -286,6 +286,145 @@ userRoutes.post("/user/update", async (req, res) => {
   }
 });
 
+//update user information
+userRoutes.post("/user/update/firstname", async (req, res) => {
+  let db_client = dbo.getDb();
+  // Get userID who we are adding credit to
+  const userID = new ObjectId(req.query.id);
+
+  const { firstname} = req.body;
+
+  // Make sure user exists in database
+  const user = await db_client
+    .collection("users")
+    .findOne({ _id: ObjectId(userID) });
+
+  if (!user) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({ message: "User doesn't exist in our records." });
+  } else {
+    // MongoDB query to find user
+    const myquery = { _id: userID };
+
+    // MongoDB query to update user's balance
+    const newvalues = {
+      $set: {
+        firstname: firstname
+      },
+    };
+    // Update user
+    await db_client
+      .collection("users")
+      .findOneAndUpdate(
+        myquery,
+        newvalues,
+        { returnDocument: "after" },
+        function (err, response) {
+          if (err) throw err;
+          // Return updated user info
+          res.status(200).json(response.value);
+        }
+      );
+  }
+});
+
+//update user information
+userRoutes.post("/user/update/lastname", async (req, res) => {
+  let db_client = dbo.getDb();
+  // Get userID who we are adding credit to
+  const userID = new ObjectId(req.query.id);
+
+  const {lastname} = req.body;
+
+  // Make sure user exists in database
+  const user = await db_client
+    .collection("users")
+    .findOne({ _id: ObjectId(userID) });
+
+  if (!user) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({ message: "User doesn't exist in our records." });
+  } else {
+    // MongoDB query to find user
+    const myquery = { _id: userID };
+
+    // MongoDB query to update user's balance
+    const newvalues = {
+      $set: {
+        lastname: lastname
+      },
+    };
+    // Update user
+    await db_client
+      .collection("users")
+      .findOneAndUpdate(
+        myquery,
+        newvalues,
+        { returnDocument: "after" },
+        function (err, response) {
+          if (err) throw err;
+          // Return updated user info
+          res.status(200).json(response.value);
+        }
+      );
+  }
+});
+
+//update user password only
+userRoutes.post("/user/update/password", async (req, res) => {
+  let db_client = dbo.getDb();
+  // Get userID who we are adding credit to
+  const userID = new ObjectId(req.query.id);
+
+  const { password } = req.body;
+
+  if (password.length < 8) {
+    return res
+      .status(410)
+      .json({ message: "Password must be at least 8 characters long." });
+  }
+
+  // Make sure user exists in database
+  const user = await db_client
+    .collection("users")
+    .findOne({ _id: ObjectId(userID) });
+
+  if (!user) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({ message: "User doesn't exist in our records." });
+  } else {
+    // MongoDB query to find user
+    const myquery = { _id: userID };
+    const hashed_password = await bcrypt.hash(password, 12);
+
+    // MongoDB query to update user's balance
+    const newvalues = {
+      $set: {
+        password: hashed_password
+      },
+    };
+    // Update user
+    await db_client
+      .collection("users")
+      .findOneAndUpdate(
+        myquery,
+        newvalues,
+        { returnDocument: "after" },
+        function (err, response) {
+          if (err) throw err;
+          // Return updated user info
+          res.status(200).json(response.value);
+        }
+      );
+  }
+});
+
 // A route to add balance to user
 userRoutes.post("/user/reserve/:id", async (req, res) => {
   let db_client = dbo.getDb();
