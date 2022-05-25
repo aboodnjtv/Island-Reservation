@@ -2,7 +2,6 @@ import React from 'react';
 import './appIndex.css';
 import CardView from '../components/CardView.js';
 import HttpRequest from '../components/HttpRequest.js';
-import Navbar from "../components/Navbar.js";
 
 /**
  * app home
@@ -101,29 +100,24 @@ import Navbar from "../components/Navbar.js";
     }
   }
   render(){
-      const list = this.state.list;
-      const listItems = list.map((item) =>
-      <div key={item._id} className="col-lg-3 col-md-4 col-sm-12">
-        <CardView title={item.name} rating={item.rating} area={item.land_size} cover={item.islandImg} price={item.price} id={item._id} />
-      </div>
-      );
-      console.log(listItems);
-
-      return (
-      <>
-        <Navbar page="Gallery" />
-        <div className="row">
-          <div className='col-12'>
-            <div className="btn-group buttons" role="group" aria-label="Basic example">
-              <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(0)}>Land Size{this.state.sortBy === 0 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 1 ? <i className='triangle-down'></i> : <></>}</button>
-              <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(1)}>Price{this.state.sortBy === 2 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 3 ? <i className='triangle-down'></i> : <></>}</button>
-              <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(2)}>Rating{this.state.sortBy === 4 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 5 ? <i className='triangle-down'></i> : <></>}</button>
-            </div>
-          </div>
-          {listItems}
-        </div>
-      </>
+    const list = this.state.list;
+    const listItems = list.map((item) =>
+    <div key={item._id} className="col-lg-3 col-md-4 col-sm-12">
+      <CardView title={item.name} distance={item.rating} area={item.land_size} cover={item.islandImg} id={item._id} />
+    </div>
     );
+    console.log(listItems);
+    return (
+    <div className="row">
+      <div className='col-12'>
+        <div className="btn-group buttons" role="group" aria-label="Basic example">
+          <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(0)}>Land Size{this.state.sortBy === 0 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 1 ? <i className='triangle-down'></i> : <></>}</button>
+          <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(1)}>Price{this.state.sortBy === 2 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 3 ? <i className='triangle-down'></i> : <></>}</button>
+          <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(2)}>Rating{this.state.sortBy === 4 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 5 ? <i className='triangle-down'></i> : <></>}</button>
+        </div>
+      </div>
+      {listItems}
+    </div>);
   }
  }
 
