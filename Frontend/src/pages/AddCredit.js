@@ -71,7 +71,7 @@ export default function AddCredit() {
     <div>
       <Navbar page="Add Credit" />
       <div className="container">
-        <h3>Add Credit</h3>
+        <h3 style={{textAlign: 'center'}}>Add Credit</h3>
         <div className="container">
           <div className="row">
             {/* bootstrap responsive design
@@ -80,7 +80,7 @@ export default function AddCredit() {
           for med page size, sign up takes 6 columns
           for large page size, sign up takes 5 cols
           */}
-            <div className="col-lg-5 col-md-6 col-xs-12">
+            <div className="offset-lg-3 col-lg-6 col-xs-12">
               <form
                 className="border shadow-sm rounded p-3 mb-3"
                 onSubmit={onSubmit}

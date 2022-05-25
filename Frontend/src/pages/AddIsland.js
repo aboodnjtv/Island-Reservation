@@ -62,9 +62,9 @@ export default function Upload(){
       <Navbar page="Add Island" />
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 col-md-8 col-12">
+          <div className="offset-lg-3 col-lg-6 col-xs-12">
             <form className="container" onSubmit={onSubmit} encType="multipart/form-data">
-              <h3>Add Your Island</h3>
+              <h3 style={{textAlign: 'center'}}>Add Your Island</h3>
               <div className ="border shadow-sm rounded p-3 mb-3">
                 <div className="form-group">
                   <label htmlFor='name'>Island Name</label>
