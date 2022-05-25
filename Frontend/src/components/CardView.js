@@ -24,7 +24,7 @@ class CardView extends React.Component {
               <div className="card-info">
                 <div className="card-info-number">{this.state.rating}</div>
               </div>
-              <div className="card-info-dot">Area {this.state.area} sq.m</div>
+              <div className="card-info-dot">Area: {this.state.area} sq.m</div>
               <div className="card-info-dot">
                 Price: ${this.state.price}/night
               </div>
