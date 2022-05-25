@@ -5,12 +5,12 @@ class CardView extends React.Component {
     super(props);
     console.log(props);
     this.state = {
-      cover: props.cover || "",
-      title: props.title || "",
-      rating: props.rating || "",
-      area: props.area || "",
-      price: props.price || "",
-      id: props.id,
+      cover: props.item.islandImg || "",
+      title: props.item.title || "",
+      rating: props.item.rating || "",
+      area: props.item.land_size || "",
+      price: props.item.price || "",
+      id: props.item._id,
     };
   }
   render() {
@@ -28,7 +28,7 @@ class CardView extends React.Component {
               <div className="card-info-dot">
                 Price: ${this.state.price}/night
               </div>
-              <a href={`/reserve/?island=${this.state.id}`} className="btn btn-primary btn-lg active -sm">
+              <a href={`/reserve?island=${this.state.id}`} className="btn btn-primary btn-lg active -sm">
                 RESERVE NOW
               </a>
             </div>

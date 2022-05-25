@@ -1,6 +1,7 @@
 import React from "react";
 import "./UserHome.css";
-import Navbar from "../components/Navbar.js";
+import Navbar from "../components/Navbar";
+import ReservationCard from "../components/ReservationCard";
 
 class UserHome extends React.Component {
   constructor(props) {
@@ -10,6 +11,10 @@ class UserHome extends React.Component {
     this.state = {
       userRecord: null
     };
+  }
+
+  numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   componentDidMount() {
@@ -106,8 +111,10 @@ class UserHome extends React.Component {
                       <div className="card-body">
                         <h5 className="card-title">Your Balance</h5>
                         <p className="card-text">
-                          Your account currently has a balance of $
-                          <span>{this.state.userRecord.user_info.balance}</span>.
+                        Your account currently has a balance of&nbsp;&nbsp;&nbsp;
+                        <span style={{fontWeight: 'bold', fontSize: '20px'}}>{'$' +
+                          this.numberWithCommas(this.state.userRecord.user_info.balance.toFixed(2))}
+                          </span>.
                         </p>
                         <a href="/addcredit" className="btn btn-primary">
                           Add credit
@@ -136,7 +143,7 @@ class UserHome extends React.Component {
                           Add an island and allow users to place bookings, or
                           update your existing island here.
                         </p>
-                        <a href="/addisland" className="btn btn-primary">
+                        <a href="/manage" className="btn btn-primary">
                           Manage
                         </a>
                       </div>
@@ -199,9 +206,11 @@ class UserHome extends React.Component {
                   <div className="card-body">
                     <h5 className="card-title">Active Reservations</h5>
                     <p className="card-text">
-                      {this.state.userRecord.bookingArray &&
-                        this.state.userRecord.bookingArray.map(function (entry, i) {
-                          return <div key={"booking-" + i}>{entry}</div>;
+                      {this.state.userRecord.active_reservations &&
+                        this.state.userRecord.active_reservations.map(function (entry, i) {
+                          return (
+                            <ReservationCard idx={i} entry={entry}/>
+                          )
                         })}
                     </p>
                   </div>
@@ -214,9 +223,11 @@ class UserHome extends React.Component {
                   <div className="card-body">
                     <h5 className="card-title">Past Reservations</h5>
                     <p className="card-text">
-                      {this.state.userRecord.pastBookingArray &&
-                        this.state.userRecord.pastBookingArray.map(function (entry, i) {
-                          return <div key={"past-booking-" + i}>{entry}</div>;
+                      {this.state.userRecord.past_reservations &&
+                        this.state.userRecord.past_reservations.map(function (entry, i) {
+                          return (
+                            <ReservationCard idx={i} entry={entry}/>
+                          )
                         })}
                     </p>
                   </div>

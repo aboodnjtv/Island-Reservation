@@ -121,7 +121,7 @@ export default function Reserve() {
 
   return (
     <div>
-      <Navbar page="Add Credit" />
+      <Navbar page="Reserve" />
       <div className="container">
         <div className="card">
         <h3 className="card-title" style={{display: 'flex',  justifyContent:'center'}}>Reserve {island.name}</h3>

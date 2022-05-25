@@ -42,7 +42,13 @@ class Navbar extends React.Component {
                 About
               </a>
             </li>
-            {/* This li component will show on condition that page == 'Detail' */}
+            {this.props.page == "Reserve" && sessionStorage.getItem("isAuthenticated") &&
+              <li className={"nav-item" + (this.props.page == 'Reserve' ? " active" : "")}>
+                <a className="nav-link" href={"/reserve/" + (this.props.type && this.props.type : "")}>
+                  Reserve
+                </a>
+              </li>
+            }
             {this.props.page == "Detail" &&
               <li className={"nav-item" + (this.props.page == 'Detail' ? " active" : "")}>
                 <a className="nav-link" href={"/detail/" + (this.props.type && this.props.type : "")}>
