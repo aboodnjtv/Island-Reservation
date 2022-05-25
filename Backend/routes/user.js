@@ -43,12 +43,13 @@ userRoutes.get("/user", async (req, res) => {
       .collection("reservations")
       .find({ reserver_id: id_obj })
       .toArray();
+
     let past_reservations = [];
     let active_reservations = [];
     for (let resIndex = 0; resIndex < all_reservations.length; resIndex++) {
       if (
-        all_reservations[resIndex].reservationStartDate > currentDate ||
-        all_reservations[resIndex].reservationEndDate > currentDate
+        all_reservations[resIndex].startDate > currentDate ||
+        all_reservations[resIndex].endDate > currentDate
       ) {
         active_reservations.push(all_reservations[resIndex]);
       } else {
@@ -174,8 +175,8 @@ userRoutes.post("/user/signin", async (req, res) => {
         let active_reservations = [];
         for (let resIndex = 0; resIndex < all_reservations.length; resIndex++) {
           if (
-            all_reservations[resIndex].reservationStartDate > currentDate ||
-            all_reservations[resIndex].reservationEndDate > currentDate
+            all_reservations[resIndex].startDate > currentDate ||
+            all_reservations[resIndex].endDate > currentDate
           ) {
             active_reservations.push(all_reservations[resIndex]);
           } else {
