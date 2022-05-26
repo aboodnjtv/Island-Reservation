@@ -44,6 +44,16 @@ userRoutes.get("/user", async (req, res) => {
       .find({ reserver_id: id_obj })
       .toArray();
 
+    for (let index = 0; index < all_reservations.length; index++) {
+      const island = await db_client
+        .db("IR")
+        .collection("islands")
+        .findOne({ _id: all_reservations[index].island_id }, {});
+
+      all_reservations[index].island_name = island.name;
+      all_reservations[index].island_img = island.islandImg;
+    }
+
     let past_reservations = [];
     let active_reservations = [];
     for (let resIndex = 0; resIndex < all_reservations.length; resIndex++) {
