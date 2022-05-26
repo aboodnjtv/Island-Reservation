@@ -532,4 +532,85 @@ userRoutes.get("/user/islands", async (req, res) => {
   }
 });
 
+userRoutes.post("/user/review/:id", async (req, res) => {
+  let db_client = dbo.getDb();
+  // const userID = req.params.id;
+  // get the reservation info from the reserve form
+  const { review_id, island_id, islandName, userReview, rating } = req.body;
+
+  const user_id = req.params.id;
+  console.log("USER ID: " + user_id);
+
+  // Make sure user exists in database
+  const user = await db_client
+    .collection("users")
+    .findOne({ _id: ObjectId(user_id) });
+  if (!user) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({ message: "User doesn't exist in our records. (review form)" });
+  } else {
+    // found the user, now find the island based on its id
+    const island = await db_client
+      .collection("islands")
+      .findOne({ name: islandName });
+
+    if (!island) {
+      console.log("Island was not found!");
+      return res
+        .status(500)
+        .json({ message: "Island was not found in the database" });
+    } else {
+      console.log("Island named: " + islandName + " was found!");
+      // now add review to reviews collections
+      // Create object to insert into database
+      const review = new Review({
+        review_id,
+        island_id,
+        islandName,
+        userReview,
+        rating,
+      });
+
+      // Insert into database
+      db_client.collection("reviews").insertOne(review, function (err) {
+        if (err) {
+          // If insert fails, return 500 error status
+          return res
+            .status(500)
+            .json({ message: "Server Error. Failed to insert into database." });
+          // res.status(500).send("Server Error: Failed to insert into database.");
+          throw err;
+        }
+      });
+      console.log("REVIEW HAS BEEN ADDED !!!!!");
+      console.log("userReview: " + userReview);
+
+      //update the rating of the island
+      const myquery = { name: islandName };
+      // Calculate updated balance
+      const updatedRating = (island.rating + rating) / 2;
+      console.log("island.rating: " + island.rating);
+      console.log("rating: " + rating);
+      console.log("updatedRating: " + updatedRating);
+      // MongoDB query to update user's balance
+      const newvalues = { $set: { rating: updatedRating } };
+      // Update user
+      await db_client
+        .collection("islands")
+        .findOneAndUpdate(
+          myquery,
+          newvalues,
+          { returnDocument: "after" },
+          function (err, response) {
+            if (err) throw err;
+            // Return updated user info
+            res.status(200).json(response.value);
+          }
+        );
+    }
+  }
+});
+
 module.exports = userRoutes;
