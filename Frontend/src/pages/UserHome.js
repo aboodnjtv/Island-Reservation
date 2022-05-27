@@ -60,6 +60,12 @@ class UserHome extends React.Component {
     }
 
     // now we have a json record of the user inside 'userRecord'
+    let existing_active_reservations = this.state.userRecord &&
+      this.state.userRecord.active_reservations &&
+      this.state.userRecord.active_reservations.length > 0;
+    let existing_past_reservations = this.state.userRecord &&
+      this.state.userRecord.past_reservations &&
+      this.state.userRecord.past_reservations.length > 0;
 
     return (
       <>
@@ -204,15 +210,17 @@ class UserHome extends React.Component {
               <div className="col-12">
                 <div className="card">
                   <div className="card-body">
-                    <h5 className="card-title">Active Reservations</h5>
-                    <p className="card-text">
-                      {this.state.userRecord.active_reservations &&
+                    <h5 className="card-title" style={{fontSize: '25px'}}>Active Reservations</h5>
+                    <div className="card-text">
+                      {existing_active_reservations ?
                         this.state.userRecord.active_reservations.map(function (entry, i) {
                           return (
-                            <ReservationCard idx={i} entry={entry}/>
+                            <ReservationCard key={"active-reservation-" + i} idx={i} entry={entry}/>
                           )
-                        })}
-                    </p>
+                        }) :
+                        <div>No Active Reservations</div>
+                      }
+                    </div>
                   </div>
                 </div>
               </div>
@@ -221,15 +229,17 @@ class UserHome extends React.Component {
               <div className="col-12">
                 <div className="card">
                   <div className="card-body">
-                    <h5 className="card-title">Past Reservations</h5>
-                    <p className="card-text">
-                      {this.state.userRecord.past_reservations &&
-                        this.state.userRecord.past_reservations.map(function (entry, i) {
-                          return (
-                            <ReservationCard idx={i} entry={entry}/>
-                          )
-                        })}
-                    </p>
+                    <h5 className="card-title" style={{fontSize: '25px'}}>Past Reservations</h5>
+                    <div className="card-text">
+                    {existing_past_reservations ?
+                      this.state.userRecord.past_reservations.map(function (entry, i) {
+                        return (
+                          <ReservationCard key={"past-reservation-" + i} idx={i} entry={entry}/>
+                        )
+                      }) :
+                      <div>No Past Reservations</div>
+                    }
+                    </div>
                   </div>
                 </div>
               </div>

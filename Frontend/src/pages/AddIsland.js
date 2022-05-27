@@ -17,6 +17,7 @@ export default function Upload(){
 
   // For navigating to different page when signed in
   let successAddedIsland = false;
+  let userid = sessionStorage.getItem('userRecordID');
 
   let formStyle = {padding: '10px',
     border: '1px solid #ccc',
@@ -43,6 +44,7 @@ export default function Upload(){
     formData.append('rating', 3);
     formData.append('islandImg', form.islandImg);
     formData.append('is_available', form.is_available);
+    formData.append('owner_id', userid);
 
     axios.post("http://localhost:5000/islands/add", formData, {
     }).then(res => {
