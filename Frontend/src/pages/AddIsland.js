@@ -13,6 +13,8 @@ export default function Upload(){
     rating: "",
     islandImg: '',
     is_available: true,
+    latitude: "",
+    longitude: ""
   });
 
   // For navigating to different page when signed in
@@ -42,6 +44,8 @@ export default function Upload(){
     formData.append('details', form.details);
     formData.append('price', form.price);
     formData.append('rating', 3);
+    formData.append('latitude', form.latitude);
+    formData.append('longitude', form.longitude);
     formData.append('islandImg', form.islandImg);
     formData.append('is_available', form.is_available);
     formData.append('owner_id', userid);
@@ -75,6 +79,14 @@ export default function Upload(){
                 <div className="form-group">
                   <label htmlFor='location'>Location</label>
                   <input type="text" name='location' className="form-control" value={form.location} onChange={(e) => updateForm({ location: e.target.value })}/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor='latitude'>Latitude</label>
+                  <input type="text" name='latitude' className="form-control" value={form.latitude} onChange={(e) => updateForm({ latitude: e.target.value })}/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor='longitude'>Longitude</label>
+                  <input type="text" name='longitude' className="form-control" value={form.longitude} onChange={(e) => updateForm({ longitude: e.target.value })}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor='land_size'>Size</label>

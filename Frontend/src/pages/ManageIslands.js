@@ -21,7 +21,7 @@ class ManageIslands extends React.Component {
     let userid = sessionStorage.getItem("userRecordID");
 
     // fetch latest version of user data from backend
-    fetch("http://localhost:5000/islands", {
+    fetch("http://localhost:5000/user/islands?id=" + userid, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ class ManageIslands extends React.Component {
     .then(data => {
       // resolve the promise: response.json(), into data as a user record
       // self.setState({islandRecords: data});
-      self.setState({islandRecords: data});
+      self.setState({islandRecords: data.user_islands});
     })
     .catch(error => {
       window.alert(error);
@@ -64,19 +64,27 @@ class ManageIslands extends React.Component {
 
 
         <div className="col-sm-4 col-12" style={{margin: '15px 0'}}>
-        <div className="card" style={{width: '18rem'}}>
-          <img className="card-img-top" src="..." alt="Card image cap"/>
+        <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', width: '18rem'}}>
+          <div style={{textAlign: 'center'}}>
+            <img className="card-img-top" src="addnewisland.jpg" alt="Card image cap" style={{ height: '170px', width: '170px'}}/>
+          </div>
           <div className="card-body">
-            <h5 className="card-title">Add a new Island</h5>
-            <p className="card-text">Add your new island here. Other users may reserve your island.</p>
+            <h5 className="card-title" style={{textAlign: 'center'}}>Add a New Island</h5>
+            <div className="card-text" style={{textAlign: 'center'}}>
+              Add your new island here. Other users may reserve your island.
+            </div>
           </div>
           <ul className="list-group list-group-flush">
-            <li className="list-group-item">Add your price per night.</li>
-            <li className="list-group-item">Add your island's location.</li>
-            <li className="list-group-item">Add your island's ....</li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>Add your price per night.</li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>Add your island's location.</li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>Add other details.</li>
           </ul>
           <div className="card-body">
-            <a href="/addisland" className="card-link">Navigate</a>
+            <div style={{textAlign: 'center'}}>
+              <a href="/addisland" className="card-link">
+                Navigate
+              </a>
+            </div>
           </div>
         </div>
         </div>

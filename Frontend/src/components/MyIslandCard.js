@@ -15,19 +15,24 @@ class MyIslandCard extends React.Component {
     return (
       <div className="col-sm-4 col-12" style={{margin: '15px 0'}}>
         <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', width: '18rem'}}>
-          <img className="card-img-top" src="..." alt="Card image cap"/>
+          <img className="card-img-top" style={{ height: '150px', width: '170px'}} src={this.props.entry.islandImg}/>
           <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">Some quick example text to build on the card
-              title and make up the bulk of the card's content.</p>
+            <h5 className="card-title" style={{textAlign: 'center'}}>{this.props.entry.name}</h5>
+            <div className="card-text" style={{textAlign: 'center'}}>{this.props.entry.details}</div>
           </div>
           <ul className="list-group list-group-flush">
-            <li className="list-group-item">Cras justo odio</li>
-            <li className="list-group-item">Dapibus ac facilisis in</li>
-            <li className="list-group-item">Vestibulum at eros</li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>${this.numberWithCommas(this.props.entry.price.toFixed(2))}/night </li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>Location: {this.props.entry.location}</li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>Land Size: {this.props.entry.land_size}</li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>Lat/Long: {this.props.entry.latitude}, {this.props.entry.longitude}</li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>Current Rating: {this.props.entry.rating}</li>
           </ul>
           <div className="card-body">
-            <a href="#" className="card-link">Card link</a>
+            <div style={{textAlign: 'center'}}>
+              <a href="#" className="card-link">
+                Edit Details
+              </a>
+            </div>
           </div>
         </div>
       </div>

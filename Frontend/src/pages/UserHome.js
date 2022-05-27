@@ -173,7 +173,7 @@ class UserHome extends React.Component {
                         <p className="card-text">
                           Add a review of your vacation here.
                         </p>
-                        <a href="/addcredit" className="btn btn-primary">
+                        <a href="/userhome" className="btn btn-primary">
                           Review
                         </a>
                       </div>
