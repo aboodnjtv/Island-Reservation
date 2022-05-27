@@ -6,7 +6,7 @@ class CardView extends React.Component {
     console.log(props);
     this.state = {
       cover: props.item.islandImg || "",
-      title: props.item.title || "",
+      title: props.item.name || "",
       rating: props.item.rating || "",
       area: props.item.land_size || "",
       price: props.item.price || "",

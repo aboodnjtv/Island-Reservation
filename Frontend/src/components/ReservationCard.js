@@ -16,7 +16,7 @@ class ReservationCard extends React.Component {
             <div className="card-body">
               <div className="row">
                 <div className="col-sm-4 col-12">
-                  <h5 className="card-title">{(this.props.idx + 1).toString() + ": " + this.props.entry.island_name}</h5>
+                  <h5 className="card-title" style={{fontWeight: 'bold'}}>{(this.props.idx + 1).toString() + ": " + this.props.entry.island_name}</h5>
                   <div className="card-info-dot">Start Date: {moment(this.props.entry.startDate).format('MM/DD/YYYY')}</div>
                   <div className="card-info-dot">End Date: {moment(this.props.entry.endDate).format('MM/DD/YYYY')}</div>
                   <div className="card-info-dot">Date Reserved: {moment(this.props.entry.reservationDate).format('MM/DD/YYYY')}</div>
