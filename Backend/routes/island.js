@@ -259,7 +259,8 @@ islandRoutes.route("/islands/add").post(upload.single('islandImg'), async (req, 
   const is_available = req.body.is_available;
   const latitude = req.body.latitude;
   const longitude = req.body.longitude;
-  const owner_id = req.body.owner_id;
+  // const owner_id = req.body.owner_id;
+  const owner_id = new ObjectId(req.body.owner_id);
   
   // const { name, location, land_size, details, price, rating, is_available } = req.body;
   const url = req.protocol + '://' + req.get('host');
