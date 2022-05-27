@@ -77,6 +77,7 @@ class ManageIslands extends React.Component {
           <ul className="list-group list-group-flush">
             <li className="list-group-item" style={{textAlign: 'center'}}>Add your price per night.</li>
             <li className="list-group-item" style={{textAlign: 'center'}}>Add your island's location.</li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>Add your island's lat/long.</li>
             <li className="list-group-item" style={{textAlign: 'center'}}>Add other details.</li>
           </ul>
           <div className="card-body">
