@@ -169,6 +169,8 @@ islandRoutes.get('/islands/rating/asc', async (req, res) => {
 islandRoutes.get('/islands/rating/desc', async (req, res) => {
   try
   {
+    const user_lat = req.query.latitude;
+    const user_long = req.query.longitude;
     const result = await getSortedIslands("rating", "desc");
     res.send(result);
   }
@@ -178,6 +180,70 @@ islandRoutes.get('/islands/rating/desc', async (req, res) => {
   }
 })
 
+//function taken from https://www.geodatasource.com/developers/javascript
+//google maps api returns latitude and longitude in meters
+function distance(lat1, lon1, lat2, lon2) {
+	if ((lat1 == lat2) && (lon1 == lon2)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * lat1/180;
+		var radlat2 = Math.PI * lat2/180;
+		var theta = lon1-lon2;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		dist = dist * 1609.344; //in meters
+		return dist;
+	}
+}
+
+//take in user latitude and longitude and return a list of islands sorted by ascending distance
+islandRoutes.get('/islands/distance', async (req, res) => {
+  try
+  {
+    const user_lat = req.query.latitude;
+    const user_long = req.query.longitude;
+    let db_client = dbo.getClient();
+    let all_islands = await db_client.db("IR").collection("islands").find({}).toArray();
+
+    for (let index = 0; index < all_islands.length; index++) {
+      all_islands[index].dist_from_user = await distance(user_lat, user_long, 
+        all_islands[index].latitude, all_islands[index].longitude);
+    }
+
+    let map = new Map();
+    let map_sorted = new Map();
+    let sorted_data = new Array();
+
+    for (let island = 0; island < all_islands.length; island++) {
+      map.set(all_islands[island], all_islands[island].dist_from_user);
+    }
+
+    map_sorted = new Map([...map.entries()].sort((val1, val2) => val1[1] - val2[1]));
+
+    //from code found on StackOverflow
+    // if (order == "asc")
+    //   map_sorted = new Map([...map.entries()].sort((val1, val2) => val1[1] - val2[1]));
+    // //descending
+    // else map_sorted = new Map([...map.entries()].sort((val1, val2) => val2[1] - val1[1]));
+
+    for (let island of map_sorted.keys()) {
+      sorted_data.push(island);
+    }
+
+    res.send(sorted_data);
+  }
+  catch(error)
+  {
+      res.status(500).json({message: error.message});
+  }
+})
 
 
 // adding an island
