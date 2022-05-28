@@ -263,10 +263,23 @@ userRoutes.post("/user/update", async (req, res) => {
 
   const { firstname, lastname, password } = req.body;
 
-  if (password.length < 8) {
-    return res
-      .status(410)
-      .json({ message: "Password must be at least 8 characters long." });
+  const updateJSON = {};
+  if (firstname != null)
+    updateJSON["firstname"] = firstname;
+
+  if (lastname != null)
+    updateJSON["lastname"] = lastname;
+
+  if (password != null)
+  {
+    if (password.length < 8) {
+      return res
+        .status(410)
+        .json({ message: "Password must be at least 8 characters long." });
+    }
+
+    const hashed_password = await bcrypt.hash(password, 12);
+    updateJSON["password"] = hashed_password;
   }
 
   // Make sure user exists in database
@@ -282,10 +295,11 @@ userRoutes.post("/user/update", async (req, res) => {
   } else {
     // MongoDB query to find user
     const myquery = { _id: userID };
-    const hashed_password = await bcrypt.hash(password, 12);
+    //const hashed_password = await bcrypt.hash(password, 12);
 
     // MongoDB query to update user's balance
-    const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
+    // const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
+    const newvalues = { $set: updateJSON};
     // Update user
     await db_client
       .collection("users")
