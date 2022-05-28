@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
+import moment from 'moment';
 
-function getDateString(date){
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  let year = date.getFullYear();
-  if(month < 10)
-    month = '0' + month.toString();
-  if(day < 10)
-    day = '0' + day.toString();
-  let stringDate = year + '-' + month + '-' + day;
-  return stringDate;
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export default function Reserve() {
@@ -32,8 +25,7 @@ export default function Reserve() {
   let islandId = params.get('island');
 
   // Get todays date so user cant reserve in the past
-  let today = new Date();
-  today = getDateString(today);
+  let today = moment().format('YYYY-MM-DD');
 
   // Calculate number of days and total price
   let numDays = Math.floor((Date.parse(form.endDate) - Date.parse(form.startDate)) / 86400000);
@@ -123,17 +115,20 @@ export default function Reserve() {
     <div>
       <Navbar page="Reserve" />
       <div className="container">
-        <div className="card">
+        <div className="card" style={{flex: '1'}}>
         <h3 className="card-title" style={{display: 'flex',  justifyContent:'center'}}>Reserve {island.name}</h3>
         <div className="card-body">
           <div className="card">
-            <img src={island.islandImg} className="card-img-top" alt="..." />
+            <div className="row text-center">
+              <img src={island.islandImg}style={{flex: '1', aspectRatio: 3/2, resize: 'contain'}} alt="Island Image"
+                className="img-responsive img-circle img-thumbnail" />
+            </div>
             <div className="card-body">
               <div className="card-info">
-                <div className="card-info-number">{island.rating}</div>
+                <div style={{flex: '1'}} className="card-info-number">{island.rating}</div>
               </div>
               <h4 style={{marginTop: "10px"}}>Details</h4>
-              <div className="card-info-number">{island.details} km</div>
+              <div className="card-info-number">{island.details}</div>
             </div>
             </div>
             <form
@@ -155,7 +150,7 @@ export default function Reserve() {
                   <label htmlFor="ddmmyy">End Date</label>
                   <input
                     type="date"
-                    min={form.startDate}
+                    min={moment(form.startDate).add(1,'days').format('YYYY-MM-DD')}
                     className="form-control"
                     id="ddmmyy"
                     value={form.endDate}
@@ -163,22 +158,19 @@ export default function Reserve() {
                   />
                 </div>
                 {numDays > 0 &&
-                  <div> {"Total Days: " + numDays}</div>
+                  <div style={{marginTop: '20px'}}> {"Total Days: " + numDays}</div>
                 }
                 {numDays > 0 &&
-                  <div> {"Total Price: " + totalPrice}</div>
+                  <div style={{marginTop: '20px'}}> {"Total Price: $" + numberWithCommas(totalPrice.toFixed(2))}</div>
                 }
                 {numDays > 0 &&
-                  <div className="form-group">
+                  <div className="form-group" style={{marginTop: '20px'}}>
                     <input
                       type="submit"
                       value="Reserve Island"
                       className="btn btn-primary"
                     />
                   </div>
-                }
-                {numDays <= 0 &&
-                  <div> Hourly Reservations will be avaliable soon! </div>
                 }
               </form>
           </div>

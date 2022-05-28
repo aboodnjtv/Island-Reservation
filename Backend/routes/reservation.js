@@ -50,6 +50,23 @@ reservationRoutes.route("/reservations/add/:uid/:lid").post(async (req, res) => 
         endDate,
         amountPaid,
     } = req.body;
+
+    // Check if user is trying to reserve in the past
+    // Edge case when user makes a reservation at 11:59:59 
+    // on same day and reservation request goes through the next day
+    const reservationDate = new Date();
+    startDate = new Date(startDate);
+    // Start date check in time will be 3pm
+    startDate.setUTCHours(14,59,59,999);
+    endDate = new Date(endDate);
+    // End date check out time will be 12pm
+    endDate.setUTCHours(11,59,59,999);
+    if(reservationDate > startDate){
+        return res
+            .status(500)
+            .json({message: "Sorry, your selected reservation window has expired."});
+    }
+
     // Check if username or island exists in database
     let existingUser = await db_client.db("IR").collection("users").find({_id: ObjectId(reserver_id)}).toArray();
     let existingIsland = await db_client.db("IR").collection("islands").find({_id: ObjectId(island_id)}).toArray();
@@ -64,11 +81,7 @@ reservationRoutes.route("/reservations/add/:uid/:lid").post(async (req, res) => 
         return res.status(409).json({message: "Island not found"});
     }
     const user = existingUser[0];
-    const island = existingIsland[0];
-    // const amountPaid = island.price;
-    const reservationDate = new Date();
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
+    // const island = existingIsland[0];
 
     //check if the user has enough balance to pay for the reservation
     if (user.balance < amountPaid) {

@@ -76,10 +76,10 @@ import Navbar from "../components/Navbar.js";
         })
       }
     }else if(type === 2){
-      if(this.state.sortBy === 3){
+      if(this.state.sortBy === 4){
         //to up
         this.setState({
-          sortBy:4
+          sortBy:5
         });
         new HttpRequest().get("/islands/rating/desc")
         .then((response) => {
@@ -89,7 +89,7 @@ import Navbar from "../components/Navbar.js";
         })
       }else{
         this.setState({
-          sortBy:3
+          sortBy:4
         });
         new HttpRequest().get("/islands/rating/asc")
         .then((response) => {
