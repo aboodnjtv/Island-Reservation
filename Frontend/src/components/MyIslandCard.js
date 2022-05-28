@@ -15,7 +15,9 @@ class MyIslandCard extends React.Component {
     return (
       <div className="col-sm-4 col-12" style={{margin: '15px 0'}}>
         <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', width: '18rem'}}>
-          <img className="card-img-top" style={{ height: '150px', width: '170px'}} src={this.props.entry.islandImg}/>
+          <div style={{textAlign: 'center'}}>
+            <img className="card-img-top" style={{ height: '150px', width: '210px'}} src={this.props.entry.islandImg}/>
+          </div>
           <div className="card-body">
             <h5 className="card-title" style={{textAlign: 'center'}}>{this.props.entry.name}</h5>
             <div className="card-text" style={{textAlign: 'center'}}>{this.props.entry.details}</div>
@@ -29,7 +31,7 @@ class MyIslandCard extends React.Component {
           </ul>
           <div className="card-body">
             <div style={{textAlign: 'center'}}>
-              <a href="#" className="card-link">
+              <a href="/editisland" className="card-link">
                 Edit Details
               </a>
             </div>

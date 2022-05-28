@@ -83,7 +83,7 @@ class ManageIslands extends React.Component {
           <div className="card-body">
             <div style={{textAlign: 'center'}}>
               <a href="/addisland" className="card-link">
-                Navigate
+                Add Island
               </a>
             </div>
           </div>

@@ -13,6 +13,7 @@ import AppAbout from "./pages/AppAbout";
 import AddIsland from "./pages/AddIsland";
 import Settings from "./pages/Settings.js";
 import ManageIslands from "./pages/ManageIslands";
+import EditIsland from "./pages/EditIsland";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 
@@ -62,6 +63,12 @@ function App() {
         <Route exact path="/manage" element={
           <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
             <ManageIslands />
+          </ProtectedRoute>
+        }
+        />
+        <Route exact path="/editisland" element={
+          <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
+            <EditIsland />
           </ProtectedRoute>
         }
         />
