@@ -39,7 +39,7 @@ const islandSchema = new Schema({
       type: Number
     },
     owner_id: {
-      type: String
+      type: mongoose.Schema.Types.ObjectId
     },
     // amenities: {
     //   type: [String],
