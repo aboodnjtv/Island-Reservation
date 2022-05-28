@@ -292,5 +292,75 @@ islandRoutes.route("/islands/add").post(upload.single('islandImg'), async (req, 
   });
 });
 
+//update island information (island name, location, land_size, details, price, latitude, longitude, islandImg)
+//sample id: 629192e8ca57c3855fab8614
+islandRoutes.post("/island/update", async (req, res) => {
+  let db_client = dbo.getDb();
+  // Get ID who we are adding credit to
+  const islandID = new ObjectId(req.query.id);
+
+  const { name, location, land_size, details, price, latitude, longitude } = req.body;
+
+  const updateJSON = {};
+  if (name != null)
+    updateJSON["name"] = name;
+
+  if (location != null)
+    updateJSON["location"] = location;
+
+  if (land_size != null)
+    updateJSON["land_size"] = land_size;
+
+  if (details != null)
+    updateJSON["details"] = details;
+
+  if (price != null)
+    updateJSON["price"] = price;
+
+  if (latitude != null)
+    updateJSON["latitude"] = latitude;
+
+  if (longitude != null)
+    updateJSON["longitude"] = longitude;
+
+  try {
+    const url = req.protocol + '://' + req.get('host');
+    const islandImg = url + '/public/' + req.file.filename;
+
+    updateJSON["islandImg"] = islandImg;
+  }
+  catch {
+    console.log("not updating island image");
+  }
+
+  // Make sure user exists in database
+  const island = await db_client
+    .collection("islands")
+    .findOne({ _id: ObjectId(islandID) });
+
+  if (!island) {
+    // If user not found return error message
+    return res
+      .status(500)
+      .json({message: "Island doesn't exist in our records." });
+  } else {
+    // MongoDB query to find user
+    const myquery = { _id: islandID };
+    //const hashed_password = await bcrypt.hash(password, 12);
+
+    // MongoDB query to update user's balance
+    // const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
+    const newvalues = { $set: updateJSON};
+    // Update user
+    await db_client
+      .collection("islands")
+      .findOneAndUpdate(myquery, newvalues, {returnDocument: "after"}, function (err, response) {
+        if (err) throw err;
+        // Return updated user info
+        res.status(200).json(response.value);
+      });
+  }
+});
+
 
 module.exports = islandRoutes;
