@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 import "./Signin.css";
 
@@ -12,7 +11,6 @@ export default function SignIn() {
 
   // For navigating to different page when signed in
   let successSignin = false;
-  const navigate = useNavigate();
 
   // These methods will update the state properties.
   function updateForm(value) {
@@ -78,10 +76,10 @@ export default function SignIn() {
   return (
     <div>
       <Navbar page="Signin" />
-      <div className="container">
-        <h3>Sign in</h3>
+      <div className="container" style={{textAlign: 'center'}}>
+        <h3 >Sign in</h3>
         <div className="container">
-          <div className="row">
+          <div className="row" style={{flex: '1', justifyContent: 'center', textAlign: 'left'}}>
             {/* bootstrap responsive design
           width of  columns on a 12 column grid:
           for xs (mobile) sign up takes whole screen (12 cols)

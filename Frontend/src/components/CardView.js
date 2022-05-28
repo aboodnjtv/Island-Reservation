@@ -37,7 +37,7 @@ class CardView extends React.Component {
               </div>
             </div>
             <a href={`/reserve?island=${this.state.id}`} style={{margin: 10}}className="btn btn-primary btn-lg active -sm">
-                RESERVE NOW
+                Reserve Island
               </a>
           </div>
         </div>

@@ -1,18 +1,14 @@
 import React from 'react';
 
 class Navbar extends React.Component {
-  constructor(props) {
-      super(props);
-  }
-
   render() {
-    {/* logo is one directory up from 'Detail' page, must change location of access */}
-    let logo = (this.props.page == "Detail" || this.props.page == "Signup" ||
-      this.props.page == "Signin" || this.props.page == "Signout"
+    /* logo is one directory up from 'Detail' page, must change location of access */
+    let logo = (this.props.page =="Detail" || this.props.page =="Signup" ||
+      this.props.page =="Signin" || this.props.page =="Signout"
       ? "../logo192.png" : "logo192.png");
     return (
       <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100'}}>
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="/">
           {/* set logo with Is. Res. text, &nbsp; adds a non-breakable space before word */}
           <img src={logo} style={{height: '60px', width: '32px'}}/>
           &nbsp;&nbsp;&nbsp;Island Reservation
@@ -27,30 +23,30 @@ class Navbar extends React.Component {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="nav navbar-nav ml-auto">
-            <li className={"nav-item" + (this.props.page == 'Home' ? " active" : "")}>
+            <li className={"nav-item" + (this.props.page === 'Home' ? " active" : "")}>
               <a className="nav-link" href="/">
                 Home
               </a>
             </li>
-            <li className={"nav-item" + (this.props.page == 'Gallery' ? " active" : "")}>
+            <li className={"nav-item" + (this.props.page =='Gallery' ? " active" : "")}>
               <a className="nav-link" href="/list">
                 Gallery
               </a>
             </li>
-            <li className={"nav-item" + (this.props.page == 'AppAbout' ? " active" : "")}>
+            <li className={"nav-item" + (this.props.page =='AppAbout' ? " active" : "")}>
               <a className="nav-link" href="/about">
                 About
               </a>
             </li>
-            {this.props.page == "Reserve" && sessionStorage.getItem("isAuthenticated") &&
-              <li className={"nav-item" + (this.props.page == 'Reserve' ? " active" : "")}>
-                <a className="nav-link" href={"/reserve/" + (this.props.type && this.props.type : "")}>
+            {this.props.page =="Reserve" && sessionStorage.getItem("isAuthenticated") &&
+              <li className={"nav-item" + (this.props.page =='Reserve' ? " active" : "")}>
+                <a className="nav-link" href="/list">
                   Reserve
                 </a>
               </li>
             }
-            {this.props.page == "Detail" &&
-              <li className={"nav-item" + (this.props.page == 'Detail' ? " active" : "")}>
+            {this.props.page =="Detail" &&
+              <li className={"nav-item" + (this.props.page =='Detail' ? " active" : "")}>
                 <a className="nav-link" href={"/detail/" + (this.props.type && this.props.type : "")}>
                   Detail
                 </a>
@@ -60,24 +56,24 @@ class Navbar extends React.Component {
           <ul className="nav navbar-nav mr-auto">
           {sessionStorage.getItem("isAuthenticated") ?
           <>
-            <li className={"nav-item" + (this.props.page == 'UserHome' ? " active" : "")}>
+            <li className={"nav-item" + (this.props.page =='UserHome' ? " active" : "")}>
               <a className="nav-link" href="/userhome">
                 My Account
               </a>
             </li>
-            <li className={"nav-item" + (this.props.page == 'Signout' ? " active" : "")}>
+            <li className={"nav-item" + (this.props.page =='Signout' ? " active" : "")}>
               <a className="nav-link" href="/user/signout">
                 Sign out
               </a>
             </li>
           </> :
           <>
-            <li className={"nav-item" + (this.props.page == 'Signin' ? " active" : "")}>
+            <li className={"nav-item" + (this.props.page =='Signin' ? " active" : "")}>
               <a className="nav-link" href="/user/signin">
                 Sign in
               </a>
             </li>
-            <li className={"nav-item" + (this.props.page == 'Signup' ? " active" : "")}>
+            <li className={"nav-item" + (this.props.page =='Signup' ? " active" : "")}>
               <a className="nav-link" href="/user/signup">
                 Join
               </a>

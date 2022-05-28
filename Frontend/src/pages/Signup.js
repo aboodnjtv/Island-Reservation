@@ -8,7 +8,6 @@ export default function SignUp() {
   const [form, setForm] = useState({
     firstname: "",
     lastname: "",
-    username: "",
     email: "",
     password: "",
   });
@@ -62,10 +61,10 @@ export default function SignUp() {
   return (
     <div>
       <Navbar page="Signup" />
-      <div className="container">
+      <div className="container" style={{textAlign: 'center'}}>
         <h3>Sign Up</h3>
         <div className="container">
-          <div className="row">
+          <div className="row" style={{flex: '1', justifyContent: 'center', textAlign: 'left'}}>
             {/* bootstrap responsive design
           width of  columns on a 12 column grid:
           for xs (mobile) sign up takes whole screen (12 cols)
@@ -95,16 +94,6 @@ export default function SignUp() {
                     id="lname"
                     value={form.lastname}
                     onChange={(e) => updateForm({ lastname: e.target.value })}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="uname">Username</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="uname"
-                    value={form.username}
-                    onChange={(e) => updateForm({ username: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
