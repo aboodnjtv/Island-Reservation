@@ -24,8 +24,13 @@ export default function Reserve() {
   let params = new URLSearchParams(search);
   let islandId = params.get('island');
 
-  // Get todays date so user cant reserve in the past
-  let today = moment().format('YYYY-MM-DD');
+  // Get todays date so user cant reserve past 3pm same day
+  let today = moment();
+  if(today.get('hours') > 14){
+    today = moment().add(1, 'days').format('YYYY-MM-DD');
+  } else {
+    today = moment().format('YYYY-MM-DD');
+  }
 
   // Calculate number of days and total price
   let numDays = Math.floor((Date.parse(form.endDate) - Date.parse(form.startDate)) / 86400000);
@@ -159,6 +164,12 @@ export default function Reserve() {
                 </div>
                 {numDays > 0 &&
                   <div style={{marginTop: '20px'}}> {"Total Days: " + numDays}</div>
+                }
+                {numDays > 0 &&
+                  <div style={{marginTop: '20px'}}> {"Check in: " + moment(form.startDate).format('MM/DD/YYYY') + " at 3:00 PM"}</div>
+                }
+                {numDays > 0 &&
+                  <div style={{marginTop: '20px'}}> {"Check out: " + moment(form.endDate).format('MM/DD/YYYY') + " at 12:00 PM"}</div>
                 }
                 {numDays > 0 &&
                   <div style={{marginTop: '20px'}}> {"Total Price: $" + numberWithCommas(totalPrice.toFixed(2))}</div>

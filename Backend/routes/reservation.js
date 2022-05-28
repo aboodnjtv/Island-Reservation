@@ -2,6 +2,7 @@ const express = require("express");
 const Reservation = require("../models/m_reservation.js");
 const bcrypt = require("bcrypt");
 const ObjectId = require("mongodb").ObjectId;
+const moment = require('moment');
 
 const reservationRoutes = express.Router();
 
@@ -51,20 +52,28 @@ reservationRoutes.route("/reservations/add/:uid/:lid").post(async (req, res) => 
         amountPaid,
     } = req.body;
 
-    // Check if user is trying to reserve in the past
-    // Edge case when user makes a reservation at 11:59:59 
-    // on same day and reservation request goes through the next day
-    const reservationDate = new Date();
-    startDate = new Date(startDate);
-    // Start date check in time will be 3pm
-    startDate.setUTCHours(14,59,59,999);
-    endDate = new Date(endDate);
-    // End date check out time will be 12pm
-    endDate.setUTCHours(11,59,59,999);
+    // Moment gets local time
+    const reservationDate = moment();
+    // startDate check in time is 3pm
+    startDate = moment(startDate).set('hour', 15);
+    // endDate check out time is 12pm
+    endDate = moment(endDate).set('hour', 12);
+
+    /*
+    console.log("reservationDate: " + reservationDate.toDate());
+    console.log("startDate: " + startDate.toDate());
+    console.log("endDate: " + endDate.toDate());
+    console.log(reservationDate);
+    console.log(startDate);
+    */
+    
+    // Check for edge case: If local time is 2:59PM and user books same day
+    // but sends reservation in at 3:00PM, return error as they missed the
+    // window to reserve
     if(reservationDate > startDate){
         return res
             .status(500)
-            .json({message: "Sorry, your selected reservation window has expired."});
+            .json({message: "Sorry, the reservation window for this booking has closed."});
     }
 
     // Check if username or island exists in database
