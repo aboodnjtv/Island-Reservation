@@ -14,6 +14,7 @@ import AddIsland from "./pages/AddIsland";
 import Settings from "./pages/Settings.js";
 import ManageIslands from "./pages/ManageIslands";
 import EditIsland from "./pages/EditIsland";
+import MapPage from "./pages/MapPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route exact path="/list" element={<AppIndex />} />
         <Route exact path="/" element={<Home />} />
         <Route exact path="/about" element={<AppAbout />} />
+        <Route exact path="/map" element={<MapPage />} />
         <Route exact path="/userhome"
           element={
             <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>

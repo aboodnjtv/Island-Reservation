@@ -125,7 +125,7 @@ export default function Reserve() {
         <div className="card-body">
           <div className="card">
             <div className="row text-center">
-              <img src={island.islandImg}style={{flex: '1', aspectRatio: 3/2, resize: 'contain'}} alt="Island Image"
+              <img src={island.islandImg} style={{flex: '1', aspectRatio: 3/2, resize: 'contain'}} alt="Island"
                 className="img-responsive img-circle img-thumbnail" />
             </div>
             <div className="card-body">

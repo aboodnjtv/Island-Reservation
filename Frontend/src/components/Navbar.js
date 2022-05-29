@@ -3,11 +3,11 @@ import React from 'react';
 class Navbar extends React.Component {
   render() {
     /* logo is one directory up from 'Detail' page, must change location of access */
-    let logo = (this.props.page =="Detail" || this.props.page =="Signup" ||
-      this.props.page =="Signin" || this.props.page =="Signout"
+    let logo = (this.props.page =="Reserve" || this.props.page =="Signup" ||
+      this.props.page =="Signin" || this.props.page =="Signout" || this.props.page =="Map"
       ? "../logo192.png" : "logo192.png");
     return (
-      <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100'}}>
+      <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100', background: this.props.page == "Map" ? 'white':''}}>
         <a className="navbar-brand" href="/">
           {/* set logo with Is. Res. text, &nbsp; adds a non-breakable space before word */}
           <img src={logo} style={{height: '60px', width: '32px'}}/>
@@ -33,6 +33,11 @@ class Navbar extends React.Component {
                 Gallery
               </a>
             </li>
+            <li className={"nav-item" + (this.props.page =='Map' ? " active" : "")}>
+              <a className="nav-link" href="/map">
+                Map
+              </a>
+            </li>
             <li className={"nav-item" + (this.props.page =='AppAbout' ? " active" : "")}>
               <a className="nav-link" href="/about">
                 About
@@ -42,13 +47,6 @@ class Navbar extends React.Component {
               <li className={"nav-item" + (this.props.page =='Reserve' ? " active" : "")}>
                 <a className="nav-link" href="/list">
                   Reserve
-                </a>
-              </li>
-            }
-            {this.props.page =="Detail" &&
-              <li className={"nav-item" + (this.props.page =='Detail' ? " active" : "")}>
-                <a className="nav-link" href={"/detail/" + (this.props.type && this.props.type : "")}>
-                  Detail
                 </a>
               </li>
             }
@@ -83,7 +81,6 @@ class Navbar extends React.Component {
           </ul>
         </div>
       </nav>
-
     )
   }
 }
