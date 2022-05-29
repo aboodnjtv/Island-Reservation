@@ -4,10 +4,6 @@ import Navbar from "../components/Navbar.js";
 
 
 class SignOut extends React.Component {
-  constructor(props) {
-		super(props);
-  }
-
   componentDidMount() {
     // signing out: clear the session storage
   	sessionStorage.clear();

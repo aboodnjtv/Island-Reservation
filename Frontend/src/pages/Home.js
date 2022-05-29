@@ -37,7 +37,7 @@ class Home extends React.Component {
 
           <div className="overpic" style={overPicStyle}>
             <div className="caption">
-              <img src="IRclear.png" />
+              <img src="IRclear.png" alt="IR Home Logo"/>
             </div>
           </div>
 

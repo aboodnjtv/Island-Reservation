@@ -66,7 +66,7 @@ class ManageIslands extends React.Component {
         <div className="col-md-4 col-sm-6 col-xs-12" style={{margin: '15px 0'}}>
         <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', width: '18rem'}}>
           <div style={{textAlign: 'center'}}>
-            <img className="card-img-top" src="addnewisland.jpg" alt="Card image cap" style={{ height: '170px', width: '170px'}}/>
+            <img className="card-img-top" src="addnewisland.jpg" alt="Add Island" style={{ height: '170px', width: '170px'}}/>
           </div>
           <div className="card-body">
             <h5 className="card-title" style={{textAlign: 'center'}}>Add a New Island</h5>

@@ -96,7 +96,7 @@ export class MapContainer extends Component {
             <div class="col-xs" style={{maxHeight: 400, maxWidth: 400}}>
               <h4 style={{display: 'flex',  justifyContent:'center'}}>{this.state.selectedPlace.name}</h4>
               {this.state.selectedPlace.name !== "Current Location" &&
-                  <img src={this.state.selectedPlace.image} style= {{
+                  <img src={this.state.selectedPlace.image} alt="Island" style= {{
                     flex: 1,
                     width: '100%',
                     height: '60%',
