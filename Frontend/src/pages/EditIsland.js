@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import Navbar from '../components/Navbar.js'
 
@@ -61,19 +62,30 @@ class EditIsland extends React.Component {
   performUpdate() {
     let self = this;
     let success = false;
+    console.log(this.state.updated_fields)
+    
+    const formData = new FormData();
 
+    for (const field in this.state.updated_fields) {
+      // console.log(field);
+      // console.log(this.state.updated_fields[field]);
+      formData.append(field, this.state.updated_fields[field]);
+    }
+    
     fetch("http://localhost:5000/island/update?id=" + this.state.island_id, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(this.state.updated_fields),
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      // },
+      body: formData,
+      // JSON.stringify(this.state.updated_fields),
     })
     .then(response => {
       // If the HTTP response is 2xx then response.ok will have a value of true
       if (!response.ok) {
-        const data = response.json();
-        throw new Error(data.message);
+        console.log('er')
+        // const data = response.json();
+        // throw new Error(data.message);
         // throw new Error(response.statusText)
       }
       window.location.href = "/manage";

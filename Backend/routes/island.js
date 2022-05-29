@@ -294,7 +294,7 @@ islandRoutes.route("/islands/add").post(upload.single('islandImg'), async (req, 
 
 //update island information (island name, location, land_size, details, price, latitude, longitude, islandImg)
 //sample id: 629192e8ca57c3855fab8614
-islandRoutes.post("/island/update", async (req, res) => {
+islandRoutes.post("/island/update", upload.single('islandImg'), async (req, res) => {
   let db_client = dbo.getDb();
   // Get ID who we are adding credit to
   const islandID = new ObjectId(req.query.id);
@@ -326,7 +326,7 @@ islandRoutes.post("/island/update", async (req, res) => {
   try {
     const url = req.protocol + '://' + req.get('host');
     const islandImg = url + '/public/' + req.file.filename;
-
+    console.log("img", islandImg);
     updateJSON["islandImg"] = islandImg;
   }
   catch {
