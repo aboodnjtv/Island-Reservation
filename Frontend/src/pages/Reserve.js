@@ -119,6 +119,7 @@ export default function Reserve() {
   return (
     <div>
       <Navbar page="Reserve" />
+      {island.price > 0 && 
       <div className="container">
         <div className="card" style={{flex: '1'}}>
         <h3 className="card-title" style={{display: 'flex',  justifyContent:'center'}}>Reserve {island.name}</h3>
@@ -128,13 +129,17 @@ export default function Reserve() {
               <img src={island.islandImg} style={{flex: '1', aspectRatio: 3/2, resize: 'contain'}} alt="Island"
                 className="img-responsive img-circle img-thumbnail" />
             </div>
-            <div className="card-body">
-              <h5 style={{display: 'flex',  justifyContent:'center', margin: 10, background: 'royalblue', color: 'white', borderRadius: '50px'}}>
-                Average Rating: {island.rating} / 5.00
-              </h5>
-              <h4 style={{marginTop: "10px"}}>Details</h4>
-              <div className="card-info-number">{island.details}</div>
-            </div>
+              <div className="jumbotron" style={{flex: 1, width: '100%', paddingTop: 40, paddingBottom: 20}}>
+                <h5 style={{display: 'flex',  justifyContent:'center', background: 'royalblue', color: 'white', borderRadius: '50px'}}>
+                  Average Rating: {island.rating} / 5.00
+                </h5>
+                  <h4 style={{marginTop: 20}}>Details</h4>
+                  <p className="card-info">{island.details}</p>
+                <h4>Island Info</h4>
+                  <p>Location: {island.location}</p>
+                  <p>Area: {island.land_size} sq.m</p>
+                  <p>Price: ${numberWithCommas(island.price.toFixed(2))}/night</p>
+              </div>
             </div>
             <form
                 className="border shadow-sm rounded p-3 mb-3"
@@ -187,6 +192,7 @@ export default function Reserve() {
           </div>
         </div>
       </div>
+    }
     </div>
   );
 }
