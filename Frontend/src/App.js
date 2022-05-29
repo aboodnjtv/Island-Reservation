@@ -17,8 +17,9 @@ import EditIsland from "./pages/EditIsland";
 import MapPage from "./pages/MapPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-
+//app main class
 function App() {
+  //web route
   return (
     <div className="app">
       <Routes>
