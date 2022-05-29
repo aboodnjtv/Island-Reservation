@@ -15,6 +15,7 @@ const styles = {
  * app home
  */
 class AppAbout extends React.Component {
+  //app about page
   render(){
     return (
       <>
