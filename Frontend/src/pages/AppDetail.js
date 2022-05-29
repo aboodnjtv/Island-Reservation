@@ -6,9 +6,10 @@ import HttpRequest from '../components/HttpRequest.js';
  * app home
  */
  class AppDetail extends React.Component {
-  //
+  //island detail page
   constructor(props) {
     super(props);
+    //land info
     this.state = {
       title: "",
       cover:"",
@@ -21,6 +22,7 @@ import HttpRequest from '../components/HttpRequest.js';
     };
     var href = window.location.href;
     var id = href.substring(href.lastIndexOf("/")+1);
+    //get json from http api
     new HttpRequest().get("/island?id="+id)
     .then((response) => {
       this.setState({
