@@ -31,7 +31,6 @@ class AppAbout extends React.Component {
             and this is just the beginning. With Island Reservation offering affordable Island bookings to more and more people,
             the standards for the perfect vacation are climbing.</p>
             <footer style={styles.footer}>
-              <p className='text-center m-4'>We will soon be offering bookings on the moon - stay tuned.</p>
             </footer>
         </div>
       </>

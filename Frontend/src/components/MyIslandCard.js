@@ -3,17 +3,13 @@ import moment from 'moment';
 
 class MyIslandCard extends React.Component {
 
-  // to access the entry
-  // this.props.entry.attribute
-
-  // {/*}<img src={this.state.cover} className="card-img-top" alt="..." />*/}
   numberWithCommas = (x) => {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
 
   render() {
     return (
-      <div className="col-sm-4 col-12" style={{margin: '15px 0'}}>
+      <div className="col-lg-4 col-md-6 col-sm-12" style={{margin: '15px 0'}}>
         <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', width: '18rem'}}>
           <div style={{textAlign: 'center'}}>
             <img className="card-img-top" style={{ height: '150px', width: '210px'}} src={this.props.entry.islandImg}/>
@@ -31,7 +27,7 @@ class MyIslandCard extends React.Component {
           </ul>
           <div className="card-body">
             <div style={{textAlign: 'center'}}>
-              <a href="/editisland" className="card-link">
+              <a href={"/editisland?id=" + this.props.entry._id} className="card-link">
                 Edit Details
               </a>
             </div>
