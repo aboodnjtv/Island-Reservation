@@ -7,7 +7,7 @@ class Navbar extends React.Component {
       this.props.page =="Signin" || this.props.page =="Signout" || this.props.page =="Map"
       ? "../logo192.png" : "logo192.png");
     return (
-      <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100', background: this.props.page == "Map" ? 'white':''}}>
+      <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100'}}>
         <a className="navbar-brand" href="/">
           {/* set logo with Is. Res. text, &nbsp; adds a non-breakable space before word */}
           <img src={logo} style={{height: '60px', width: '32px'}}/>

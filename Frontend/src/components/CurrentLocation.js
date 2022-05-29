@@ -4,13 +4,9 @@ import ReactDOM from "react-dom";
 const mapStyles = {
   map: {
     flex: 1,
-    position: "absolute",
+    position: "relative",
     width: "100%",
-    height: "100%",
-    right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
+    height: "calc(100vh - 86px)",
   },
 };
 
@@ -111,7 +107,7 @@ export class CurrentLocation extends React.Component {
 
     return (
 
-      <div>
+      <div id="map_canvas" style={{width: '100%', height: '100%'}}>
         <div style={style} ref="map">
           Loading map...
         </div>

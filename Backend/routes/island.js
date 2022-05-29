@@ -44,7 +44,7 @@ islandRoutes.get('/islands', async (req, res) => {
   {
       // console.log("got inside");
       let db_client = dbo.getClient();
-      let data = await db_client.db("IR").collection("islands").find({}, {projection: {name: 1, location: 1, land_size: 1, islandImg: 1, rating: 1, price: 1}}).toArray();
+      let data = await db_client.db("IR").collection("islands").find({}, {projection: {name: 1, location: 1, land_size: 1, islandImg: 1, rating: 1, price: 1, latitude: 1, longitude: 1}}).toArray();
 
       res.send(data);
   }

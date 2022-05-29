@@ -2,13 +2,55 @@ import React, { Component } from "react";
 import {GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
 import CurrentLocation from "./CurrentLocation";
 
-export class MapContainer extends Component {
-  state = {
-    showingInfoWindow: false,
-    activeMarker: {},
-    selectedPlace: {},
-  };
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
+export class MapContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.state ={
+      showingInfoWindow: false,
+      activeMarker: {},
+      selectedPlace: {},
+      list: [],
+    };
+  }
+  
+  componentDidMount() {
+    // save self as current this state because .then is an event handler
+    // the event handler redefines 'this'
+    // create a pointer to 'this' so that we can use set state of the component
+    let self = this;
+    // get user id from the userRecord gathered from sign in
+
+    // fetch latest version of user data from backend
+    fetch("http://localhost:5000/islands", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then(response => {
+      // If the HTTP response is 2xx then response.ok will have a value of true
+      if (!response.ok) {
+        const data = response.json();
+        throw new Error(data.message);
+      }
+      // return the promise(response.json) so that the next .then can resolve the promise
+      return response.json();
+    })
+    .then(data => {
+      // resolve the promise: response.json(), into data as a user record
+      self.setState({
+        list: data,
+      });
+    })
+    .catch(error => {
+      window.alert(error);
+      return;
+    });
+  }
 
   onMarkerClick = (props, marker, e) =>
     this.setState({
@@ -27,79 +69,60 @@ export class MapContainer extends Component {
   };
 
   render() {
+    console.log(this.state);
+    const list = this.state.list;
+    const listItems = list.map((item) =>
+      <Marker key={item._id}
+          position={{ lat: item.latitude, lng: item.longitude }}
+          onClick={this.onMarkerClick}
+          name={item.name}
+          id={item._id}
+          image={item.islandImg}
+          amount={item.price}
+          rating={item.rating}
+      />
+    );
     return (
-
-      <CurrentLocation centerAroundCurrentLocation google={this.props.google}>
+      <div>
+        {list.length > 0 &&
+        <CurrentLocation centerAroundCurrentLocation google={this.props.google}>
           <Marker onClick={this.onMarkerClick} name={"Current Location"} />
-          <Marker
-            position={{ lat: 22.0964, lng: -159.5261 }}
-            onClick={this.onMarkerClick}
-            name={
-              "Kauai, Rating = 1.48" +
-              "\n" +
-              "Details: Beautiful Island with great tropic scenery"
-            }
-          />
-          <Marker
-            position={{ lat: 21.4389, lng: -158.0001 }}
-            onClick={this.onMarkerClick}
-            ame={"O'ahu, Rating = 2.19"}
-          />
-          <Marker
-            position={{ lat: 13.338761, lng: -81.37294 }}
-            onClick={this.onMarkerClick}
-            name={"Providence Cialis Island, Rating = 1.48"}
-          />
-          <Marker
-            position={{ lat: 20.7984, lng: -156.3319 }}
-            onClick={this.onMarkerClick}
-            name={"Maui, Hawaii = 4.53"}
-          />
-          <Marker
-            position={{ lat: 36.3932, lng: 25.4615 }}
-            onClick={this.onMarkerClick}
-            name={"Santorini, Greece, Rating = 3.92"}
-          />
-          <Marker
-            position={{ lat: 32.7607, lng: -16.9595 }}
-            onClick={this.onMarkerClick}
-            name={"Madeira, Portugal, Rating = 1.86"}
-          />
-          <Marker
-            position={{ lat: -17.5263888889, lng: -149.8180555556 }}
-            onClick={this.onMarkerClick}
-            name={"Moorea-Maiao, Rating = 4.55"}
-          />
-          <Marker
-            position={{ lat: -16.499701, lng: -151.770538 }}
-            onClick={this.onMarkerClick}
-            name={"Bora Bora, Rating = 3.53"}
-          />
-          <Marker
-            position={{ lat: -0.777259, lng: -91.142578 }}
-            onClick={this.onMarkerClick}
-            name={"Galapagos Islands, Rating = 4"}
-          />
-          <Marker
-            position={{ lat: 9.740696, lng: 118.730072 }}
-            onClick={this.onMarkerClick}
-            name={"Palawan, Rating = 3.5"}
-          />
-          <Marker
-            position={{ lat: 39.710358, lng: 2.995148 }}
-            onClick={this.onMarkerClick}
-            name={"Majorca, Rating = 2.57"}
-          />
+          {listItems}
           <InfoWindow
             marker={this.state.activeMarker}
             visible={this.state.showingInfoWindow}
             onClose={this.onClose}
           >
-            <div>
-              <h4>{this.state.selectedPlace.name}</h4>
+            <div class="col-xs" style={{maxHeight: 400, maxWidth: 400}}>
+              <h4 style={{display: 'flex',  justifyContent:'center'}}>{this.state.selectedPlace.name}</h4>
+              {this.state.selectedPlace.name !== "Current Location" &&
+                  <img src={this.state.selectedPlace.image} style= {{
+                    flex: 1,
+                    width: '100%',
+                    height: '60%',
+                    resize: 'contain'}}
+                  />
+              }
+              {this.state.selectedPlace.amount && 
+                <h5 style={{display: 'flex',  justifyContent:'center', margin: 10}}>
+                  Price: ${numberWithCommas(this.state.selectedPlace.amount.toFixed(2))}/night
+                </h5>
+              }
+              {this.state.selectedPlace.rating && 
+                <h5 style={{display: 'flex',  justifyContent:'center', margin: 10, background: 'royalblue', color: 'white', borderRadius: '50px'}}>
+                  Rating: {this.state.selectedPlace.rating.toFixed(2)} / 5.00
+                </h5>
+              }
+              {this.state.selectedPlace.id &&
+                <a href={`/reserve?island=${this.state.selectedPlace.id}`} style={{display: 'flex',  justifyContent:'center'}} className="btn btn-primary btn-lg active -sm">
+                  Reserve Island
+                </a>
+              }
             </div>
           </InfoWindow>
-          </CurrentLocation>
+        </CurrentLocation>
+        }
+      </div>
     );
   }
 }

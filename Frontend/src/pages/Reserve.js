@@ -129,9 +129,9 @@ export default function Reserve() {
                 className="img-responsive img-circle img-thumbnail" />
             </div>
             <div className="card-body">
-              <div className="card-info">
-                <div style={{flex: '1'}} className="card-info-number">{island.rating}</div>
-              </div>
+              <h5 style={{display: 'flex',  justifyContent:'center', margin: 10, background: 'royalblue', color: 'white', borderRadius: '50px'}}>
+                Average Rating: {island.rating} / 5.00
+              </h5>
               <h4 style={{marginTop: "10px"}}>Details</h4>
               <div className="card-info-number">{island.details}</div>
             </div>
