@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import Navbar from '../components/Navbar.js'
 
@@ -67,8 +66,6 @@ class EditIsland extends React.Component {
     const formData = new FormData();
 
     for (const field in this.state.updated_fields) {
-      // console.log(field);
-      // console.log(this.state.updated_fields[field]);
       formData.append(field, this.state.updated_fields[field]);
     }
     
@@ -83,7 +80,7 @@ class EditIsland extends React.Component {
     .then(response => {
       // If the HTTP response is 2xx then response.ok will have a value of true
       if (!response.ok) {
-        console.log('er')
+        console.log('error');
         // const data = response.json();
         // throw new Error(data.message);
         // throw new Error(response.statusText)
