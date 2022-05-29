@@ -60,6 +60,7 @@ class EditIsland extends React.Component {
 
   performUpdate() {
     let self = this;
+    let success = false;
 
     fetch("http://localhost:5000/island/update?id=" + this.state.island_id, {
       method: "POST",
@@ -75,6 +76,7 @@ class EditIsland extends React.Component {
         throw new Error(data.message);
         // throw new Error(response.statusText)
       }
+      window.location.href = "/manage";
     })
     .catch(error => {
       window.alert(error);
