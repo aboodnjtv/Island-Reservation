@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/m_user.js");
+const Review = require("../models/m_review.js");
 const bcrypt = require("bcrypt");
 
 // userRoutes is an instance of the express router.
@@ -263,23 +264,10 @@ userRoutes.post("/user/update", async (req, res) => {
 
   const { firstname, lastname, password } = req.body;
 
-  const updateJSON = {};
-  if (firstname != null)
-    updateJSON["firstname"] = firstname;
-
-  if (lastname != null)
-    updateJSON["lastname"] = lastname;
-
-  if (password != null)
-  {
-    if (password.length < 8) {
-      return res
-        .status(410)
-        .json({ message: "Password must be at least 8 characters long." });
-    }
-
-    const hashed_password = await bcrypt.hash(password, 12);
-    updateJSON["password"] = hashed_password;
+  if (password.length < 8) {
+    return res
+      .status(410)
+      .json({ message: "Password must be at least 8 characters long." });
   }
 
   // Make sure user exists in database
@@ -295,11 +283,10 @@ userRoutes.post("/user/update", async (req, res) => {
   } else {
     // MongoDB query to find user
     const myquery = { _id: userID };
-    //const hashed_password = await bcrypt.hash(password, 12);
+    const hashed_password = await bcrypt.hash(password, 12);
 
     // MongoDB query to update user's balance
-    // const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
-    const newvalues = { $set: updateJSON};
+    const newvalues = { $set: { "firstname": firstname, "lastname": lastname, "password": hashed_password } };
     // Update user
     await db_client
       .collection("users")
@@ -546,14 +533,27 @@ userRoutes.get("/user/islands", async (req, res) => {
   }
 });
 
-userRoutes.post("/user/review/:id", async (req, res) => {
+userRoutes.post("/user/review/:id/:Iid", async (req, res) => {
   let db_client = dbo.getDb();
-  // const userID = req.params.id;
   // get the reservation info from the reserve form
-  const { review_id, island_id, islandName, userReview, rating } = req.body;
+  const {  islandName, userReview, rating } = req.body;
 
+  const island_id = req.params.Iid;
   const user_id = req.params.id;
-  console.log("USER ID: " + user_id);
+
+  console.log("userid", user_id);
+  // check if a review exist already
+  const checkreviewed = await db_client
+    .collection("reviews")
+    .findOne({ user_id: ObjectId(user_id) , island_id: ObjectId(island_id)} );
+
+  console.log("checked", checkreviewed);
+  if(checkreviewed){
+    console.log("You've made a review for this island already!");
+    return res
+    .status(500)
+    .json({ message: "Review has been made already" });
+  } 
 
   // Make sure user exists in database
   const user = await db_client
@@ -568,7 +568,7 @@ userRoutes.post("/user/review/:id", async (req, res) => {
     // found the user, now find the island based on its id
     const island = await db_client
       .collection("islands")
-      .findOne({ name: islandName });
+      .findOne({ _id: ObjectId(island_id) });
 
     if (!island) {
       console.log("Island was not found!");
@@ -576,11 +576,14 @@ userRoutes.post("/user/review/:id", async (req, res) => {
         .status(500)
         .json({ message: "Island was not found in the database" });
     } else {
-      console.log("Island named: " + islandName + " was found!");
+
+      console.log("Island named: " + island.name + " was found!");
+
       // now add review to reviews collections
       // Create object to insert into database
       const review = new Review({
-        review_id,
+        // review_id,
+        user_id,
         island_id,
         islandName,
         userReview,
@@ -601,14 +604,19 @@ userRoutes.post("/user/review/:id", async (req, res) => {
       console.log("REVIEW HAS BEEN ADDED !!!!!");
       console.log("userReview: " + userReview);
 
+      const numReviews = await db_client
+        .collection("reviews")
+        .count({island_id : ObjectId(island_id)});
+
       //update the rating of the island
-      const myquery = { name: islandName };
+      const myquery = { _id: ObjectId(island_id)};
       // Calculate updated balance
-      const updatedRating = (island.rating + rating) / 2;
+      const rateAvg = (rating - island.rating) / numReviews;
+      const updatedRating = island.rating + rateAvg;
       console.log("island.rating: " + island.rating);
       console.log("rating: " + rating);
       console.log("updatedRating: " + updatedRating);
-      // MongoDB query to update user's balance
+
       const newvalues = { $set: { rating: updatedRating } };
       // Update user
       await db_client
@@ -624,6 +632,23 @@ userRoutes.post("/user/review/:id", async (req, res) => {
           }
         );
     }
+  }
+});
+
+// get reviews for island by island_id
+userRoutes.get("/user/review", async (req, res) => {
+  try {
+    const island_id = new ObjectId(req.query.id);
+    let db_client = dbo.getClient();
+    let reviews_data = await db_client
+      .db("IR")
+      .collection("reviews")
+      .find({ island_id: island_id })
+      .toArray();
+    console.log(reviews_data);
+    res.send(reviews_data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 

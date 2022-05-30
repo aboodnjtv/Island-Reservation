@@ -43,7 +43,7 @@ export default function Upload(){
     formData.append('land_size', form.land_size);
     formData.append('details', form.details);
     formData.append('price', form.price);
-    formData.append('rating', 3);
+    formData.append('rating', 0);
     formData.append('latitude', form.latitude);
     formData.append('longitude', form.longitude);
     formData.append('islandImg', form.islandImg);

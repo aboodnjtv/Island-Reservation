@@ -173,7 +173,7 @@ class UserHome extends React.Component {
                         <p className="card-text">
                           Add a review of your vacation here.
                         </p>
-                        <a href="/userhome" className="btn btn-primary">
+                        <a href="/makereview" className="btn btn-primary">
                           Review
                         </a>
                       </div>
@@ -181,7 +181,8 @@ class UserHome extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="col-sm-6 col-12">
+            </div>
+            <div className="col-sm-6 col-12">
               <div className="card mb-3" style={{ maxWidth: "540px" }}>
                 <div className="row no-gutters">
                   <div className="col-md-4">
@@ -204,7 +205,6 @@ class UserHome extends React.Component {
                   </div>
                 </div>
               </div>
-            </div>
             </div>
             <div className="row">
               <div className="col-12">

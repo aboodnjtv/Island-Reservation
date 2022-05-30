@@ -3,14 +3,20 @@ import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 
 export default function Review() {
+
   const [form, setForm] = useState({
     islandName: "",
     userReview: "",
     rating: "",
+    // island_id: useParams(),
   });
 
   // Get logged in user info
   let userid = sessionStorage.getItem("userRecordID");
+
+  let search = window.location.search;
+  let params = new URLSearchParams(search);
+  let islandId = params.get('island');
 
   // For navigating to different page when successfully added balance
   let successAddBalance = false;
@@ -23,7 +29,6 @@ export default function Review() {
     });
   }
 
-  // This function will handle the submission.
   async function onSubmit(e) {
     e.preventDefault();
 
@@ -32,7 +37,7 @@ export default function Review() {
     // NOTE: USER BALANCE WILL GO TO NAN IF ENTIRE FORM NOT FILLED OUT, NEED TO CHECK THAT FORM IS FILLED OUT
 
     // When submit pressed, make api call
-    await fetch(`http://localhost:5000/user/review/${userid}`, {
+    await fetch(`http://localhost:5000/user/review/${userid}/${islandId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
-import moment from 'moment';
+import ShowReviews from "../components/ShowReviews.js";
 
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function getDateString(date){
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let year = date.getFullYear();
+  if(month < 10)
+    month = '0' + month.toString();
+  if(day < 10)
+    day = '0' + day.toString();
+  let stringDate = year + '-' + month + '-' + day;
+  return stringDate;
 }
 
 export default function Reserve() {
@@ -15,6 +23,9 @@ export default function Reserve() {
   });
   // State for the island that is selected for reservation
   const [island, setIsland] = useState({});
+  
+  // State for the island's reviews
+  const [reviews, setReviews] = useState([]);
 
   // Get id of logged in user
   let userId = sessionStorage.getItem("userRecordID");
@@ -23,14 +34,9 @@ export default function Reserve() {
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let islandId = params.get('island');
-
-  // Get todays date so user cant reserve past 3pm same day
-  let today = moment();
-  if(today.get('hours') > 14){
-    today = moment().add(1, 'days').format('YYYY-MM-DD');
-  } else {
-    today = moment().format('YYYY-MM-DD');
-  }
+  // Get todays date so user cant reserve in the past
+  let today = new Date();
+  today = getDateString(today);
 
   // Calculate number of days and total price
   let numDays = Math.floor((Date.parse(form.endDate) - Date.parse(form.startDate)) / 86400000);
@@ -114,26 +120,47 @@ export default function Reserve() {
       window.alert(error);
       return;
     });
+
+    fetch("http://localhost:5000/user/review?id=" + islandId, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        const data = response.json();
+        throw new Error(data.message);
+      }
+      return response.json();
+    })
+    .then(data => {
+      setReviews(data)
+      console.log("review", reviews);
+    })
+    .catch(error => {
+      window.alert(error);
+      return;
+    });
+
   }, [islandId])
 
+  console.log("review", reviews);
   return (
     <div>
       <Navbar page="Reserve" />
       <div className="container">
-        <div className="card" style={{flex: '1'}}>
+        <div className="card">
         <h3 className="card-title" style={{display: 'flex',  justifyContent:'center'}}>Reserve {island.name}</h3>
         <div className="card-body">
           <div className="card">
-            <div className="row text-center">
-              <img src={island.islandImg} style={{flex: '1', aspectRatio: 3/2, resize: 'contain'}} alt="Island"
-                className="img-responsive img-circle img-thumbnail" />
-            </div>
+            <img src={island.islandImg} className="card-img-top" alt="..." />
             <div className="card-body">
-              <h5 style={{display: 'flex',  justifyContent:'center', margin: 10, background: 'royalblue', color: 'white', borderRadius: '50px'}}>
-                Average Rating: {island.rating} / 5.00
-              </h5>
+              <div className="card-info">
+                <div className="card-info-number">{island.rating}</div>
+              </div>
               <h4 style={{marginTop: "10px"}}>Details</h4>
-              <div className="card-info-number">{island.details}</div>
+              <div className="card-info-number">{island.details} km</div>
             </div>
             </div>
             <form
@@ -155,7 +182,7 @@ export default function Reserve() {
                   <label htmlFor="ddmmyy">End Date</label>
                   <input
                     type="date"
-                    min={moment(form.startDate).add(1,'days').format('YYYY-MM-DD')}
+                    min={form.startDate}
                     className="form-control"
                     id="ddmmyy"
                     value={form.endDate}
@@ -163,19 +190,13 @@ export default function Reserve() {
                   />
                 </div>
                 {numDays > 0 &&
-                  <div style={{marginTop: '20px'}}> {"Total Days: " + numDays}</div>
+                  <div> {"Total Days: " + numDays}</div>
                 }
                 {numDays > 0 &&
-                  <div style={{marginTop: '20px'}}> {"Check in: " + moment(form.startDate).format('MM/DD/YYYY') + " at 3:00 PM"}</div>
+                  <div> {"Total Price: " + totalPrice}</div>
                 }
                 {numDays > 0 &&
-                  <div style={{marginTop: '20px'}}> {"Check out: " + moment(form.endDate).format('MM/DD/YYYY') + " at 12:00 PM"}</div>
-                }
-                {numDays > 0 &&
-                  <div style={{marginTop: '20px'}}> {"Total Price: $" + numberWithCommas(totalPrice.toFixed(2))}</div>
-                }
-                {numDays > 0 &&
-                  <div className="form-group" style={{marginTop: '20px'}}>
+                  <div className="form-group">
                     <input
                       type="submit"
                       value="Reserve Island"
@@ -183,7 +204,19 @@ export default function Reserve() {
                     />
                   </div>
                 }
+                {numDays <= 0 &&
+                  <div> Hourly Reservations will be avaliable soon! </div>
+                }
               </form>
+              <div>
+              <h4 style={{marginTop: "10px"}}>Customers Reviews:</h4>
+                {reviews.map((review) =>
+                  <div key={review._id}>
+                    <ShowReviews item={review}/>
+                  </div>
+                  )
+                }
+              </div>
           </div>
         </div>
       </div>
