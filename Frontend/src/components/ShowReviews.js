@@ -14,7 +14,7 @@ class ShowReviews extends React.Component {
   render() {
     
     return (
-      <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', padding: '6px', margin: '6px'}}>
+      <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', marginTop: '10px'}}>
         <div className="card-body">
           <div className="card">
             <div className="card-body">
