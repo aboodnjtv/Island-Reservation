@@ -21,10 +21,6 @@ export default function Upload(){
   let successAddedIsland = false;
   let userid = sessionStorage.getItem('userRecordID');
 
-  let formStyle = {padding: '10px',
-    border: '1px solid #ccc',
-    borderRadius: '4px'};
-
   function updateForm(value) {
     return setForm((prev) => {
         return { ...prev, ...value };

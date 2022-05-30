@@ -59,8 +59,8 @@ class EditIsland extends React.Component {
   }
 
   performUpdate() {
-    let self = this;
-    let success = false;
+    // let self = this;
+    // let success = false;
     console.log(this.state.updated_fields)
     
     const formData = new FormData();

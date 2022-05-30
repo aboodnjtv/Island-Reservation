@@ -1,5 +1,4 @@
 import React from "react";
-import moment from 'moment';
 
 class MyIslandCard extends React.Component {
 
@@ -12,7 +11,7 @@ class MyIslandCard extends React.Component {
       <div className="col-lg-4 col-md-6 col-sm-12" style={{margin: '15px 0'}}>
         <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', width: '18rem'}}>
           <div style={{textAlign: 'center'}}>
-            <img className="card-img-top" style={{ height: '150px', width: '210px'}} src={this.props.entry.islandImg}/>
+            <img className="card-img-top" alt="Island" style={{ height: '150px', width: '210px'}} src={this.props.entry.islandImg}/>
           </div>
           <div className="card-body">
             <h5 className="card-title" style={{textAlign: 'center'}}>{this.props.entry.name}</h5>

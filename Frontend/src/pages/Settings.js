@@ -88,12 +88,12 @@ class Settings extends React.Component {
 
   onSubmit = () => {
     let userid = sessionStorage.getItem("userRecordID");
-    if (this.state.fname != this.state.userRecord.firstname) {
+    if (this.state.fname !== this.state.userRecord.firstname) {
       let updatefirstnameData = {id: userid}
       updatefirstnameData.firstname = this.state.fname;
       this.performUpdate("firstname", updatefirstnameData);
     }
-    if (this.state.lname != this.state.userRecord.lastname) {
+    if (this.state.lname !== this.state.userRecord.lastname) {
       let updatelastnameData = {id: userid}
       updatelastnameData.lastname = this.state.lname;
       this.performUpdate("lastname", updatelastnameData);
