@@ -5,6 +5,7 @@ class Navbar extends React.Component {
     /* logo is one directory up from 'Detail' page, must change location of access */
     let logo = (this.props.page ==="Reserve" || this.props.page ==="Signup" ||
       this.props.page ==="Signin" || this.props.page ==="Signout" || this.props.page ==="Map"
+      || this.props.page ==="Add Review"
       ? "../logo192.png" : "logo192.png");
     return (
       <nav className="navbar navbar-expand-lg navbar-light" style={{zIndex: '100'}}>

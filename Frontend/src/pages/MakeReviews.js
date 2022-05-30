@@ -1,5 +1,6 @@
 import React from 'react';
 import ReviewsDisplay from "../components/ReviewsDisplay";
+import Navbar from "../components/Navbar";
 
 class MakeReviews extends React.Component{
   constructor(props) {
@@ -66,12 +67,14 @@ class MakeReviews extends React.Component{
       this.state.userRecord.past_reservations.length > 0;
 
     return(
+      <>
+      <Navbar page="Review Island" />
       <section className="container">
         <div className="row">
               <div className="col-12">
                 <div className="card">
                   <div className="card-body">
-                    <h5 className="card-title" style={{fontSize: '25px'}}>Review Your Reservations</h5>
+                    <h5 className="card-title" style={{fontSize: '25px', textAlign: 'center'}}>Review Your Reservations</h5>
                     <div className="card-text">
                     {existing_past_reservations ?
                       this.state.userRecord.past_reservations.map(function (entry, i) {
@@ -87,6 +90,7 @@ class MakeReviews extends React.Component{
               </div>
             </div>
       </section>
+      </>
     )
   }
 }

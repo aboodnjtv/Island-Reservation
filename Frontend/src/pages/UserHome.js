@@ -181,8 +181,7 @@ class UserHome extends React.Component {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-sm-6 col-12">
+              <div className="col-sm-6 col-12">
               <div className="card mb-3" style={{ maxWidth: "540px" }}>
                 <div className="row no-gutters">
                   <div className="col-md-4">
@@ -205,6 +204,7 @@ class UserHome extends React.Component {
                   </div>
                 </div>
               </div>
+            </div>
             </div>
             <div className="row">
               <div className="col-12">

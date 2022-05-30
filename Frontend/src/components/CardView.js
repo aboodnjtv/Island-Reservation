@@ -11,7 +11,7 @@ class CardView extends React.Component {
     this.state = {
       cover: props.item.islandImg || "",
       title: props.item.name || "",
-      rating: props.item.rating || "",
+      rating: props.item.rating,
       area: props.item.land_size || "",
       price: props.item.price || "",
       id: props.item._id,
@@ -26,10 +26,12 @@ class CardView extends React.Component {
             <div className="card-body">
               <h5 style={{display: 'flex',  justifyContent:'center'}} className="card-title">{this.state.title}</h5>
               <div className="card-info" style={{display: 'block'}}>
-                <div className="card-info-dot">
-                  Rating:
-                  <div style={{marginLeft: 10}} className="card-info-number">{this.state.rating}</div>
-                </div>
+                {this.state.rating != undefined &&
+                  <div className="card-info-dot">
+                    Rating:
+                    <div style={{marginLeft: 10}} className="card-info-number">{this.state.rating.toFixed(2)}</div>
+                  </div>
+                }
                 <div className="card-info-dot">Area: {this.state.area} sq.m</div>
                 <div className="card-info-dot">
                 Price: ${numberWithCommas(this.state.price.toFixed(2))}/night

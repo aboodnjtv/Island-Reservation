@@ -611,7 +611,8 @@ userRoutes.post("/user/review/:id/:Iid", async (req, res) => {
       //update the rating of the island
       const myquery = { _id: ObjectId(island_id)};
       // Calculate updated balance
-      const rateAvg = (rating - island.rating) / numReviews;
+      // Fixed infinite rating bug when island has no reviews (divide by 0)
+      const rateAvg = (numReviews > 0) ? ((rating - island.rating) * 1.0 / numReviews) : ((rating - island.rating) * 1.0 / 1);
       const updatedRating = island.rating + rateAvg;
       console.log("island.rating: " + island.rating);
       console.log("rating: " + rating);

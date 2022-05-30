@@ -1,5 +1,4 @@
 import React from "react";
-import moment from 'moment';
 
 class ShowReviews extends React.Component {
 
@@ -19,13 +18,9 @@ class ShowReviews extends React.Component {
         <div className="card-body">
           <div className="card">
             <div className="card-body">
-              <div className="row">
-                <div className="col-sm-4 col-12">
-                <div className="card-info-dot">{this.state.userRating}</div>
-                <div className="card-info-dot"> {this.state.rating} / 5</div>
-                </div>
+                <div className="card-info-dot" style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>{this.state.userRating}</div>
+                <div className="card-info-dot"> Rating: {this.state.rating} / 5</div>
               </div>
-            </div>
           </div>
         </div>
       </div>

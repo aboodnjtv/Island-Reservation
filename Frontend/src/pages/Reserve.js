@@ -1,19 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
+import moment from "moment";
 import ShowReviews from "../components/ShowReviews.js";
-
-function getDateString(date){
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  let year = date.getFullYear();
-  if(month < 10)
-    month = '0' + month.toString();
-  if(day < 10)
-    day = '0' + day.toString();
-  let stringDate = year + '-' + month + '-' + day;
-  return stringDate;
-}
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -38,9 +27,14 @@ export default function Reserve() {
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let islandId = params.get('island');
-  // Get todays date so user cant reserve in the past
-  let today = new Date();
-  today = getDateString(today);
+
+  // Get todays date so user cant reserve past 3pm same day
+  let today = moment();
+  if(today.get('hours') > 14){
+    today = moment().add(1, 'days').format('YYYY-MM-DD');
+  } else {
+    today = moment().format('YYYY-MM-DD');
+  }
 
   // Calculate number of days and total price
   let numDays = Math.floor((Date.parse(form.endDate) - Date.parse(form.startDate)) / 86400000);
@@ -164,9 +158,11 @@ export default function Reserve() {
                 className="img-responsive img-circle img-thumbnail" />
             </div>
               <div className="jumbotron" style={{flex: 1, width: '100%', paddingTop: 40, paddingBottom: 20}}>
-                <h5 style={{display: 'flex',  justifyContent:'center', background: 'royalblue', color: 'white', borderRadius: '50px'}}>
-                  Average Rating: {island.rating} / 5.00
-                </h5>
+                {island.rating != undefined &&
+                  <h5 style={{display: 'flex',  justifyContent:'center', background: 'royalblue', color: 'white', borderRadius: '50px'}}>
+                    Average Rating: {island.rating.toFixed(2)} / 5.00
+                  </h5>      
+                }
                   <h4 style={{marginTop: 20}}>Details</h4>
                   <p className="card-info">{island.details}</p>
                 <h4>Island Info</h4>
@@ -194,7 +190,7 @@ export default function Reserve() {
                   <label htmlFor="ddmmyy">End Date</label>
                   <input
                     type="date"
-                    min={form.startDate}
+                    min={moment(form.startDate).add(1,'days').format('YYYY-MM-DD')}
                     className="form-control"
                     id="ddmmyy"
                     value={form.endDate}
@@ -202,13 +198,19 @@ export default function Reserve() {
                   />
                 </div>
                 {numDays > 0 &&
-                  <div> {"Total Days: " + numDays}</div>
+                  <div style={{marginTop: '20px'}}> {"Total Days: " + numDays}</div>
                 }
                 {numDays > 0 &&
-                  <div> {"Total Price: " + totalPrice}</div>
+                  <div style={{marginTop: '20px'}}> {"Check in: " + moment(form.startDate).format('MM/DD/YYYY') + " at 3:00 PM"}</div>
                 }
                 {numDays > 0 &&
-                  <div className="form-group">
+                  <div style={{marginTop: '20px'}}> {"Check out: " + moment(form.endDate).format('MM/DD/YYYY') + " at 12:00 PM"}</div>
+                }
+                {numDays > 0 &&
+                  <div style={{marginTop: '20px'}}> {"Total Price: $" + numberWithCommas(totalPrice.toFixed(2))}</div>
+                }
+                {numDays > 0 &&
+                  <div className="form-group" style={{marginTop: '20px'}}>
                     <input
                       type="submit"
                       value="Reserve Island"
@@ -216,19 +218,17 @@ export default function Reserve() {
                     />
                   </div>
                 }
-                {numDays <= 0 &&
-                  <div> Hourly Reservations will be avaliable soon! </div>
-                }
               </form>
-              <div>
-              <h4 style={{marginTop: "10px"}}>Customers Reviews:</h4>
-                {reviews.map((review) =>
-                  <div key={review._id}>
-                    <ShowReviews item={review}/>
-                  </div>
-                  )
-                }
-              </div>
+              {reviews.length > 0 &&
+                <div>
+                  <h4 style={{marginTop: "10px", textAlign: 'center'}}>Customer Reviews</h4>
+                    {reviews.map((review) =>
+                      <div key={review._id}>
+                        <ShowReviews item={review}/>
+                      </div>
+                  )}
+                </div>
+              }
           </div>
         </div>
       </div>

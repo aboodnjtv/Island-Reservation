@@ -103,14 +103,14 @@ export class MapContainer extends Component {
                     resize: 'contain'}}
                   />
               }
+              {this.state.selectedPlace.rating != undefined &&
+                <h5 style={{display: 'flex',  justifyContent:'center', margin: 10, background: 'royalblue', color: 'white', borderRadius: '50px'}}>
+                  Rating: {this.state.selectedPlace.rating.toFixed(2)} / 5.00
+                </h5>
+              }
               {this.state.selectedPlace.amount && 
                 <h5 style={{display: 'flex',  justifyContent:'center', margin: 10}}>
                   Price: ${numberWithCommas(this.state.selectedPlace.amount.toFixed(2))}/night
-                </h5>
-              }
-              {this.state.selectedPlace.rating && 
-                <h5 style={{display: 'flex',  justifyContent:'center', margin: 10, background: 'royalblue', color: 'white', borderRadius: '50px'}}>
-                  Rating: {this.state.selectedPlace.rating.toFixed(2)} / 5.00
                 </h5>
               }
               {this.state.selectedPlace.id &&

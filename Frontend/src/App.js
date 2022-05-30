@@ -13,6 +13,8 @@ import AppAbout from "./pages/AppAbout";
 import AddIsland from "./pages/AddIsland";
 import Settings from "./pages/Settings.js";
 import ManageIslands from "./pages/ManageIslands";
+import EditIsland from "./pages/EditIsland";
+import MapPage from "./pages/MapPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Review from "./pages/Review";
 import MakeReviews from "./pages/MakeReviews";
@@ -28,6 +30,7 @@ function App() {
         <Route exact path="/list" element={<AppIndex />} />
         <Route exact path="/" element={<Home />} />
         <Route exact path="/about" element={<AppAbout />} />
+        <Route exact path="/map" element={<MapPage />} />
         <Route exact path="/userhome"
           element={
             <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
@@ -51,6 +54,12 @@ function App() {
         <Route exact path="/addisland" element={
             <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
               <AddIsland />
+            </ProtectedRoute>
+          }
+        />
+        <Route exact path="/editisland" element={
+            <ProtectedRoute isLoggedIn={sessionStorage.getItem("isAuthenticated")}>
+              <EditIsland />
             </ProtectedRoute>
           }
         />

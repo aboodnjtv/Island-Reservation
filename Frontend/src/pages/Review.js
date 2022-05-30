@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 
 export default function Review() {
 
   const [form, setForm] = useState({
-    islandName: "",
     userReview: "",
     rating: "",
     // island_id: useParams(),
   });
+
+  // State for the island that is selected for reservation
+  const [island, setIsland] = useState({});
 
   // Get logged in user info
   let userid = sessionStorage.getItem("userRecordID");
@@ -69,13 +71,39 @@ export default function Review() {
     }
   }
 
+  useEffect(() => {
+    fetch("http://localhost:5000/island?id=" + islandId, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then(response => {
+      // If the HTTP response is 2xx then response.ok will have a value of true
+      if (!response.ok) {
+        const data = response.json();
+        throw new Error(data.message);
+      }
+      // return the promise(response.json) so that the next .then can resolve the promise
+      return response.json();
+    })
+    .then(data => {
+      // resolve the promise: response.json(), into data as a user record
+      setIsland(data);
+    })
+    .catch(error => {
+      window.alert(error);
+      return;
+    });
+  }, [islandId])
+
   return (
     <div>
-      <Navbar page="Add Credit" />
+      <Navbar page="Add Review" />
       <div className="container">
-        <h3>Island Review</h3>
+        <h3 style={{textAlign: 'center'}}>Review {island.name}</h3>
         <div className="container">
-          <div className="row">
+          <div className="row" style={{flex: '1', justifyContent: 'center', textAlign: 'left'}}>
             {/* bootstrap responsive design
           width of  columns on a 12 column grid:
           for xs (mobile) sign up takes whole screen (12 cols)
@@ -86,17 +114,8 @@ export default function Review() {
               <form
                 className="border shadow-sm rounded p-3 mb-3"
                 onSubmit={onSubmit}
+                style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
               >
-                <div className="form-group">
-                  <label htmlFor="islandName">Island Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="islandName"
-                    value={form.islandName}
-                    onChange={(e) => updateForm({ islandName: e.target.value })}
-                  />
-                </div>
                 <div className="form-group">
                   <label htmlFor="userReview">Type Your Review</label>
                   <textarea
@@ -114,6 +133,8 @@ export default function Review() {
                   <input
                     type="number"
                     className="form-control"
+                    min={0}
+                    max={5}
                     id="rating"
                     value={form.lastname}
                     onChange={(e) => updateForm({ rating: e.target.value })}
