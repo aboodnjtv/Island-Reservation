@@ -12,9 +12,11 @@ import Navbar from "../components/Navbar.js";
     super(props);
     this.state = {
       list: [],
+      searchText: "",
       //0 land size desc 1 land size asc
       //2 price desc 3 price asc
       //4 rating desc 5 rating asc
+      // searchText for searching for specific islands
       sortBy:-1
     }
     //http请求
@@ -102,12 +104,23 @@ import Navbar from "../components/Navbar.js";
   }
   render(){
     const list = this.state.list;
-    const listItems = list.map((item) =>
+    // Filter islands based on search bar
+    const filteredData = list.filter((newList) => {
+      // If no search bar input, display all islands
+      if (this.state.input === '') {
+          return newList;
+      }
+      // Return islands where name matches search bar input
+      else {
+          return newList.name.toLowerCase().includes(this.state.searchText.toLowerCase());
+      }
+    });
+    // Display filtered islands
+    const listItems = filteredData.map((item) =>
     <div key={item._id} className="col-lg-3 col-md-4 col-sm-12">
       <CardView item={item}/>
     </div>
     );
-    console.log(listItems);
     return (
       <>
         <Navbar page="Account" />
@@ -117,6 +130,16 @@ import Navbar from "../components/Navbar.js";
               <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(0)}>Land Size{this.state.sortBy === 0 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 1 ? <i className='triangle-down'></i> : <></>}</button>
               <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(1)}>Price{this.state.sortBy === 2 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 3 ? <i className='triangle-down'></i> : <></>}</button>
               <button type="button" className="btn btn-outline-dark" onClick={() => this.handleClick(2)}>Rating{this.state.sortBy === 4 ? <i className='triangle-up'></i> : <></>}{this.state.sortBy === 5 ? <i className='triangle-down'></i> : <></>}</button>
+            </div>
+            <div className="search" style={{margin: 10}}>
+              <input
+                  type="text"
+                  className="form-control"
+                  id="search"
+                  placeholder="Search"
+                  value={this.state.searchText}
+                  onChange={(e) => this.setState({ searchText: e.target.value })}
+                />
             </div>
           </div>
           {listItems}
