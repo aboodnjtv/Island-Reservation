@@ -136,7 +136,7 @@ export default function Reserve() {
     })
     .then(data => {
       setReviews(data)
-      console.log("review", reviews);
+      // console.log("review", reviews);
     })
     .catch(error => {
       window.alert(error);
@@ -145,7 +145,7 @@ export default function Reserve() {
 
   }, [islandId])
 
-  console.log("review", reviews);
+  // console.log("review", reviews);
   return (
     <div>
       <Navbar page="Reserve" />
