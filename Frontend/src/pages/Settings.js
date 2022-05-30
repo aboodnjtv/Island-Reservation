@@ -148,6 +148,7 @@ class Settings extends React.Component {
               className="form-control"
               id="password"
               placeholder="*******"
+              minLength={8}
               value={this.state.password || ''}
               onChange={this.changePassword}
             />

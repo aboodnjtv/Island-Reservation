@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 
-export default function Review() {
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
+export default function Review() {
   const [form, setForm] = useState({
     userReview: "",
     rating: "",
@@ -103,14 +106,27 @@ export default function Review() {
       <div className="container">
         <h3 style={{textAlign: 'center'}}>Review {island.name}</h3>
         <div className="container">
-          <div className="row" style={{flex: '1', justifyContent: 'center', textAlign: 'left'}}>
+          {island.price > 0 &&
+          <div>
+            <img src={island.islandImg} style={{flex: '1', aspectRatio: 3/2, resize: 'contain'}} alt="Island"
+            className="img-responsive img-circle img-thumbnail" />
+            <div className="jumbotron" style={{flex: 1, width: '100%', paddingTop: 20, paddingBottom: 10}}>
+              <h4>Details</h4>
+              <p className="card-info">{island.details}</p>
+              <h4>Island Info</h4>
+              <p>Location: {island.location}</p>
+              <p>Area: {island.land_size} sq.m</p>
+              <p>Price: ${numberWithCommas(island.price.toFixed(2))}/night</p>
+            </div>
+          </div>
+          }
             {/* bootstrap responsive design
           width of  columns on a 12 column grid:
           for xs (mobile) sign up takes whole screen (12 cols)
           for med page size, sign up takes 6 columns
           for large page size, sign up takes 5 cols
           */}
-            <div className="col-lg-5 col-md-6 col-xs-12">
+            <div style={{flex: 1, width: '100%'}}>
               <form
                 className="border shadow-sm rounded p-3 mb-3"
                 onSubmit={onSubmit}
@@ -124,6 +140,7 @@ export default function Review() {
                     id="userReview"
                     rows="3"
                     value={form.userReview}
+                    required={true}
                     onChange={(e) => updateForm({ userReview: e.target.value })}
                   />
                 </div>
@@ -135,6 +152,7 @@ export default function Review() {
                     className="form-control"
                     min={0}
                     max={5}
+                    required={true}
                     id="rating"
                     value={form.lastname}
                     onChange={(e) => updateForm({ rating: e.target.value })}
@@ -152,7 +170,6 @@ export default function Review() {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }

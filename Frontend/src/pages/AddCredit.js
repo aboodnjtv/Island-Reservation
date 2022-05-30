@@ -135,6 +135,7 @@ export default function AddCredit() {
                   <input
                     type="number"
                     max="999"
+                    min={0}
                     pattern="([0-9]|[0-9]|[0-9])"
                     className="form-control"
                     id="cvc"
@@ -151,6 +152,7 @@ export default function AddCredit() {
                     step="0.01"
                     className="form-control"
                     id="amount"
+                    required={true}
                     value={form.addamount}
                     onChange={(e) => updateForm({ addamount: e.target.value })}
                   />
