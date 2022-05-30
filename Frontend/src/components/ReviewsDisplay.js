@@ -29,7 +29,7 @@ class ReviewsDisplay extends React.Component {
                   </div>
                 </div>
                 <div className="col-sm-8 col-12" style={{textAlign: 'right', verticalAlign: 'middle'}}>
-                  <img src={this.props.entry.island_img} style={{ height: '164px'}}/>
+                  <img src={this.props.entry.island_img} style={{ height: '164px'}} alt="Island"/>
                 </div>
               </div>
             </div>

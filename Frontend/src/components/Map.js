@@ -103,7 +103,7 @@ export class MapContainer extends Component {
                     resize: 'contain'}}
                   />
               }
-              {this.state.selectedPlace.rating != undefined &&
+              {this.state.selectedPlace.rating !== undefined &&
                 <h5 style={{display: 'flex',  justifyContent:'center', margin: 10, background: 'royalblue', color: 'white', borderRadius: '50px'}}>
                   Rating: {this.state.selectedPlace.rating.toFixed(2)} / 5.00
                 </h5>

@@ -51,17 +51,7 @@ class MakeReviews extends React.Component{
   }  
 
   render(){
-
-    // check if no user record
-    let emptyUserRecord = true;
-    if (this.state.userRecord) {
-      emptyUserRecord = false;
-    }
-
     // now we have a json record of the user inside 'userRecord'
-    let existing_active_reservations = this.state.userRecord &&
-      this.state.userRecord.active_reservations &&
-      this.state.userRecord.active_reservations.length > 0;
     let existing_past_reservations = this.state.userRecord &&
       this.state.userRecord.past_reservations &&
       this.state.userRecord.past_reservations.length > 0;

@@ -26,7 +26,7 @@ class CardView extends React.Component {
             <div className="card-body">
               <h5 style={{display: 'flex',  justifyContent:'center'}} className="card-title">{this.state.title}</h5>
               <div className="card-info" style={{display: 'block'}}>
-                {this.state.rating != undefined &&
+                {this.state.rating !== undefined &&
                   <div className="card-info-dot">
                     Rating:
                     <div style={{marginLeft: 10}} className="card-info-number">{this.state.rating.toFixed(2)}</div>
