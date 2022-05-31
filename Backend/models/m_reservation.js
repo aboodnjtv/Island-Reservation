@@ -3,26 +3,29 @@ const mongoose = require('mongoose');
 
 // Define Reservation schema
 const reservationSchema = new mongoose.Schema({
-    reserver_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    },
-    island_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Island',
-    },
-    amountPaid: {
-      type: Number,
-    },
-    reservationDate: {
-      type: Date,
-    },
-    startDate: {
-      type: Date,
-    },
-    endDate: {
-      type: Date,
-    },
+  //id must be found in the users collection under an _id 
+  reserver_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  //id must be found in the islands collection under an _id
+  island_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Island',
+  },
+  amountPaid: {
+    type: Number,
+  },
+  //the date that the reservation was made
+  reservationDate: {
+    type: Date,
+  },
+  startDate: {
+    type: Date,
+  },
+  endDate: {
+    type: Date,
+  },
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema);
