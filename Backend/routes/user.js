@@ -111,7 +111,7 @@ userRoutes.route('/user/signup').post(async (req, res) => {
   let db_client = dbo.getDb();
 
   // Get request body
-  const { firstname, lastname, username, email, password } = req.body;
+  const { firstname, lastname, email, password } = req.body;
 
   //the password has to be at least 8 characters long
   if (password.length < 8) {
@@ -128,30 +128,20 @@ userRoutes.route('/user/signup').post(async (req, res) => {
   //hash the password
   const hash = await bcrypt.hash(password, 12);
 
-  // Check if username or email already exists
-  let existingUser = await db_client
-    .collection('users')
-    .find({ username: username })
-    .toArray();
+  // Check if email already exists
   let existingEmail = await db_client
     .collection('users')
     .find({ email: email })
     .toArray();
-  if (existingUser.length != 0) {
-    // If username exists, send 409 error code with an error message
-    // See this for standard error code and meanings: https://restfulapi.net/http-status-codes/
-    return res.status(409).json({ message: 'Username is already in use.' });
-  } 
-  else if (existingEmail.length != 0) {
+  if (existingEmail.length != 0) {
     // If email exists, send 409 error code with an error message
     return res.status(409).json({ message: 'Email is already in use.' });
-  }
+  } 
 
   // Create user object to insert into database
   const user = new User({
     firstname,
     lastname,
-    username,
     email,
     password: hash,
     balance: 0,
@@ -183,7 +173,6 @@ userRoutes.post('/user/signin', async (req, res) => {
 
   //check if user exists
   if (!user) {
-    console.log('username doesn\'t exist');
     return res
       .status(500)
       .json({ message: `${email} doesn't exist in our records.` });

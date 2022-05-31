@@ -10,10 +10,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Last Name cannot be blank'],
   },
-  username: {
-    type: String,
-    required: [true, 'Username cannot be blank'],
-  },
   email: {
     type: String,
     required: [true, 'Email cannot be blank'],
