@@ -1,5 +1,5 @@
 import React from 'react';
-import './appIndex.css';
+import './AppIndex.css';
 import CardView from '../components/CardView.js';
 import HttpRequest from '../components/HttpRequest.js';
 import Navbar from "../components/Navbar.js";
@@ -103,6 +103,7 @@ import Navbar from "../components/Navbar.js";
     }
   }
   render(){
+    // List of all islands
     const list = this.state.list;
     // Filter islands based on search bar
     const filteredData = list.filter((newList) => {

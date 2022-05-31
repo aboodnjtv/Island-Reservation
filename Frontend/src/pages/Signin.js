@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar.js";
-import "./Signin.css";
 
 // Copy of Maiah's code, just changed from class component to functional component
 export default function SignIn() {

@@ -22,9 +22,8 @@ export class MapContainer extends Component {
     // the event handler redefines 'this'
     // create a pointer to 'this' so that we can use set state of the component
     let self = this;
-    // get user id from the userRecord gathered from sign in
 
-    // fetch latest version of user data from backend
+    // Fetch all island data from backend
     fetch("http://localhost:5000/islands", {
       method: "GET",
       headers: {
@@ -41,7 +40,7 @@ export class MapContainer extends Component {
       return response.json();
     })
     .then(data => {
-      // resolve the promise: response.json(), into data as a user record
+      // Resolve the promise: Set the react state to the data returned by backend (list of island objects)
       self.setState({
         list: data,
       });
@@ -52,13 +51,15 @@ export class MapContainer extends Component {
     });
   }
 
+  // Function that handles marker click, displays information window with selected markers info
   onMarkerClick = (props, marker, e) =>
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true,
     });
-
+  
+  // Function that handles closing of info window
   onClose = (props) => {
     if (this.state.showingInfoWindow) {
       this.setState({
@@ -69,7 +70,7 @@ export class MapContainer extends Component {
   };
 
   render() {
-    console.log(this.state);
+    // Get list of islands from react state
     const list = this.state.list;
     const listItems = list.map((item) =>
       <Marker key={item._id}

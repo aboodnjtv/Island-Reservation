@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
-import "./Signup.css";
 
 // Copy of Maiah's code, just changed from class component to functional component
 export default function SignUp() {

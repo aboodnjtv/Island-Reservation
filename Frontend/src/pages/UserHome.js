@@ -1,5 +1,4 @@
 import React from "react";
-import "./UserHome.css";
 import Navbar from "../components/Navbar";
 import ReservationCard from "../components/ReservationCard";
 

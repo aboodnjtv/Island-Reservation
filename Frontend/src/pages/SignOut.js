@@ -1,5 +1,4 @@
 import React from "react";
-import "./SignOut.css";
 import Navbar from "../components/Navbar.js";
 
 
