@@ -5,7 +5,7 @@ const client = new MongoClient(Db, {
   useUnifiedTopology: true,
 });
  
-var IR_db;
+let IR_db;
 
 async function listDatabases(client){
   databasesList = await client.db().admin().listDatabases();

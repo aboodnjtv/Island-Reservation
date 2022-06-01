@@ -324,7 +324,7 @@ islandRoutes.post('/island/update', upload.single('islandImg'), async (req, res)
     updateJSON['details'] = details;
 
   if (price != null)
-    updateJSON['price'] = price;
+    updateJSON['price'] = parseInt(price);
 
   if (latitude != null)
     updateJSON['latitude'] = latitude;
