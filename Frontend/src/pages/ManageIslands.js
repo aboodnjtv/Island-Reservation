@@ -2,10 +2,9 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import MyIslandCard from "../components/MyIslandCard";
 
+// Page where user can add/edit their islands
 class ManageIslands extends React.Component {
   constructor(props) {
-    // let userRecordString = sessionStorage.getItem("userRecord");
-    // userRecordString = unescape(userRecordString);
     super(props);
     this.state = {
       islandRecords: null
@@ -61,35 +60,33 @@ class ManageIslands extends React.Component {
                 )
               })
             }
-
-
-        <div className="col-md-4 col-sm-6 col-xs-12" style={{margin: '15px 0'}}>
-        <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', width: '18rem', paddingTop: '20px'}}>
-          <div style={{textAlign: 'center'}}>
-            <img className="card-img-top" src="addnewisland.jpg" alt="Add Island" style={{ height: '170px', width: '170px'}}/>
-          </div>
-          <div className="card-body">
-            <h5 className="card-title" style={{textAlign: 'center'}}>Add a New Island</h5>
-            <div className="card-text" style={{textAlign: 'center'}}>
-              Add your new island here. Other users may reserve your island.
+            <div className="col-md-4 col-sm-6 col-xs-12" style={{margin: '15px 0'}}>
+              <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', width: '18rem', paddingTop: '20px'}}>
+                <div style={{textAlign: 'center'}}>
+                  <img className="card-img-top" src="addnewisland.jpg" alt="Add Island" style={{ height: '170px', width: '170px'}}/>
+                </div>
+                <div className="card-body">
+                  <h5 className="card-title" style={{textAlign: 'center'}}>Add a New Island</h5>
+                  <div className="card-text" style={{textAlign: 'center'}}>
+                    Add your new island here. Other users may reserve your island.
+                  </div>
+                </div>
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item" style={{textAlign: 'center'}}>Add your price per night.</li>
+                  <li className="list-group-item" style={{textAlign: 'center'}}>Add your island's location.</li>
+                  <li className="list-group-item" style={{textAlign: 'center'}}>Add your island's lat/long.</li>
+                  <li className="list-group-item" style={{textAlign: 'center'}}>Add other details.</li>
+                </ul>
+                <div className="card-body">
+                  <div style={{textAlign: 'center'}}>
+                    <a href="/addisland" className="card-link">
+                      Add Island
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item" style={{textAlign: 'center'}}>Add your price per night.</li>
-            <li className="list-group-item" style={{textAlign: 'center'}}>Add your island's location.</li>
-            <li className="list-group-item" style={{textAlign: 'center'}}>Add your island's lat/long.</li>
-            <li className="list-group-item" style={{textAlign: 'center'}}>Add other details.</li>
-          </ul>
-          <div className="card-body">
-            <div style={{textAlign: 'center'}}>
-              <a href="/addisland" className="card-link">
-                Add Island
-              </a>
-            </div>
-          </div>
-        </div>
-        </div>
-        </div>
         </div>
       </>
     );

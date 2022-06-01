@@ -3,10 +3,7 @@ import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 import moment from "moment";
 import ShowReviews from "../components/ShowReviews.js";
-
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+import addCommas from "../util/AddCommas.js";
 
 export default function Reserve() {
   // State for the reservation form
@@ -55,12 +52,10 @@ export default function Reserve() {
   async function onSubmit(e) {
     e.preventDefault();
 
-    // Fix this to send the new balance to the db, have backend add this balance to current balance
     const reservationInfo = { ...form }
     reservationInfo.amountPaid = totalPrice;
-    // NOTE: USER BALANCE WILL GO TO NAN IF ENTIRE FORM NOT FILLED OUT, NEED TO CHECK THAT FORM IS FILLED OUT
 
-    // When submit pressed, make api call
+    // When submit pressed, make api call to add reservation
     await fetch(`http://localhost:5000/reservations/add/${userId}/${islandId}`, {
       method: "POST",
       headers: {
@@ -93,8 +88,9 @@ export default function Reserve() {
     }
   }
 
-  // useEffect is similar to componentDidMount, updates island state for the currently selected island
+  // useEffect is similar to componentDidMount, get selected island info and its reviews
   useEffect(() => {
+    // Fetch currently selected islands information
     fetch("http://localhost:5000/island?id=" + islandId, {
       method: "GET",
       headers: {
@@ -111,7 +107,7 @@ export default function Reserve() {
       return response.json();
     })
     .then(data => {
-      // resolve the promise: response.json(), into data as a user record
+      // resolve the promise: Set island state to data retrieved from backend
       setIsland(data);
     })
     .catch(error => {
@@ -119,6 +115,7 @@ export default function Reserve() {
       return;
     });
 
+    // Fetch reviews associated with currently selected island
     fetch("http://localhost:5000/user/review?id=" + islandId, {
       method: "GET",
       headers: {
@@ -133,17 +130,15 @@ export default function Reserve() {
       return response.json();
     })
     .then(data => {
+      // Set reviews state to data retrieved from backend
       setReviews(data)
-      // console.log("review", reviews);
     })
     .catch(error => {
       window.alert(error);
       return;
     });
-
   }, [islandId])
 
-  // console.log("review", reviews);
   return (
     <div>
       <Navbar page="Reserve" />
@@ -168,7 +163,7 @@ export default function Reserve() {
                   <h4>Island Info</h4>
                   <p>Location: {island.location}</p>
                   <p>Area: {island.land_size} sq.m</p>
-                  <p>Price: ${numberWithCommas(island.price.toFixed(2))}/night</p>
+                  <p>Price: ${addCommas(island.price.toFixed(2))}/night</p>
               </div>
             </div>
             <form
@@ -207,7 +202,7 @@ export default function Reserve() {
                   <div style={{marginTop: '20px'}}> {"Check out: " + moment(form.endDate).format('MM/DD/YYYY') + " at 12:00 PM"}</div>
                 }
                 {numDays > 0 &&
-                  <div style={{marginTop: '20px'}}> {"Total Price: $" + numberWithCommas(totalPrice.toFixed(2))}</div>
+                  <div style={{marginTop: '20px'}}> {"Total Price: $" + addCommas(totalPrice.toFixed(2))}</div>
                 }
                 {numDays > 0 &&
                   <div className="form-group" style={{marginTop: '20px'}}>

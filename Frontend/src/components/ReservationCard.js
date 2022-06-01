@@ -1,13 +1,9 @@
 import React from "react";
 import moment from 'moment';
+import addCommas from "../util/AddCommas";
 
+// Card component for users reservations on user home page
 class ReservationCard extends React.Component {
-
-  //             {/*}<img src={this.state.cover} className="card-img-top" alt="..." />*/}
-  numberWithCommas = (x) => {
-		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	}
-
   render() {
     return (
       <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', padding: '6px', margin: '6px'}}>
@@ -21,7 +17,7 @@ class ReservationCard extends React.Component {
                   <div className="card-info-dot">End Date: {moment(this.props.entry.endDate).format('MM/DD/YYYY')}</div>
                   <div className="card-info-dot">Date Reserved: {moment(this.props.entry.reservationDate).format('MM/DD/YYYY')}</div>
                   <div className="card-info-dot">
-                    Amount Paid: ${this.numberWithCommas(this.props.entry.amountPaid.toFixed(2))}
+                    Amount Paid: ${addCommas(this.props.entry.amountPaid.toFixed(2))}
                   </div>
                 </div>
                 <div className="col-sm-8 col-12" style={{textAlign: 'right', verticalAlign: 'middle'}}>

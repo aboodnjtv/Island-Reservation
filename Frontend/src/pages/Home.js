@@ -1,9 +1,8 @@
 import React from "react";
 import "./Home.css";
 import Navbar from "../components/Navbar.js";
-/**
- * app home
- */
+
+// Component for user home page after login
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -26,7 +25,6 @@ class Home extends React.Component {
     return (
       <>
         <Navbar page="Home" />
-
         <div
           id="carouselExampleIndicators"
           className="carousel slide"
@@ -34,13 +32,11 @@ class Home extends React.Component {
           style={{ height: "100%" }}
         >
           {/* add the logo at center of page */}
-
           <div className="overpic" style={overPicStyle}>
             <div className="caption">
               <img src="IRclear.png" alt="IR Home Logo"/>
             </div>
           </div>
-
           <ol className="carousel-indicators">
             <li
               data-target="#carouselExampleIndicators"

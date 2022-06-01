@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import {GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
 import CurrentLocation from "./CurrentLocation";
+import addCommas from "../util/AddCommas";
 
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-export class MapContainer extends Component {
+export class Map extends Component {
   constructor(props) {
     super(props);
     this.state ={
@@ -111,7 +108,7 @@ export class MapContainer extends Component {
               }
               {this.state.selectedPlace.amount && 
                 <h5 style={{display: 'flex',  justifyContent:'center', margin: 10}}>
-                  Price: ${numberWithCommas(this.state.selectedPlace.amount.toFixed(2))}/night
+                  Price: ${addCommas(this.state.selectedPlace.amount.toFixed(2))}/night
                 </h5>
               }
               {this.state.selectedPlace.id &&
@@ -130,4 +127,4 @@ export class MapContainer extends Component {
 
 export default GoogleApiWrapper({
   apiKey: "AIzaSyBSwfjL3VFjn1vAE2t0wfRi4Y8b5S1aYy0",
-})(MapContainer);
+})(Map);

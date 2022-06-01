@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar.js";
 
-// Copy of Maiah's code, just changed from class component to functional component
+// Component for signing in a user
 export default function SignIn() {
   const [form, setForm] = useState({
     email: "",

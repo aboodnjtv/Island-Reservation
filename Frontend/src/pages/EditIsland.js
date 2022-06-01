@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar.js'
 
+// Component for editing an island the user uploaded
 class EditIsland extends React.Component {
   constructor(props) {
   		super(props);
@@ -170,7 +171,7 @@ class EditIsland extends React.Component {
   };
 
   getUrlParam = (key) => {
-      var params = {};
+      let params = {};
       window.location.href.replace(/[?&]+([^=&]+)=([^&#]*)/gi, function(m, key, value) {
           params[key] = value;
       });

@@ -1,7 +1,7 @@
 import React from "react";
 
+// Component for reviews of island, shown on bottom of the reserve page
 class ShowReviews extends React.Component {
-
   constructor(props) {
     super(props);
     console.log(props);
@@ -10,9 +10,7 @@ class ShowReviews extends React.Component {
       rating: props.item.rating || "",
     };
   }
-  
   render() {
-    
     return (
       <div className="card" style={{border: '1px solid rgba(0,0,0,.125)', marginTop: '10px'}}>
         <div className="card-body">

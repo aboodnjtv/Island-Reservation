@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
-
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+import addCommas from "../util/AddCommas.js";
 
 export default function Review() {
   const [form, setForm] = useState({
     userReview: "",
     rating: "",
-    // island_id: useParams(),
   });
 
   // State for the island that is selected for reservation
@@ -19,12 +15,13 @@ export default function Review() {
   // Get logged in user info
   let userid = sessionStorage.getItem("userRecordID");
 
+  // Get island id
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let islandId = params.get('island');
 
-  // For navigating to different page when successfully added balance
-  let successAddBalance = false;
+  // For navigating to different page when successfully adding a review
+  let successAddReview = false;
   const navigate = useNavigate();
 
   // These methods will update the state properties.
@@ -34,12 +31,12 @@ export default function Review() {
     });
   }
 
+  // Handle form submission
   async function onSubmit(e) {
     e.preventDefault();
 
-    // Fix this to send the new balance to the db, have backend add this balance to current balance
-    const newCard = { ...form };
-    // NOTE: USER BALANCE WILL GO TO NAN IF ENTIRE FORM NOT FILLED OUT, NEED TO CHECK THAT FORM IS FILLED OUT
+    // Get form data
+    const newReview = { ...form };
 
     // When submit pressed, make api call
     await fetch(`http://localhost:5000/user/review/${userid}/${islandId}`, {
@@ -47,16 +44,15 @@ export default function Review() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newCard),
+      body: JSON.stringify(newReview),
     })
       .then(async (response) => {
         const data = await response.json();
         // If the HTTP response is 2xx then response.ok will have a value of true
         if (!response.ok) {
           throw new Error(data.message);
-          // throw new Error(response.statusText)
         } else {
-          successAddBalance = true;
+          successAddReview = true;
         }
       })
       .catch((error) => {
@@ -66,14 +62,15 @@ export default function Review() {
       });
 
     // Navigate to signin page if signup success
-    if (successAddBalance) {
+    if (successAddReview) {
       console.log("Sucess");
       navigate("/userhome");
     } else {
       console.log("Not Sucess");
     }
   }
-
+  
+  // Get currenntly selected island info from backend
   useEffect(() => {
     fetch("http://localhost:5000/island?id=" + islandId, {
       method: "GET",
@@ -116,7 +113,7 @@ export default function Review() {
               <h4>Island Info</h4>
               <p>Location: {island.location}</p>
               <p>Area: {island.land_size} sq.m</p>
-              <p>Price: ${numberWithCommas(island.price.toFixed(2))}/night</p>
+              <p>Price: ${addCommas(island.price.toFixed(2))}/night</p>
             </div>
           </div>
           }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar.js'
 
+// Component for user settings, updates user's info
 class Settings extends React.Component {
   constructor(props) {
   		super(props);

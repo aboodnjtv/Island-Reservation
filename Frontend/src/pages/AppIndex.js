@@ -4,10 +4,8 @@ import CardView from '../components/CardView.js';
 import HttpRequest from '../components/HttpRequest.js';
 import Navbar from "../components/Navbar.js";
 
-/**
- * app home
- */
- class AppIndex extends React.Component {
+// Component for the Gallery Page
+class AppIndex extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,9 +29,8 @@ import Navbar from "../components/Navbar.js";
     this.setState({
       list: []
     });
-    if(type === 0){
-      if(this.state.sortBy === 0){
-        //to up
+    if(type === 0){ // Sort by land size
+      if(this.state.sortBy === 0){ // Land size descending
         this.setState({
           sortBy:1
         });
@@ -43,7 +40,7 @@ import Navbar from "../components/Navbar.js";
             list: response.data
           });
         })
-      }else{
+      }else{ // Land size ascending
         this.setState({
           sortBy:0
         });
@@ -54,9 +51,8 @@ import Navbar from "../components/Navbar.js";
           });
         })
       }
-    }else if(type === 1){
-      if(this.state.sortBy === 2){
-        //to up
+    }else if(type === 1){ // Sort by price
+      if(this.state.sortBy === 2){ // Price descending
         this.setState({
           sortBy:3
         });
@@ -66,7 +62,7 @@ import Navbar from "../components/Navbar.js";
             list: response.data
           });
         })
-      }else{
+      }else{ // Price ascending
         this.setState({
           sortBy:2
         });
@@ -77,9 +73,8 @@ import Navbar from "../components/Navbar.js";
           });
         })
       }
-    }else if(type === 2){
-      if(this.state.sortBy === 4){
-        //to up
+    }else if(type === 2){ // Sort by average rating
+      if(this.state.sortBy === 4){ // Rating descending
         this.setState({
           sortBy:5
         });
@@ -89,7 +84,7 @@ import Navbar from "../components/Navbar.js";
             list: response.data
           });
         })
-      }else{
+      }else{ // Rating ascending
         this.setState({
           sortBy:4
         });
@@ -103,7 +98,7 @@ import Navbar from "../components/Navbar.js";
     }
   }
   render(){
-    // List of all islands
+    // Get a list of all islands
     const list = this.state.list;
     // Filter islands based on search bar
     const filteredData = list.filter((newList) => {
@@ -116,7 +111,7 @@ import Navbar from "../components/Navbar.js";
           return newList.name.toLowerCase().includes(this.state.searchText.toLowerCase());
       }
     });
-    // Display filtered islands
+    // Display filtered islands by mapping them
     const listItems = filteredData.map((item) =>
     <div key={item._id} className="col-lg-3 col-md-4 col-sm-12">
       <CardView item={item}/>
@@ -124,7 +119,7 @@ import Navbar from "../components/Navbar.js";
     );
     return (
       <>
-        <Navbar page="Account" />
+        <Navbar page="Gallery" />
         <div className="row">
           <div className='col-12'>
             <div className="btn-group buttons" role="group" aria-label="Basic example">

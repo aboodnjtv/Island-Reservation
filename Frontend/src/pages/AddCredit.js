@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 
+// Page for adding credit to a users account, is a simple form
 export default function AddCredit() {
   const [form, setForm] = useState({
     firstname: "",
@@ -29,10 +30,8 @@ export default function AddCredit() {
   // This function will handle the submission.
   async function onSubmit(e) {
     e.preventDefault();
-
-    // Fix this to send the new balance to the db, have backend add this balance to current balance
+    // Get submitted form data
     const newCard = { ...form };
-    // NOTE: USER BALANCE WILL GO TO NAN IF ENTIRE FORM NOT FILLED OUT, NEED TO CHECK THAT FORM IS FILLED OUT
 
     // When submit pressed, make api call
     await fetch(`http://localhost:5000/user/addcredit/${userid}`, {
@@ -47,7 +46,6 @@ export default function AddCredit() {
         // If the HTTP response is 2xx then response.ok will have a value of true
         if (!response.ok) {
           throw new Error(data.message);
-          // throw new Error(response.statusText)
         } else {
           successAddBalance = true;
         }
@@ -58,7 +56,7 @@ export default function AddCredit() {
         return;
       });
 
-    // Navigate to signin page if signup success
+    // Navigate to user home page if successfully added balance
     if (successAddBalance) {
       console.log("Sucess");
       navigate("/userhome");

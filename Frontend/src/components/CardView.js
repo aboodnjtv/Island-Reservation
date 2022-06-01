@@ -1,9 +1,7 @@
 import React from "react";
+import addCommas from "../util/AddCommas";
 
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
+// Card component for the gallery page
 class CardView extends React.Component {
   constructor(props) {
     super(props);
@@ -28,19 +26,16 @@ class CardView extends React.Component {
               <div className="card-info" style={{display: 'block'}}>
                 {this.state.rating !== undefined &&
                   <div className="card-info-dot">
-                    Rating:
-                    <div style={{marginLeft: 10}} className="card-info-number">{this.state.rating.toFixed(2)}</div>
+                    Rating: <div style={{marginLeft: 10}} className="card-info-number">{this.state.rating.toFixed(2)}</div>
                   </div>
                 }
                 <div className="card-info-dot">Area: {this.state.area} sq.m</div>
-                <div className="card-info-dot">
-                Price: ${numberWithCommas(this.state.price.toFixed(2))}/night
-                </div>
+                <div className="card-info-dot">Price: ${addCommas(this.state.price.toFixed(2))}/night</div>
               </div>
             </div>
             <a href={`/reserve?island=${this.state.id}`} style={{margin: 10}}className="btn btn-primary btn-lg active -sm">
-                Reserve Island
-              </a>
+              Reserve Island
+            </a>
           </div>
         </div>
       </div>

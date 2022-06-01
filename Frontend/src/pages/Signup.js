@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../components/Navbar.js";
 
-// Copy of Maiah's code, just changed from class component to functional component
+// Component for signing up a user
 export default function SignUp() {
   const [form, setForm] = useState({
     firstname: "",

@@ -2,14 +2,12 @@ import React from 'react';
 import ReviewsDisplay from "../components/ReviewsDisplay";
 import Navbar from "../components/Navbar";
 
+// Page where user can see their past reservations and leave reviews for them
 class MakeReviews extends React.Component{
   constructor(props) {
-    // let userRecordString = sessionStorage.getItem("userRecord");
-    // userRecordString = unescape(userRecordString);
     super(props);
     this.state = {
       userRecord: null,
-      // reviews: [],
     };
     }
 
@@ -45,9 +43,6 @@ class MakeReviews extends React.Component{
       window.alert(error);
       return;
     });
-
-    // fetch()
-
   }  
 
   render(){
@@ -55,17 +50,17 @@ class MakeReviews extends React.Component{
     let existing_past_reservations = this.state.userRecord &&
       this.state.userRecord.past_reservations &&
       this.state.userRecord.past_reservations.length > 0;
-
+    
     return(
       <>
-      <Navbar page="Review Island" />
-      <section className="container">
-        <div className="row">
-              <div className="col-12">
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title" style={{fontSize: '25px', textAlign: 'center'}}>Review Your Reservations</h5>
-                    <div className="card-text">
+        <Navbar page="Review Island" />
+        <section className="container">
+          <div className="row">
+            <div className="col-12">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title" style={{fontSize: '25px', textAlign: 'center'}}>Review Your Reservations</h5>
+                  <div className="card-text">
                     {existing_past_reservations ?
                       this.state.userRecord.past_reservations.map(function (entry, i) {
                         return (
@@ -74,12 +69,12 @@ class MakeReviews extends React.Component{
                       }) :
                       <div>No Reservations</div>
                     }
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
-      </section>
+          </div>
+        </section>
       </>
     )
   }

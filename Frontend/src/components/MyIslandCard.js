@@ -1,11 +1,8 @@
 import React from "react";
+import addCommas from "../util/AddCommas";
 
+// Card component for user's own islands on manage islands page
 class MyIslandCard extends React.Component {
-
-  numberWithCommas = (x) => {
-		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	}
-
   render() {
     return (
       <div className="col-lg-4 col-md-6 col-sm-12" style={{margin: '15px 0'}}>
@@ -18,7 +15,7 @@ class MyIslandCard extends React.Component {
             <div className="card-text" style={{textAlign: 'center'}}>{this.props.entry.details}</div>
           </div>
           <ul className="list-group list-group-flush">
-            <li className="list-group-item" style={{textAlign: 'center'}}>${this.numberWithCommas(this.props.entry.price.toFixed(2))}/night </li>
+            <li className="list-group-item" style={{textAlign: 'center'}}>${addCommas(this.props.entry.price.toFixed(2))}/night </li>
             <li className="list-group-item" style={{textAlign: 'center'}}>Location: {this.props.entry.location}</li>
             <li className="list-group-item" style={{textAlign: 'center'}}>Land Size: {this.props.entry.land_size}</li>
             <li className="list-group-item" style={{textAlign: 'center'}}>Lat/Long: {this.props.entry.latitude}, {this.props.entry.longitude}</li>

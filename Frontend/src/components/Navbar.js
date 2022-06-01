@@ -1,5 +1,6 @@
 import React from 'react';
 
+// NavBar component above every page of the app changes depending on if signed in or not
 class Navbar extends React.Component {
   render() {
     /* logo is one directory up from 'Detail' page, must change location of access */

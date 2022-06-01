@@ -1,19 +1,15 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import ReservationCard from "../components/ReservationCard";
+import addCommas from "../util/AddCommas";
 
+// Component for the user home page
 class UserHome extends React.Component {
   constructor(props) {
-    // let userRecordString = sessionStorage.getItem("userRecord");
-    // userRecordString = unescape(userRecordString);
     super(props);
     this.state = {
       userRecord: null
     };
-  }
-
-  numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   componentDidMount() {
@@ -117,8 +113,8 @@ class UserHome extends React.Component {
                         <h5 className="card-title">Your Balance</h5>
                         <p className="card-text">
                         Your account currently has a balance of&nbsp;&nbsp;&nbsp;
-                        <span style={{fontWeight: 'bold', fontSize: '20px'}}>{'$' +
-                          this.numberWithCommas(this.state.userRecord.user_info.balance.toFixed(2))}
+                        <span style={{fontWeight: 'bold', fontSize: '20px'}}>
+                          {'$' + addCommas(this.state.userRecord.user_info.balance.toFixed(2))}
                           </span>.
                         </p>
                         <a href="/addcredit" className="btn btn-primary">
