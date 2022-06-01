@@ -15,36 +15,13 @@ const mapStyles = {
 export class CurrentLocation extends React.Component {
   constructor(props) {
     super(props);
-    const { lat, lng } = this.props.initialCenter;
+    const { latitude, longitude } = this.props.Center;
     this.state = {
-      currentLocation: {
-        lat: lat,
-        lng: lng,
+      userLocation: {
+        lat: latitude,
+        lng: longitude,
       },
     };
-  }
-
-  // Reload map if current location changes
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.google !== this.props.google) {
-      this.loadMap();
-    }
-    if (prevState.currentLocation !== this.state.currentLocation) {
-      this.recenterMap();
-    }
-  }
-
-  // Helper function that recenters map if current location changes
-  recenterMap() {
-    const map = this.map;
-    const current = this.state.currentLocation;
-    const google = this.props.google;
-    const maps = google.maps;
-
-    if (map) {
-      let center = new maps.LatLng(current.lat, current.lng);
-      map.panTo(center);
-    }
   }
 
   // Whenever component mounts, get location and update state
@@ -52,11 +29,11 @@ export class CurrentLocation extends React.Component {
     if (this.props.centerAroundCurrentLocation) {
       if (navigator && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((pos) => {
-          const coords = pos.coords;
+          const coordinates = pos.coords;
           this.setState({
-            currentLocation: {
-              lat: coords.latitude,
-              lng: coords.longitude,
+            userLocation: {
+              lat: coordinates.latitude,
+              lng: coordinates.longitude,
             },
           });
         });
@@ -68,18 +45,13 @@ export class CurrentLocation extends React.Component {
   // Helper function that loads the map
   loadMap() {
     if (this.props && this.props.google) {
-      // checks if google is available
       const { google } = this.props;
       const maps = google.maps;
-      
-      const mapRef = this.refs.map;
-
-      // reference to the actual DOM element
-      const node = ReactDOM.findDOMNode(mapRef);
-
+      const referencemap = this.refs.map;
+      const node = ReactDOM.findDOMNode(referencemap);
       let { zoom } = this.props;
-      const { lat, lng } = this.state.currentLocation;
-      const center = new maps.LatLng(lat, lng);
+      const { latitude, longitude } = this.state.userLocation;
+      const center = new maps.LatLng(latitude, longitude);
 
       const mapConfig = Object.assign(
         {},
@@ -96,7 +68,30 @@ export class CurrentLocation extends React.Component {
     }
   }
 
-  // Function that obly renders map if props are defined
+  // Map reconfigures if userlocation changes
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.google !== this.props.google) {
+      this.loadMap();
+    }
+    if (prevState.userLocation !== this.state.userLocation) {
+      this.recenterMap();
+    }
+  }
+
+  // Helper function that recenters map if current location changes
+  recenterMap() {
+    const map = this.map;
+    const place = this.state.userLocation;
+    const google = this.props.google;
+    const maps = google.maps;
+
+    if (map) {
+      let center = new maps.LatLng(place.lat, place.lng);
+      map.panTo(center);
+    }
+  }
+
+  // Function that only renders map if props are defined
   renderChildren() {
     const { children } = this.props;
     if (!children) return;
@@ -105,7 +100,7 @@ export class CurrentLocation extends React.Component {
       return React.cloneElement(c, {
         map: this.map,
         google: this.props.google,
-        mapCenter: this.state.currentLocation,
+        mapCenter: this.state.userLocation,
       });
     });
   }
@@ -114,10 +109,8 @@ export class CurrentLocation extends React.Component {
   render() {
     const style = Object.assign({}, mapStyles.map);
     return (
-      <div id="map_canvas" style={{width: '100%', height: '100%'}}>
-        <div style={style} ref="map">
-          Loading map...
-        </div>
+      <div id="map_canvas" style={{ width: "100%", height: "100%" }}>
+        <div style={style} ref="map"></div>
         {this.renderChildren()}
       </div>
     );
@@ -127,8 +120,8 @@ export class CurrentLocation extends React.Component {
 // Define default props, set initial center to Santa Cruz
 CurrentLocation.defaultProps = {
   zoom: 3,
-  initialCenter: {
-    lat: 36.9990,
+  Center: {
+    lat: 36.999,
     lng: -109.0452,
   },
   centerAroundCurrentLocation: true,
