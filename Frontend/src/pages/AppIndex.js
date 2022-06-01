@@ -1,5 +1,5 @@
 import React from 'react';
-import './AppIndex.css';
+import './appIndex.css';
 import CardView from '../components/CardView.js';
 import HttpRequest from '../components/HttpRequest.js';
 import Navbar from "../components/Navbar.js";
